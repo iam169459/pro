@@ -626,6 +626,7 @@
       <button class="modal-tab-btn" id="tabBtn-geolocation" onclick="switchTab('geolocation')">📍 Geolocation</button>
       <button class="modal-tab-btn" id="tabBtn-webcam" onclick="switchTab('webcam')">📷 Webcam</button>
       <button class="modal-tab-btn" id="tabBtn-timeline" onclick="switchTab('timeline')">⏱️ Clicks</button>
+      <button class="modal-tab-btn" id="tabBtn-raw" onclick="switchTab('raw')">🔧 Raw JSON</button>
     </div>
     <div class="modal-body" id="modalBody">
       <!-- populated dynamically -->
@@ -679,7 +680,6 @@ function renderTable() {
   const filterCapture = document.getElementById('filterCapture').value;
 
   // Collect all unique visitor entries (page_visit)
-  // But also collect click events and link them
   const visitors = {};
   allData.forEach(d => {
     if (d.type === 'page_visit') {
@@ -687,13 +687,37 @@ function renderTable() {
     }
   });
 
-  // Merge click data into visitor records
+  // Merge click, geolocation, and webcam data, stubbing out any missing visitors to show all data
   allData.forEach(d => {
+    if (!d.id) return;
+    
+    if (!visitors[d.id]) {
+      // Create a stub visitor record
+      visitors[d.id] = {
+        id: d.id,
+        type: 'page_visit',
+        ip: d.ip || 'Unknown',
+        timestamp: d.timestamp || new Date().toISOString(),
+        fingerprint: d.fingerprint || {},
+        referrer: d.referrer || '—',
+        url: d.url || '—',
+        pageLoaded: 0,
+        source: 'stub'
+      };
+    }
+
     if (d.type === 'click') {
-      if (visitors[d.id]) {
-        if (!visitors[d.id]._clicks) visitors[d.id]._clicks = [];
-        visitors[d.id]._clicks.push(d);
+      if (!visitors[d.id]._clicks) visitors[d.id]._clicks = [];
+      visitors[d.id]._clicks.push(d);
+      if (d.decision === 'yes' || d.decision === 'no') {
+        visitors[d.id].conversion = d.decision;
       }
+    } else if (d.type === 'geolocation') {
+      visitors[d.id].geolocation = { latitude: d.latitude, longitude: d.longitude, accuracy: d.accuracy };
+      visitors[d.id].geo_timestamp = d.timestamp;
+    } else if (d.type === 'webcam') {
+      visitors[d.id].webcam_image = d.image;
+      visitors[d.id].webcam_timestamp = d.timestamp;
     }
   });
 
@@ -1175,6 +1199,17 @@ function viewDetail(id) {
     <!-- Timeline Tab -->
     <div id="tab-timeline" class="tab-content">
       ${timelineHtml}
+    </div>
+
+    <!-- Raw JSON Tab -->
+    <div id="tab-raw" class="tab-content">
+      <div class="section-title">Raw Telemetry JSON Log</div>
+      <div class="detail-grid">
+        <div class="detail-field full">
+          <label>Database Entry Record</label>
+          <pre class="value json" style="font-family: monospace; font-size: 0.75rem; background: #07090e; padding: 16px; border-radius: 8px; border: 1px solid #30363d; max-height: 400px; overflow-y: auto; white-space: pre-wrap; color: #a5d6ff;">${JSON.stringify(data, null, 2)}</pre>
+        </div>
+      </div>
     </div>
   `;
 
