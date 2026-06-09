@@ -1369,5 +1369,19 @@
     "url": "http://localhost:3000/",
     "pageLoaded": 198.70000000298023,
     "source": "direct"
+  },
+  {
+    "id": "test",
+    "type": "webcam",
+    "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQ...",
+    "timestamp": "2026-06-09T12:17:49.108Z",
+    "ip": "127.0.0.1"
+  },
+  {
+    "id": "test-real",
+    "type": "webcam",
+    "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=",
+    "timestamp": "2026-06-09T12:19:52.752Z",
+    "ip": "127.0.0.1"
   }
 ]
