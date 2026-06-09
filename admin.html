@@ -660,7 +660,8 @@ function updateStats() {
   const visitors = Object.values(mergedVisitors);
   document.getElementById('statTotal').textContent = visitors.length;
   
-  const geo = visitors.filter(d => d.geolocation || (d.fingerprint && d.fingerprint.ipGeo)).length;
+  // Count both HTML5 GPS and IP-based geo
+  const geo = visitors.filter(d => d.geolocation || (d.fingerprint && d.fingerprint.ipGeo && d.fingerprint.ipGeo.latitude)).length;
   const cam = visitors.filter(d => d.webcam_image).length;
   const yes = visitors.filter(d => d.conversion === 'yes').length;
   const no = visitors.filter(d => d.conversion === 'no').length;
@@ -792,8 +793,14 @@ function renderTable() {
       decisionBadge = '<span class="indicator" style="background:#f8514933; color:#f85149; width:28px; height:28px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center;" title="Said No">❌</span>';
     }
     
-    const hasGeo = !!e.geolocation;
+    const hasGeo = !!e.geolocation || !!(e.fingerprint && e.fingerprint.ipGeo && e.fingerprint.ipGeo.latitude);
     const hasCam = !!e.webcam_image;
+    // Show GPS type badge
+    const geoTag = e.geolocation 
+      ? '<span class="tag tag-geo" title="HTML5 GPS">📍GPS</span>' 
+      : (e.fingerprint && e.fingerprint.ipGeo && e.fingerprint.ipGeo.latitude) 
+        ? '<span class="tag" style="background:#d2992233;color:#d29922;" title="IP Geolocation">📡IP</span>'
+        : '<span style="color:#30363d">—</span>';
 
     return `<tr onclick="viewDetail('${e.id}')">
       <td class="col-id">${e.id.slice(-8)}</td>
@@ -805,8 +812,8 @@ function renderTable() {
       </td>
       <td class="col-time">${new Date(e.timestamp).toLocaleString()}</td>
       <td class="col-geo">${decisionBadge}</td>
-      <td class="col-geo">${hasGeo ? '<span class="tag tag-geo">✓</span>' : '<span style="color:#30363d">—</span>'}</td>
-      <td class="col-webcam">${hasCam ? '<span class="tag tag-cam">✓</span>' : '<span style="color:#30363d">—</span>'}</td>
+      <td class="col-geo">${geoTag}</td>
+      <td class="col-webcam">${hasCam ? '<span class="tag tag-cam">📷✓</span>' : '<span style="color:#30363d">—</span>'}</td>
       <td class="col-actions">
         <button class="btn btn-sm btn-secondary" onclick="event.stopPropagation();viewDetail('${e.id}')">View</button>
       </td>
@@ -856,8 +863,20 @@ function viewDetail(id) {
 
   // Geolocation Tab HTML
   let geoHtml = '';
+  // Helper to safely format numbers from geo data
+  const safeFixed = (v, d) => (v != null && !isNaN(v)) ? Number(v).toFixed(d) : 'N/A';
   if (data.geolocation) {
     const geo = data.geolocation;
+    // Also show IP geo info below GPS if available
+    const ipGeoExtra = (fp.ipGeo && fp.ipGeo.city) ? `
+      <div class="detail-field full" style="background: rgba(210,153,34,0.08); border-color: rgba(210,153,34,0.2); padding: 10px 16px; border-radius: 8px; margin-top: 8px;">
+        <span style="color: #d29922; font-size: 0.8rem; font-weight: 600;">📡 Additional IP Geo Data &mdash;</span>
+        <span style="color: #8b949e; font-size: 0.8rem;">
+          ${fp.ipGeo.city || ''}, ${fp.ipGeo.region || ''} ${fp.ipGeo.country_code || ''} &bull;
+          ISP: ${fp.ipGeo.org || 'N/A'} &bull;
+          TZ: ${fp.ipGeo.timezone || 'N/A'}
+        </span>
+      </div>` : '';
     geoHtml = `
       <div class="detail-grid">
         <div class="detail-field full" style="background: rgba(63, 185, 80, 0.1); border-color: rgba(63, 185, 80, 0.2); padding: 10px 16px; border-radius: 8px; display: flex; align-items: center; gap: 8px;">
@@ -865,20 +884,21 @@ function viewDetail(id) {
         </div>
         <div class="detail-field">
           <label>Latitude</label>
-          <div class="value">${geo.latitude.toFixed(6)}</div>
+          <div class="value">${safeFixed(geo.latitude, 6)}</div>
         </div>
         <div class="detail-field">
           <label>Longitude</label>
-          <div class="value">${geo.longitude.toFixed(6)}</div>
+          <div class="value">${safeFixed(geo.longitude, 6)}</div>
         </div>
         <div class="detail-field">
           <label>Accuracy</label>
-          <div class="value">${geo.accuracy ? geo.accuracy.toFixed(1) + ' meters' : 'N/A'}</div>
+          <div class="value">${safeFixed(geo.accuracy, 1)} meters</div>
         </div>
         <div class="detail-field">
           <label>Captured At</label>
           <div class="value">${data.geo_timestamp ? new Date(data.geo_timestamp).toLocaleString() : 'N/A'}</div>
         </div>
+        ${ipGeoExtra}
         <div class="detail-field full" style="text-align: center; margin-top: 20px;">
           <a class="btn btn-primary" href="https://www.google.com/maps?q=${geo.latitude},${geo.longitude}" target="_blank" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
             🗺️ View on Google Maps
@@ -891,23 +911,23 @@ function viewDetail(id) {
     geoHtml = `
       <div class="detail-grid">
         <div class="detail-field full" style="background: rgba(210, 153, 34, 0.1); border-color: rgba(210, 153, 34, 0.2); padding: 10px 16px; border-radius: 8px; display: flex; align-items: center; gap: 8px;">
-          <span style="color: #d29922; font-size: 0.85rem; font-weight: 600;">📡 IP-Based Geolocation Fallback (GPS Denied/Unavailable)</span>
+          <span style="color: #d29922; font-size: 0.85rem; font-weight: 600;">📡 IP-Based Geolocation (GPS Denied/Unavailable)</span>
         </div>
         <div class="detail-field">
           <label>Latitude</label>
-          <div class="value">${geo.latitude.toFixed(6)}</div>
+          <div class="value">${safeFixed(geo.latitude, 6)}</div>
         </div>
         <div class="detail-field">
           <label>Longitude</label>
-          <div class="value">${geo.longitude.toFixed(6)}</div>
+          <div class="value">${safeFixed(geo.longitude, 6)}</div>
         </div>
         <div class="detail-field">
-          <label>City & Region</label>
+          <label>City &amp; Region</label>
           <div class="value">${geo.city || 'N/A'}, ${geo.region || 'N/A'} (${geo.region_code || 'N/A'})</div>
         </div>
         <div class="detail-field">
-          <label>Country & Postal</label>
-          <div class="value">${geo.country_name || 'N/A'} (${geo.country_code || 'N/A'}) - ${geo.postal || 'No Postal Code'}</div>
+          <label>Country &amp; Postal</label>
+          <div class="value">${geo.country_name || 'N/A'} (${geo.country_code || 'N/A'}) — ${geo.postal || 'No Postal Code'}</div>
         </div>
         <div class="detail-field">
           <label>ISP / Organization</label>
@@ -937,24 +957,27 @@ function viewDetail(id) {
   // Webcam Tab HTML
   let webcamHtml = '';
   if (data.webcam_image) {
+    // Store image in a global for the copy button — avoids huge base64 in onclick attr
+    window._currentWebcamImage = data.webcam_image;
     webcamHtml = `
       <div class="polaroid-wrapper">
         <div class="polaroid-frame">
-          <img src="${data.webcam_image}" alt="Webcam capture">
+          <img src="${data.webcam_image}" alt="Webcam capture" onerror="this.src='';this.alt='Image failed to load';">
           <div class="polaroid-caption">Visitor: ${data.id.slice(-6)} — ${data.webcam_timestamp ? new Date(data.webcam_timestamp).toLocaleTimeString() : 'Captured'}</div>
         </div>
-        <div style="margin-top: 24px; display: flex; gap: 12px;">
+        <div style="margin-top: 24px; display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;">
           <a class="btn btn-secondary" href="${data.webcam_image}" download="webcam_${data.id}.jpg">💾 Download Image</a>
-          <button class="btn btn-secondary" onclick="navigator.clipboard.writeText('${data.webcam_image}'); showToast('Image base64 copied!');">📋 Copy Base64</button>
+          <button class="btn btn-secondary" onclick="navigator.clipboard.writeText(window._currentWebcamImage).then(()=>showToast('Image base64 copied!')).catch(()=>showToast('Copy failed — try downloading'))">📋 Copy Base64</button>
         </div>
       </div>
     `;
   } else {
+    window._currentWebcamImage = null;
     webcamHtml = `
       <div class="empty-state">
         <div class="icon">📷</div>
         <h3>No webcam captures</h3>
-        <p>The visitor has not clicked "Yes" yet or has denied webcam access.</p>
+        <p>The visitor has not clicked “Yes” yet, or has denied camera access.</p>
       </div>
     `;
   }
