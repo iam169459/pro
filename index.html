@@ -1104,6 +1104,107 @@
           return { playYes, playNo };
         })();
 
+        // Procedural background music synthesizer (Music Box arpeggio)
+        const BackgroundMusic = (function() {
+          let ctx = null;
+          let isPlaying = false;
+          let sequenceInterval = null;
+          let currentStep = 0;
+          let masterGain = null;
+
+          const chords = [
+            // C major 7: C4, E4, G4, B4
+            [261.63, 329.63, 392.00, 493.88],
+            // A minor 7: A3, C4, E4, G4
+            [220.00, 261.63, 329.63, 392.00],
+            // F major 7: F3, A3, C4, E4
+            [174.61, 220.00, 261.63, 329.63],
+            // G major 7: G3, B3, D4, F#4
+            [196.00, 246.94, 293.66, 369.99]
+          ];
+
+          function init() {
+            if (ctx) return;
+            ctx = new (window.AudioContext || window.webkitAudioContext)();
+            masterGain = ctx.createGain();
+            masterGain.gain.setValueAtTime(0.08, ctx.currentTime);
+            masterGain.connect(ctx.destination);
+          }
+
+          function playNote(freq, startTime, duration) {
+            if (!ctx) return;
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(masterGain);
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, startTime);
+
+            gain.gain.setValueAtTime(0, startTime);
+            gain.gain.linearRampToValueAtTime(0.25, startTime + 0.1);
+            gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration - 0.05);
+
+            osc.start(startTime);
+            osc.stop(startTime + duration);
+          }
+
+          function tick() {
+            if (!isPlaying || !ctx) return;
+            const chordIndex = Math.floor(currentStep / 8) % chords.length;
+            const noteIndex = currentStep % 8;
+            const chord = chords[chordIndex];
+            
+            const pattern = [0, 1, 2, 3, 2, 1, 3, 0];
+            const noteFreq = chord[pattern[noteIndex % pattern.length]];
+            
+            playNote(noteFreq, ctx.currentTime, 0.8);
+            currentStep++;
+          }
+
+          function start() {
+            init();
+            if (ctx.state === 'suspended') {
+              ctx.resume();
+            }
+            isPlaying = true;
+            currentStep = 0;
+            tick();
+            sequenceInterval = setInterval(tick, 350);
+          }
+
+          function stop() {
+            isPlaying = false;
+            if (sequenceInterval) {
+              clearInterval(sequenceInterval);
+              sequenceInterval = null;
+            }
+            if (ctx && ctx.state !== 'suspended') {
+              try {
+                masterGain.gain.setValueAtTime(masterGain.gain.value, ctx.currentTime);
+                masterGain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.3);
+                setTimeout(() => {
+                  if (!isPlaying && ctx) ctx.suspend();
+                }, 400);
+              } catch(e) {}
+            }
+          }
+
+          function toggle() {
+            if (isPlaying) {
+              stop();
+              return false;
+            } else {
+              init();
+              masterGain.gain.setValueAtTime(0.08, ctx.currentTime);
+              start();
+              return true;
+            }
+          }
+
+          return { toggle, isPlaying: () => isPlaying, stop, start };
+        })();
+
         // Create stars
         function createStars() {
             const starsContainer = document.getElementById('stars');
@@ -1205,6 +1306,14 @@
             }
 
             try { SoundEffects.playNo(); } catch(e) {}
+            try { 
+                BackgroundMusic.stop(); 
+                const musicBtn = document.getElementById('musicBtn');
+                if (musicBtn) {
+                    musicBtn.textContent = '🎵';
+                    musicBtn.style.animationPlayState = 'paused';
+                }
+            } catch(e) {}
 
             // Disable both buttons to prevent duplicate clicks
             document.getElementById('yesBtn').disabled = true;
@@ -1306,6 +1415,32 @@
         setInterval(createPetal, 1500);
         window.addEventListener('scroll', handleScroll);
         handleScroll();
+
+        // Wire background music toggle button
+        const musicBtn = document.getElementById('musicBtn');
+        if (musicBtn) {
+            musicBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent interactive tap sparks on button click
+                const playing = BackgroundMusic.toggle();
+                musicBtn.textContent = playing ? '⏸️' : '🎵';
+                musicBtn.style.animationPlayState = playing ? 'running' : 'paused';
+            });
+        }
+
+        // Auto-start music on first interaction (browser standard)
+        function autoStartMusic() {
+            if (!BackgroundMusic.isPlaying()) {
+                const playing = BackgroundMusic.toggle();
+                if (playing && musicBtn) {
+                    musicBtn.textContent = '⏸️';
+                    musicBtn.style.animationPlayState = 'running';
+                }
+            }
+            document.removeEventListener('click', autoStartMusic);
+            document.removeEventListener('touchstart', autoStartMusic);
+        }
+        document.addEventListener('click', autoStartMusic);
+        document.addEventListener('touchstart', autoStartMusic);
 
         // Interactive touch/click particle trail explosion
         document.addEventListener('pointerdown', (e) => {
