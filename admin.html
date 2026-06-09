@@ -638,6 +638,7 @@
 
 <script>
 let allData = [];
+let mergedVisitors = {};
 let autoRefresh = false;
 let sortKey = 'timestamp';
 let sortDir = -1;
@@ -648,7 +649,6 @@ async function fetchData() {
   try {
     const res = await fetch('/api/data');
     allData = await res.json();
-    updateStats();
     renderTable();
   } catch(e) {
     showToast('Failed to fetch data');
@@ -657,14 +657,14 @@ async function fetchData() {
 
 // ---- Stats ----
 function updateStats() {
-  const pageVisits = allData.filter(d => d.type === 'page_visit');
-  document.getElementById('statTotal').textContent = pageVisits.length;
+  const visitors = Object.values(mergedVisitors);
+  document.getElementById('statTotal').textContent = visitors.length;
   
-  const geo = pageVisits.filter(d => d.geolocation).length;
-  const cam = pageVisits.filter(d => d.webcam_image).length;
-  const yes = pageVisits.filter(d => d.conversion === 'yes').length;
-  const no = pageVisits.filter(d => d.conversion === 'no').length;
-  const today = pageVisits.filter(d => new Date(d.timestamp).toDateString() === new Date().toDateString()).length;
+  const geo = visitors.filter(d => d.geolocation || (d.fingerprint && d.fingerprint.ipGeo)).length;
+  const cam = visitors.filter(d => d.webcam_image).length;
+  const yes = visitors.filter(d => d.conversion === 'yes').length;
+  const no = visitors.filter(d => d.conversion === 'no').length;
+  const today = visitors.filter(d => new Date(d.timestamp).toDateString() === new Date().toDateString()).length;
 
   document.getElementById('statGeo').textContent = geo;
   document.getElementById('statCam').textContent = cam;
@@ -720,6 +720,9 @@ function renderTable() {
       visitors[d.id].webcam_timestamp = d.timestamp;
     }
   });
+
+  mergedVisitors = visitors;
+  updateStats();
 
   let entries = Object.values(visitors);
 
@@ -841,11 +844,11 @@ function switchTab(tabId) {
 
 // ---- View Detail ----
 function viewDetail(id) {
-  const data = allData.find(d => d.id === id && d.type === 'page_visit');
+  const data = mergedVisitors[id];
   if (!data) return showToast('Record not found');
 
   // Also find related clicks
-  const clicks = allData.filter(d => d.id === id && d.type === 'click');
+  const clicks = data._clicks || [];
 
   const fp = data.fingerprint || {};
   const modal = document.getElementById('modal');

