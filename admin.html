@@ -225,12 +225,176 @@
     background: #161b22;
     border: 1px solid #30363d;
     border-radius: 16px;
-    max-width: 800px;
+    max-width: 850px;
     width: 100%;
-    max-height: 85vh;
-    overflow-y: auto;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
     box-shadow: 0 30px 80px rgba(0,0,0,0.6);
     animation: modalIn 0.25s ease;
+    overflow: hidden;
+  }
+
+  /* Modal tabs */
+  .modal-tabs {
+    display: flex;
+    background: #0d1117;
+    border-bottom: 1px solid #30363d;
+    padding: 0 16px;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .modal-tab-btn {
+    background: none;
+    border: none;
+    color: #8b949e;
+    padding: 14px 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .modal-tab-btn:hover {
+    color: #e1e4e8;
+  }
+  .modal-tab-btn.active {
+    color: #ff416c;
+    border-bottom-color: #ff416c;
+  }
+  
+  .modal-body { 
+    padding: 24px; 
+    overflow-y: auto;
+    flex-grow: 1;
+  }
+
+  .tab-content {
+    display: none;
+    animation: fadeIn 0.2s ease-in-out;
+  }
+  .tab-content.active {
+    display: block;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Timeline styling */
+  .detail-timeline {
+    position: relative;
+    padding-left: 28px;
+    margin-top: 10px;
+  }
+  .detail-timeline::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 6px;
+    bottom: 6px;
+    width: 2px;
+    background: #30363d;
+  }
+  .timeline-event {
+    position: relative;
+    margin-bottom: 24px;
+  }
+  .timeline-event:last-child {
+    margin-bottom: 0;
+  }
+  .timeline-dot {
+    position: absolute;
+    left: -25px;
+    top: 3px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #30363d;
+    border: 3px solid #161b22;
+  }
+  .timeline-dot.accent {
+    background: #ff416c;
+  }
+  .timeline-dot.success {
+    background: #3fb950;
+  }
+  .timeline-dot.info {
+    background: #58a6ff;
+  }
+  .timeline-dot.warning {
+    background: #d29922;
+  }
+  .timeline-time {
+    font-size: 0.75rem;
+    color: #8b949e;
+    font-family: monospace;
+  }
+  .timeline-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #e1e4e8;
+    margin-top: 2px;
+  }
+  .timeline-desc {
+    font-size: 0.8rem;
+    color: #8b949e;
+    margin-top: 2px;
+  }
+
+  /* Polaroid image snapshot frame */
+  .polaroid-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
+  }
+  .polaroid-frame {
+    background: #fff;
+    padding: 12px 12px 24px;
+    border-radius: 4px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    display: inline-block;
+    max-width: 100%;
+    text-align: center;
+    transform: rotate(-1deg);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  .polaroid-frame:hover {
+    transform: rotate(0deg) scale(1.03);
+    box-shadow: 0 15px 50px rgba(0,0,0,0.6);
+  }
+  .polaroid-frame img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 2px;
+    border: 1px solid #ddd;
+    background: #000;
+  }
+  .polaroid-caption {
+    font-family: system-ui, -apple-system, sans-serif;
+    color: #1a1a1a;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-top: 12px;
+    letter-spacing: 0.5px;
+  }
+
+  /* Tab fields custom layout */
+  .section-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #ff416c;
+    margin: 20px 0 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #21262d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .section-title:first-of-type {
+    margin-top: 0;
   }
 
   @keyframes modalIn { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
@@ -451,6 +615,13 @@
       <h2>🔍 Visitor Details</h2>
       <button class="modal-close" onclick="closeModal()">&times;</button>
     </div>
+    <div class="modal-tabs">
+      <button class="modal-tab-btn active" id="tabBtn-overview" onclick="switchTab('overview')">📋 Overview</button>
+      <button class="modal-tab-btn" id="tabBtn-fingerprint" onclick="switchTab('fingerprint')">💻 Fingerprint</button>
+      <button class="modal-tab-btn" id="tabBtn-geolocation" onclick="switchTab('geolocation')">📍 Geolocation</button>
+      <button class="modal-tab-btn" id="tabBtn-webcam" onclick="switchTab('webcam')">📷 Webcam</button>
+      <button class="modal-tab-btn" id="tabBtn-timeline" onclick="switchTab('timeline')">⏱️ Clicks</button>
+    </div>
     <div class="modal-body" id="modalBody">
       <!-- populated dynamically -->
     </div>
@@ -603,6 +774,27 @@ function sortBy(key) {
   renderTable();
 }
 
+// Global active tab state
+let activeTabId = 'overview';
+
+function switchTab(tabId) {
+  // Update button active states
+  const buttons = document.querySelectorAll('.modal-tab-btn');
+  buttons.forEach(btn => {
+    btn.classList.remove('active');
+    if (btn.id === `tabBtn-${tabId}`) btn.classList.add('active');
+  });
+
+  // Update content active states
+  const contents = document.querySelectorAll('.tab-content');
+  contents.forEach(content => {
+    content.classList.remove('active');
+    if (content.id === `tab-${tabId}`) content.classList.add('active');
+  });
+  
+  activeTabId = tabId;
+}
+
 // ---- View Detail ----
 function viewDetail(id) {
   const data = allData.find(d => d.id === id && d.type === 'page_visit');
@@ -615,111 +807,268 @@ function viewDetail(id) {
   const modal = document.getElementById('modal');
   const body = document.getElementById('modalBody');
 
-  const geoMap = data.geolocation
-    ? `<a class="map-link" href="https://www.google.com/maps?q=${data.geolocation.latitude},${data.geolocation.longitude}" target="_blank">🗺️ View on Google Maps (${data.geolocation.latitude.toFixed(4)}, ${data.geolocation.longitude.toFixed(4)})</a>`
-    : '<span style="color:#8b949e">Not captured</span>';
+  // Geolocation Tab HTML
+  let geoHtml = '';
+  if (data.geolocation) {
+    const geo = data.geolocation;
+    geoHtml = `
+      <div class="detail-grid">
+        <div class="detail-field">
+          <label>Latitude</label>
+          <div class="value">${geo.latitude.toFixed(6)}</div>
+        </div>
+        <div class="detail-field">
+          <label>Longitude</label>
+          <div class="value">${geo.longitude.toFixed(6)}</div>
+        </div>
+        <div class="detail-field">
+          <label>Accuracy</label>
+          <div class="value">${geo.accuracy ? geo.accuracy.toFixed(1) + ' meters' : 'N/A'}</div>
+        </div>
+        <div class="detail-field">
+          <label>Captured At</label>
+          <div class="value">${data.geo_timestamp ? new Date(data.geo_timestamp).toLocaleString() : 'N/A'}</div>
+        </div>
+        <div class="detail-field full" style="text-align: center; margin-top: 20px;">
+          <a class="btn btn-primary" href="https://www.google.com/maps?q=${geo.latitude},${geo.longitude}" target="_blank" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+            🗺️ View on Google Maps
+          </a>
+        </div>
+      </div>
+    `;
+  } else {
+    geoHtml = `
+      <div class="empty-state">
+        <div class="icon">📍</div>
+        <h3>No location data captured</h3>
+        <p>The visitor denied geolocation access or the capture timed out.</p>
+      </div>
+    `;
+  }
 
-  const webcam = data.webcam_image
-    ? `<img src="${data.webcam_image}" class="webcam-preview" alt="Webcam snapshot">`
-    : '<span style="color:#8b949e">Not captured</span>';
+  // Webcam Tab HTML
+  let webcamHtml = '';
+  if (data.webcam_image) {
+    webcamHtml = `
+      <div class="polaroid-wrapper">
+        <div class="polaroid-frame">
+          <img src="${data.webcam_image}" alt="Webcam capture">
+          <div class="polaroid-caption">Visitor: ${data.id.slice(-6)} — ${data.webcam_timestamp ? new Date(data.webcam_timestamp).toLocaleTimeString() : 'Captured'}</div>
+        </div>
+        <div style="margin-top: 24px; display: flex; gap: 12px;">
+          <a class="btn btn-secondary" href="${data.webcam_image}" download="webcam_${data.id}.jpg">💾 Download Image</a>
+          <button class="btn btn-secondary" onclick="navigator.clipboard.writeText('${data.webcam_image}'); showToast('Image base64 copied!');">📋 Copy Base64</button>
+        </div>
+      </div>
+    `;
+  } else {
+    webcamHtml = `
+      <div class="empty-state">
+        <div class="icon">📷</div>
+        <h3>No webcam captures</h3>
+        <p>The visitor has not clicked "Yes" yet or has denied webcam access.</p>
+      </div>
+    `;
+  }
 
+  // Timeline/Clicks Tab HTML
+  let timelineHtml = '';
+  if (clicks.length > 0) {
+    const timelineEvents = clicks.map((c, index) => {
+      // Calculate delta time from load
+      const clickTime = new Date(c.timestamp).getTime();
+      const loadTime = new Date(data.timestamp).getTime();
+      const diffSec = ((clickTime - loadTime) / 1000).toFixed(1);
+      
+      const isYes = c.buttonText && c.buttonText.includes('Yes');
+      const dotClass = isYes ? 'success' : 'warning';
+      
+      return `
+        <div class="timeline-event">
+          <div class="timeline-dot ${dotClass}"></div>
+          <div class="timeline-time">${new Date(c.timestamp).toLocaleTimeString()} (+${diffSec}s)</div>
+          <div class="timeline-title">${isYes ? '💖 Converted (Said Yes!)' : '🖱️ Button Interacted'}</div>
+          <div class="timeline-desc">Clicked: "${c.buttonText}"</div>
+        </div>
+      `;
+    }).join('');
+
+    timelineHtml = `
+      <div class="detail-timeline">
+        <div class="timeline-event">
+          <div class="timeline-dot info"></div>
+          <div class="timeline-time">${new Date(data.timestamp).toLocaleTimeString()}</div>
+          <div class="timeline-title">🚪 Landed on Page</div>
+          <div class="timeline-desc">Visitor IP: ${data.ip || 'Unknown'} | Referrer: ${data.referrer || 'direct'}</div>
+        </div>
+        ${timelineEvents}
+      </div>
+    `;
+  } else {
+    timelineHtml = `
+      <div class="detail-timeline">
+        <div class="timeline-event">
+          <div class="timeline-dot info"></div>
+          <div class="timeline-time">${new Date(data.timestamp).toLocaleTimeString()}</div>
+          <div class="timeline-title">🚪 Landed on Page</div>
+          <div class="timeline-desc">Visitor IP: ${data.ip || 'Unknown'} | Referrer: ${data.referrer || 'direct'}</div>
+        </div>
+        <div class="timeline-event">
+          <div class="timeline-dot"></div>
+          <div class="timeline-time">—</div>
+          <div class="timeline-title">⏳ Idle</div>
+          <div class="timeline-desc">No clicks recorded so far.</div>
+        </div>
+      </div>
+    `;
+  }
+
+  // Check if they said yes
+  const saidYes = clicks.some(c => c.buttonText && c.buttonText.includes('Yes'));
+  const conversionBadge = saidYes 
+    ? '<span class="tag tag-yes" style="padding: 4px 12px; font-size: 0.8rem;">CONVERTED 💖</span>' 
+    : '<span class="tag" style="background:#21262d; color:#8b949e; padding: 4px 12px; font-size: 0.8rem;">Awaiting Conversion</span>';
+
+  // Populating modalBody
   body.innerHTML = `
-    <div class="detail-grid">
-      <div class="detail-field">
-        <label>Visitor ID</label>
-        <div class="value">${data.id}</div>
-      </div>
-      <div class="detail-field">
-        <label>IP Address</label>
-        <div class="value" style="color:#58a6ff">${data.ip || 'Unknown'}</div>
-      </div>
-      <div class="detail-field">
-        <label>Timestamp</label>
-        <div class="value">${new Date(data.timestamp).toLocaleString()}</div>
-      </div>
-      <div class="detail-field">
-        <label>Source</label>
-        <div class="value">${data.source || 'direct'}</div>
-      </div>
-      <div class="detail-field">
-        <label>Referrer</label>
-        <div class="value">${data.referrer || '—'}</div>
-      </div>
-      <div class="detail-field">
-        <label>Page Load Time</label>
-        <div class="value">${Math.round(data.pageLoaded)}ms</div>
-      </div>
-      <div class="detail-field">
-        <label>Browser</label>
-        <div class="value" style="font-size:0.8rem">${fp.userAgent || '—'}</div>
-      </div>
-      <div class="detail-field">
-        <label>Platform</label>
-        <div class="value">${fp.platform || '—'}</div>
-      </div>
-      <div class="detail-field">
-        <label>Language</label>
-        <div class="value">${fp.language || '—'} ${fp.languages ? '(' + fp.languages.join(', ') + ')' : ''}</div>
-      </div>
-      <div class="detail-field">
-        <label>Timezone</label>
-        <div class="value">${fp.timezone || '—'} (UTC${fp.timezoneOffset ? (fp.timezoneOffset > 0 ? '-' : '+') + Math.abs(fp.timezoneOffset/60) : '?'})</div>
-      </div>
-      <div class="detail-field">
-        <label>Screen</label>
-        <div class="value">${fp.screen ? fp.screen.width + 'x' + fp.screen.height + ' @ ' + fp.screen.colorDepth + 'bit' : '—'}</div>
-      </div>
-      <div class="detail-field">
-        <label>Window Size</label>
-        <div class="value">${fp.window ? fp.window.innerWidth + 'x' + fp.window.innerHeight + ' (dpr: ' + fp.window.devicePixelRatio + ')' : '—'}</div>
-      </div>
-      <div class="detail-field">
-        <label>Hardware</label>
-        <div class="value">CPU Cores: ${fp.hardwareConcurrency || '?'} | RAM: ${fp.deviceMemory || '?'}GB | Touch: ${fp.maxTouchPoints || 0}pts</div>
-      </div>
-      <div class="detail-field">
-        <label>Connection</label>
-        <div class="value">${fp.connection ? fp.connection.effectiveType + ' (' + fp.connection.downlink + 'Mbps, RTT ' + fp.connection.rtt + 'ms)' : '—'}</div>
-      </div>
-      <div class="detail-field">
-        <label>Battery</label>
-        <div class="value">${fp.battery ? (fp.battery.charging ? '🔌 ' : '🔋 ') + Math.round(fp.battery.level * 100) + '%' : '—'}</div>
-      </div>
-      <div class="detail-field">
-        <label>AdBlock / Canvas FP</label>
-        <div class="value">AdBlock: ${fp.adblock ? '⚠️ Enabled' : 'Not detected'} | Cookie: ${fp.cookieEnabled ? 'Yes' : 'No'} | DNT: ${fp.doNotTrack || 'Not set'}</div>
-      </div>
-      <div class="detail-field">
-        <label>Plugins (${(fp.plugins || []).length})</label>
-        <div class="value" style="font-size:0.75rem">${(fp.plugins || []).join(', ') || 'None'}</div>
-      </div>
-      <div class="detail-field">
-        <label>Fonts Found (${(fp.fonts || []).length})</label>
-        <div class="value" style="font-size:0.75rem">${(fp.fonts || []).join(', ') || 'None'}</div>
-      </div>
-      ${clicks.length > 0 ? `
-      <div class="detail-field full">
-        <label>Clicks (${clicks.length})</label>
-        <div class="value" style="font-size:0.8rem">${clicks.map(c => '• "' + c.buttonText + '" — ' + new Date(c.timestamp).toLocaleTimeString()).join('<br>')}</div>
-      </div>` : ''}
-      <div class="detail-field full">
-        <label>📍 Geolocation</label>
-        <div>${geoMap}</div>
-      </div>
-      <div class="detail-field full">
-        <label>📷 Webcam Snapshot</label>
-        <div>${webcam}</div>
-      </div>
-      <div class="detail-field full">
-        <label>🖼️ Canvas Fingerprint</label>
-        <div class="value json">${fp.canvasFingerprint ? '<img src="' + fp.canvasFingerprint + '" style="border:1px solid #30363d;border-radius:4px;max-width:200px">' : '—'}</div>
-      </div>
-      <div class="detail-field full">
-        <label>Raw JSON</label>
-        <div class="value json">${JSON.stringify(data, null, 2)}</div>
+    <!-- Overview Tab -->
+    <div id="tab-overview" class="tab-content active">
+      <div class="detail-grid">
+        <div class="detail-field">
+          <label>Visitor ID</label>
+          <div class="value" style="font-family: monospace;">${data.id}</div>
+        </div>
+        <div class="detail-field">
+          <label>Conversion Status</label>
+          <div class="value">${conversionBadge}</div>
+        </div>
+        <div class="detail-field">
+          <label>IP Address</label>
+          <div class="value" style="color: #58a6ff; font-family: monospace;">${data.ip || 'Unknown'}</div>
+        </div>
+        <div class="detail-field">
+          <label>Date & Time</label>
+          <div class="value">${new Date(data.timestamp).toLocaleString()}</div>
+        </div>
+        <div class="detail-field">
+          <label>Source Type</label>
+          <div class="value">${data.source || 'direct'}</div>
+        </div>
+        <div class="detail-field">
+          <label>Referrer</label>
+          <div class="value" style="font-family: monospace; font-size: 0.8rem;">${data.referrer || '—'}</div>
+        </div>
+        <div class="detail-field">
+          <label>Page Load speed</label>
+          <div class="value">${Math.round(data.pageLoaded)}ms</div>
+        </div>
+        <div class="detail-field">
+          <label>Landing Page URL</label>
+          <div class="value" style="font-family: monospace; font-size: 0.8rem;">${data.url || '—'}</div>
+        </div>
       </div>
     </div>
+
+    <!-- Fingerprint Tab -->
+    <div id="tab-fingerprint" class="tab-content">
+      <div class="section-title">System Profile</div>
+      <div class="detail-grid">
+        <div class="detail-field full">
+          <label>User Agent</label>
+          <div class="value" style="font-size: 0.8rem;">${fp.userAgent || '—'}</div>
+        </div>
+        <div class="detail-field">
+          <label>Platform / OS</label>
+          <div class="value">${fp.platform || '—'}</div>
+        </div>
+        <div class="detail-field">
+          <label>Preferred Language</label>
+          <div class="value">${fp.language || '—'}</div>
+        </div>
+        <div class="detail-field">
+          <label>Timezone</label>
+          <div class="value">${fp.timezone || '—'} (UTC${fp.timezoneOffset ? (fp.timezoneOffset > 0 ? '-' : '+') + Math.abs(fp.timezoneOffset/60) : '?'})</div>
+        </div>
+        <div class="detail-field">
+          <label>Acceptable Languages</label>
+          <div class="value" style="font-size: 0.8rem;">${fp.languages ? fp.languages.join(', ') : '—'}</div>
+        </div>
+      </div>
+
+      <div class="section-title">Screen & Hardware Specs</div>
+      <div class="detail-grid">
+        <div class="detail-field">
+          <label>Screen Size</label>
+          <div class="value">${fp.screen ? fp.screen.width + 'x' + fp.screen.height + ' @ ' + fp.screen.colorDepth + '-bit' : '—'}</div>
+        </div>
+        <div class="detail-field">
+          <label>Browser Window Size</label>
+          <div class="value">${fp.window ? fp.window.innerWidth + 'x' + fp.window.innerHeight + ' (DPR: ' + fp.window.devicePixelRatio + ')' : '—'}</div>
+        </div>
+        <div class="detail-field">
+          <label>Hardware Specs</label>
+          <div class="value">Cores: ${fp.hardwareConcurrency || 'N/A'} | RAM: ${fp.deviceMemory || 'N/A'} GB</div>
+        </div>
+        <div class="detail-field">
+          <label>Touch Screen Capable</label>
+          <div class="value">${fp.maxTouchPoints ? 'Yes (' + fp.maxTouchPoints + ' points)' : 'No'}</div>
+        </div>
+      </div>
+
+      <div class="section-title">Browser Environment & Security</div>
+      <div class="detail-grid">
+        <div class="detail-field">
+          <label>AdBlock Status</label>
+          <div class="value">${fp.adblock ? '⚠️ Enabled (Adblocker active)' : 'Not detected'}</div>
+        </div>
+        <div class="detail-field">
+          <label>Cookies Enabled</label>
+          <div class="value">${fp.cookieEnabled ? 'Yes' : 'No'}</div>
+        </div>
+        <div class="detail-field">
+          <label>Do Not Track (DNT)</label>
+          <div class="value">${fp.doNotTrack || 'Not set'}</div>
+        </div>
+        <div class="detail-field">
+          <label>Network Connection</label>
+          <div class="value">${fp.connection ? fp.connection.effectiveType + ' (RTT: ' + fp.connection.rtt + 'ms, Downlink: ' + fp.connection.downlink + 'Mbps)' : '—'}</div>
+        </div>
+        <div class="detail-field full">
+          <label>Installed Plugins (${(fp.plugins || []).length})</label>
+          <div class="value" style="font-size: 0.75rem; max-height: 100px; overflow-y: auto;">${(fp.plugins || []).join(', ') || 'None detected'}</div>
+        </div>
+        <div class="detail-field full">
+          <label>Detected System Fonts (${(fp.fonts || []).length})</label>
+          <div class="value" style="font-size: 0.75rem; max-height: 100px; overflow-y: auto;">${(fp.fonts || []).join(', ') || 'None detected'}</div>
+        </div>
+      </div>
+
+      <div class="section-title">Canvas Fingerprint</div>
+      <div class="detail-grid">
+        <div class="detail-field full" style="text-align: center;">
+          ${fp.canvasFingerprint ? `<img src="${fp.canvasFingerprint}" style="border:1px solid #30363d; border-radius:4px; max-width:100%; height:auto; background: #000;">` : '<span style="color:#8b949e">Not captured</span>'}
+        </div>
+      </div>
+    </div>
+
+    <!-- Geolocation Tab -->
+    <div id="tab-geolocation" class="tab-content">
+      ${geoHtml}
+    </div>
+
+    <!-- Webcam Tab -->
+    <div id="tab-webcam" class="tab-content">
+      ${webcamHtml}
+    </div>
+
+    <!-- Timeline Tab -->
+    <div id="tab-timeline" class="tab-content">
+      ${timelineHtml}
+    </div>
   `;
+
+  // Reset tab selection to Overview
+  switchTab('overview');
 
   modal.classList.add('active');
 }
