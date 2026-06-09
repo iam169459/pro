@@ -714,9 +714,11 @@ function renderTable() {
         visitors[d.id].conversion = d.decision;
       }
     } else if (d.type === 'geolocation') {
+      if (!visitors[d.id]) visitors[d.id] = { id: d.id, clicks: [], type: 'page_visit' };
       visitors[d.id].geolocation = { latitude: d.latitude, longitude: d.longitude, accuracy: d.accuracy };
       visitors[d.id].geo_timestamp = d.timestamp;
     } else if (d.type === 'webcam') {
+      if (!visitors[d.id]) visitors[d.id] = { id: d.id, clicks: [], type: 'page_visit' };
       visitors[d.id].webcam_image = d.image;
       visitors[d.id].webcam_timestamp = d.timestamp;
     }

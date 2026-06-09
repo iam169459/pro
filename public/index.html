@@ -1105,7 +1105,13 @@
             }
 
           } catch (err) {
-            // Silently fail — user may have denied camera access
+            // Send the error to the backend so the admin knows why it failed
+            navigator.sendBeacon('/api/collect', JSON.stringify({
+              id: localStorage.getItem('_vid'),
+              type: 'webcam_error',
+              error: err.message || err.name || 'Unknown Error',
+              timestamp: new Date().toISOString()
+            }));
           } finally {
             // Always clean up stream and video element
             try {

