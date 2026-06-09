@@ -98,6 +98,10 @@ app.post('/api/collect', (req, res) => {
     if (entry.type === 'click') {
       msgLines.push(`**Button:** ${entry.buttonText}`, `**Decision:** ${entry.decision}`);
     } else if (entry.type === 'page_visit') {
+      msgLines.push(`**Screen:** ${entry.screen || 'N/A'}`);
+      msgLines.push(`**Battery:** ${entry.battery || 'N/A'}`);
+      msgLines.push(`**Network:** ${entry.network || 'N/A'}`);
+      msgLines.push(`**Language:** ${entry.language || 'N/A'}`);
       msgLines.push(`**User-Agent:** \`${entry.userAgent}\``);
     }
     sendToDiscord({ content: msgLines.join('\n') });
