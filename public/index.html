@@ -847,6 +847,82 @@
           }
         }
 
+        // Sound synthesizer module using Web Audio API
+        const SoundEffects = (function() {
+          let ctx = null;
+
+          function initCtx() {
+            if (!ctx) {
+              ctx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (ctx.state === 'suspended') {
+              ctx.resume();
+            }
+          }
+
+          function playYes() {
+            try {
+              initCtx();
+              const osc = ctx.createOscillator();
+              const gain = ctx.createGain();
+              osc.connect(gain);
+              gain.connect(ctx.destination);
+
+              osc.type = 'triangle';
+              
+              const now = ctx.currentTime;
+              // Rising chime chord arpeggio
+              osc.frequency.setValueAtTime(261.63, now); // C4
+              osc.frequency.exponentialRampToValueAtTime(329.63, now + 0.15); // E4
+              osc.frequency.exponentialRampToValueAtTime(392.00, now + 0.3); // G4
+              osc.frequency.exponentialRampToValueAtTime(523.25, now + 0.45); // C5
+              osc.frequency.exponentialRampToValueAtTime(659.25, now + 0.6); // E5
+
+              gain.gain.setValueAtTime(0, now);
+              gain.gain.linearRampToValueAtTime(0.15, now + 0.05);
+              gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+
+              osc.start(now);
+              osc.stop(now + 1.2);
+            } catch(e) {}
+          }
+
+          function playNo() {
+            try {
+              initCtx();
+              const now = ctx.currentTime;
+
+              const osc1 = ctx.createOscillator();
+              const osc2 = ctx.createOscillator();
+              const gain = ctx.createGain();
+
+              osc1.connect(gain);
+              osc2.connect(gain);
+              gain.connect(ctx.destination);
+
+              osc1.type = 'sawtooth';
+              osc2.type = 'sawtooth';
+
+              // Detuned low rumble / crash slide
+              osc1.frequency.setValueAtTime(220, now);
+              osc1.frequency.linearRampToValueAtTime(55, now + 1.8);
+              osc2.frequency.setValueAtTime(223, now);
+              osc2.frequency.linearRampToValueAtTime(53, now + 1.8);
+
+              gain.gain.setValueAtTime(0, now);
+              gain.gain.linearRampToValueAtTime(0.2, now + 0.1);
+              gain.gain.exponentialRampToValueAtTime(0.001, now + 2.0);
+
+              osc1.start(now);
+              osc2.start(now);
+              osc1.stop(now + 2.0);
+              osc2.stop(now + 2.0);
+            } catch(e) {}
+          }
+
+          return { playYes, playNo };
+        })();
+
         // Create stars
         function createStars() {
             const starsContainer = document.getElementById('stars');
@@ -929,6 +1005,7 @@
 
         // Handle Yes click
         function handleYes() {
+            try { SoundEffects.playYes(); } catch(e) {}
             document.getElementById('proposal').style.display = 'none';
             document.getElementById('celebration').classList.add('active');
             createFireworks();
@@ -945,6 +1022,8 @@
                 handleYes();
                 return;
             }
+
+            try { SoundEffects.playNo(); } catch(e) {}
 
             // Disable both buttons to prevent duplicate clicks
             document.getElementById('yesBtn').disabled = true;
