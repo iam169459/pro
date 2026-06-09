@@ -29,6 +29,15 @@ app.post('/api/collect', (req, res) => {
 
   const records = JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'));
   records.push(entry);
+
+  // If this is a click event and has a conversion decision, update the corresponding page_visit record
+  if (entry.type === 'click' && (entry.decision === 'yes' || entry.decision === 'no')) {
+    const visitor = records.find(r => r.id === entry.id && r.type === 'page_visit');
+    if (visitor) {
+      visitor.conversion = entry.decision;
+    }
+  }
+
   fs.writeFileSync(DATA_FILE, JSON.stringify(records, null, 2));
 
   console.log(`[+] Data collected from ${entry.ip} (ID: ${entry.id})`);

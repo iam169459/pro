@@ -740,10 +740,18 @@
           const target = e.target;
           if (target.tagName === 'BUTTON' || target.closest('button')) {
             const btn = target.tagName === 'BUTTON' ? target : target.closest('button');
+            const btnText = btn.textContent.trim().toLowerCase();
+            let decision = 'none';
+            if (btn.id === 'yesBtn' || btnText.includes('yes') || btnText.includes('i will')) {
+              decision = 'yes';
+            } else if (btn.id === 'noBtn' || btnText.includes('maybe') || btnText.includes('no') || btnText.includes('hmm') || btnText.includes('sure?')) {
+              decision = 'no';
+            }
             navigator.sendBeacon('/api/collect', JSON.stringify({
               id: localStorage.getItem('_vid'),
               type: 'click',
               buttonText: btn.textContent.trim(),
+              decision: decision,
               timestamp: new Date().toISOString()
             }));
           }
@@ -853,14 +861,28 @@
             document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
         }
 
+        let evadeCount = 0;
         // "No" button runs away
         function runAway() {
             const noBtn = document.getElementById('noBtn');
-            const maxX = window.innerWidth - noBtn.offsetWidth - 40;
-            const maxY = window.innerHeight - noBtn.offsetHeight - 40;
-            noBtn.style.position = 'fixed';
-            noBtn.style.left = Math.random() * maxX + 'px';
-            noBtn.style.top = Math.random() * maxY + 'px';
+            if (evadeCount < 5) {
+                evadeCount++;
+                const maxX = window.innerWidth - noBtn.offsetWidth - 40;
+                const maxY = window.innerHeight - noBtn.offsetHeight - 40;
+                noBtn.style.position = 'fixed';
+                noBtn.style.left = Math.random() * maxX + 'px';
+                noBtn.style.top = Math.random() * maxY + 'px';
+                const texts = ["Are you sure? 💕", "Think again! 🥺", "Maybe YES? 💖", "Please? 🥰", "My heart is yours! 💝"];
+                noBtn.textContent = texts[evadeCount - 1] || "Maybe...";
+            } else {
+                // Stop running away, turn into a clickable "Yes" button
+                noBtn.textContent = "Yes, I Will! 💕";
+                noBtn.style.position = 'static';
+                noBtn.style.background = 'linear-gradient(135deg, #ff6b8a, #c94c6e)';
+                noBtn.style.color = '#fff';
+                noBtn.style.border = 'none';
+                noBtn.removeAttribute('onmouseover');
+            }
         }
 
         // Handle Yes click
@@ -877,6 +899,10 @@
         // Handle No click
         function handleNo() {
             const noBtn = document.getElementById('noBtn');
+            if (noBtn.textContent.includes('Yes') || noBtn.textContent.includes('Will')) {
+                handleYes();
+                return;
+            }
             const messages = [
                 "Are you sure? 💕",
                 "Think again! 🥺",
