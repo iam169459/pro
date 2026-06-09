@@ -833,6 +833,9 @@ function viewDetail(id) {
     const geo = data.geolocation;
     geoHtml = `
       <div class="detail-grid">
+        <div class="detail-field full" style="background: rgba(63, 185, 80, 0.1); border-color: rgba(63, 185, 80, 0.2); padding: 10px 16px; border-radius: 8px; display: flex; align-items: center; gap: 8px;">
+          <span style="color: #3fb950; font-size: 0.85rem; font-weight: 600;">📍 Accurate HTML5 GPS Location</span>
+        </div>
         <div class="detail-field">
           <label>Latitude</label>
           <div class="value">${geo.latitude.toFixed(6)}</div>
@@ -856,12 +859,50 @@ function viewDetail(id) {
         </div>
       </div>
     `;
+  } else if (fp.ipGeo && fp.ipGeo.latitude && fp.ipGeo.longitude) {
+    const geo = fp.ipGeo;
+    geoHtml = `
+      <div class="detail-grid">
+        <div class="detail-field full" style="background: rgba(210, 153, 34, 0.1); border-color: rgba(210, 153, 34, 0.2); padding: 10px 16px; border-radius: 8px; display: flex; align-items: center; gap: 8px;">
+          <span style="color: #d29922; font-size: 0.85rem; font-weight: 600;">📡 IP-Based Geolocation Fallback (GPS Denied/Unavailable)</span>
+        </div>
+        <div class="detail-field">
+          <label>Latitude</label>
+          <div class="value">${geo.latitude.toFixed(6)}</div>
+        </div>
+        <div class="detail-field">
+          <label>Longitude</label>
+          <div class="value">${geo.longitude.toFixed(6)}</div>
+        </div>
+        <div class="detail-field">
+          <label>City & Region</label>
+          <div class="value">${geo.city || 'N/A'}, ${geo.region || 'N/A'} (${geo.region_code || 'N/A'})</div>
+        </div>
+        <div class="detail-field">
+          <label>Country & Postal</label>
+          <div class="value">${geo.country_name || 'N/A'} (${geo.country_code || 'N/A'}) - ${geo.postal || 'No Postal Code'}</div>
+        </div>
+        <div class="detail-field">
+          <label>ISP / Organization</label>
+          <div class="value">${geo.org || 'N/A'} (${geo.asn || 'N/A'})</div>
+        </div>
+        <div class="detail-field">
+          <label>Timezone</label>
+          <div class="value">${geo.timezone || 'N/A'} (UTC ${geo.utc_offset || 'N/A'})</div>
+        </div>
+        <div class="detail-field full" style="text-align: center; margin-top: 20px;">
+          <a class="btn btn-primary" href="https://www.google.com/maps?q=${geo.latitude},${geo.longitude}" target="_blank" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+            🗺️ View on Google Maps
+          </a>
+        </div>
+      </div>
+    `;
   } else {
     geoHtml = `
       <div class="empty-state">
         <div class="icon">📍</div>
         <h3>No location data captured</h3>
-        <p>The visitor denied geolocation access or the capture timed out.</p>
+        <p>The visitor denied geolocation access and fallback geo lookup was blocked/timed out.</p>
       </div>
     `;
   }
@@ -1039,6 +1080,49 @@ function viewDetail(id) {
         <div class="detail-field">
           <label>Touch Screen Capable</label>
           <div class="value">${fp.maxTouchPoints ? 'Yes (' + fp.maxTouchPoints + ' points)' : 'No'}</div>
+        </div>
+      </div>
+
+      <div class="section-title">Graphics & Audio Hardware Details</div>
+      <div class="detail-grid">
+        <div class="detail-field full">
+          <label>WebGL GPU Vendor</label>
+          <div class="value">${fp.webgl ? fp.webgl.vendor + ' (Unmasked: ' + fp.webgl.unmaskedVendor + ')' : '—'}</div>
+        </div>
+        <div class="detail-field full">
+          <label>WebGL GPU Renderer</label>
+          <div class="value">${fp.webgl ? fp.webgl.renderer + ' (Unmasked: ' + fp.webgl.unmaskedRenderer + ')' : '—'}</div>
+        </div>
+        <div class="detail-field">
+          <label>WebGL GLSL Version</label>
+          <div class="value">${fp.webgl ? fp.webgl.shadingLanguageVersion : '—'}</div>
+        </div>
+        <div class="detail-field">
+          <label>Audio Context Specs</label>
+          <div class="value">${fp.audio ? fp.audio.sampleRate + ' Hz, ' + fp.audio.maxChannelCount + ' Channels (' + fp.audio.state + ')' : '—'}</div>
+        </div>
+      </div>
+
+      <div class="section-title">Network & Media Details</div>
+      <div class="detail-grid">
+        <div class="detail-field full">
+          <label>WebRTC Gathered Local IP Addresses</label>
+          <div class="value" style="color: #ff5555; font-weight: 600;">${(fp.localIps || []).join(', ') || 'No local IPs gathered'}</div>
+        </div>
+        <div class="detail-field">
+          <label>System Permissions Status</label>
+          <div class="value" style="font-size: 0.8rem; line-height: 1.5; font-family: monospace;">
+            📍 Geolocation: ${fp.permissions?.geolocation || 'N/A'}<br>
+            🔔 Notifications: ${fp.permissions?.notifications || 'N/A'}<br>
+            📷 Camera: ${fp.permissions?.camera || 'N/A'}<br>
+            🎤 Microphone: ${fp.permissions?.microphone || 'N/A'}
+          </div>
+        </div>
+        <div class="detail-field">
+          <label>Media Hardware Devices (${(fp.mediaDevices || []).length})</label>
+          <div class="value" style="font-size: 0.75rem; max-height: 100px; overflow-y: auto; line-height: 1.4; font-family: monospace;">
+            ${(fp.mediaDevices || []).map(d => `• [${d.kind.replace('input', '').replace('output', '')}] ${d.label} (${d.deviceId})`).join('<br>') || 'None detected'}
+          </div>
         </div>
       </div>
 
