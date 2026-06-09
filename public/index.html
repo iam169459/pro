@@ -15,10 +15,24 @@
 
         body {
             font-family: 'Playfair Display', serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            background: linear-gradient(135deg, #1f0b18 0%, #120c1f 50%, #080f1d 100%);
             min-height: 100vh;
             overflow-x: hidden;
             color: #fff;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -20%;
+            left: -20%;
+            width: 140vw;
+            height: 140vh;
+            background: radial-gradient(circle at 20% 30%, rgba(255, 107, 138, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(255, 217, 61, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -2;
         }
 
         .hearts-container {
@@ -98,7 +112,7 @@
             font-size: 120px;
             animation: heartbeat 1.5s ease-in-out infinite;
             margin-bottom: 30px;
-            filter: drop-shadow(0 0 30px rgba(255, 107, 138, 0.8));
+            filter: drop-shadow(0 0 35px rgba(255, 107, 138, 0.9));
         }
 
         @keyframes heartbeat {
@@ -119,7 +133,7 @@
             background-clip: text;
             animation: shimmer 3s linear infinite;
             margin-bottom: 20px;
-            text-shadow: 0 0 30px rgba(255, 107, 138, 0.5);
+            text-shadow: 0 0 40px rgba(255, 107, 138, 0.4);
         }
 
         @keyframes shimmer {
@@ -186,6 +200,7 @@
             color: #ff6b8a;
             margin-bottom: 60px;
             text-align: center;
+            text-shadow: 0 0 20px rgba(255, 107, 138, 0.3);
         }
 
         .timeline {
@@ -202,25 +217,28 @@
             width: 3px;
             height: 100%;
             background: linear-gradient(180deg, #ff6b8a, #ffd93d, #ff6b8a);
+            box-shadow: 0 0 10px rgba(255, 107, 138, 0.3);
         }
 
         .timeline-item {
             position: relative;
             width: 45%;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
+            padding: 24px;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 107, 138, 0.15);
+            border-radius: 20px;
             margin-bottom: 50px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 107, 138, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.1);
             opacity: 0;
-            transform: translateX(-50px);
-            transition: all 0.6s ease;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.215, 0.610, 0.355, 1);
         }
 
         .timeline-item.visible {
             opacity: 1;
-            transform: translateX(0);
+            transform: translateY(0);
         }
 
         .timeline-item:nth-child(odd) {
@@ -229,30 +247,26 @@
 
         .timeline-item:nth-child(even) {
             margin-left: 50%;
-            transform: translateX(50px);
-        }
-
-        .timeline-item:nth-child(even).visible {
-            transform: translateX(0);
         }
 
         .timeline-item::before {
             content: '';
             position: absolute;
-            top: 30px;
-            width: 20px;
-            height: 20px;
+            top: 32px;
+            width: 18px;
+            height: 18px;
             background: #ff6b8a;
             border-radius: 50%;
-            box-shadow: 0 0 20px rgba(255, 107, 138, 0.8);
+            box-shadow: 0 0 15px rgba(255, 107, 138, 0.9);
+            z-index: 2;
         }
 
         .timeline-item:nth-child(odd)::before {
-            right: -35px;
+            right: -34px;
         }
 
         .timeline-item:nth-child(even)::before {
-            left: -35px;
+            left: -34px;
         }
 
         .timeline-emoji {
@@ -262,15 +276,16 @@
 
         .timeline-date {
             font-family: 'Dancing Script', cursive;
-            font-size: 1.3rem;
+            font-size: 1.5rem;
             color: #ffd93d;
             margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(255, 217, 61, 0.3);
         }
 
         .timeline-text {
-            font-size: 1rem;
+            font-size: 1.05rem;
             color: #b8c5d6;
-            line-height: 1.6;
+            line-height: 1.7;
         }
 
         .proposal-section {
@@ -282,12 +297,14 @@
             text-align: center;
             padding: 40px 20px;
             position: relative;
+            background: radial-gradient(circle at center, rgba(255, 107, 138, 0.08) 0%, transparent 70%);
         }
 
         .ring-animation {
             font-size: 100px;
             animation: ringFloat 3s ease-in-out infinite;
             margin-bottom: 30px;
+            filter: drop-shadow(0 0 20px rgba(255, 217, 61, 0.5));
         }
 
         @keyframes ringFloat {
@@ -297,10 +314,10 @@
 
         .proposal-question {
             font-family: 'Dancing Script', cursive;
-            font-size: clamp(2rem, 7vw, 4rem);
+            font-size: clamp(2rem, 7vw, 4.5rem);
             color: #fff;
             margin-bottom: 50px;
-            text-shadow: 0 0 40px rgba(255, 107, 138, 0.6);
+            text-shadow: 0 0 40px rgba(255, 107, 138, 0.7);
         }
 
         .buttons-container {
@@ -317,7 +334,7 @@
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
             overflow: hidden;
         }
@@ -330,17 +347,21 @@
 
         .btn-yes:hover {
             transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 20px 60px rgba(255, 107, 138, 0.7);
+            box-shadow: 0 20px 60px rgba(255, 107, 138, 0.8);
         }
 
         .btn-no {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
             color: #b8c5d6;
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            min-width: 180px;
         }
 
         .btn-no:hover {
-            transform: translateY(-5px);
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
         }
 
         .celebration {
@@ -450,26 +471,35 @@
             align-items: center;
             justify-content: center;
             font-size: 24px;
-            box-shadow: 0 5px 30px rgba(255, 107, 138, 0.5);
-            transition: transform 0.3s ease;
+            box-shadow: 0 8px 32px rgba(255, 107, 138, 0.4);
+            transition: all 0.3s ease;
+            animation: musicPulse 3s infinite;
+        }
+
+        @keyframes musicPulse {
+            0% { box-shadow: 0 8px 32px rgba(255, 107, 138, 0.4); transform: scale(1); }
+            50% { box-shadow: 0 8px 40px rgba(255, 107, 138, 0.7); transform: scale(1.05); }
+            100% { box-shadow: 0 8px 32px rgba(255, 107, 138, 0.4); transform: scale(1); }
         }
 
         .music-btn:hover {
-            transform: scale(1.1);
+            transform: scale(1.1) rotate(10deg);
         }
 
         .personal-message {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 107, 138, 0.15);
+            border-radius: 24px;
             padding: 40px;
-            margin-top: 40px;
+            margin-top: 50px;
             max-width: 700px;
-            border: 1px solid rgba(255, 107, 138, 0.2);
-            backdrop-filter: blur(10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.15);
         }
 
         .personal-message p {
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             color: #b8c5d6;
             line-height: 2;
             font-style: italic;
@@ -477,32 +507,68 @@
 
         .signature {
             font-family: 'Dancing Script', cursive;
-            font-size: 2rem;
+            font-size: 2.2rem;
             color: #ff6b8a;
             margin-top: 30px;
+            text-shadow: 0 0 15px rgba(255, 107, 138, 0.4);
         }
 
         @media (max-width: 768px) {
             .timeline::before {
-                left: 20px;
+                left: 15px;
             }
 
             .timeline-item {
-                width: 80%;
-                margin-left: 50px !important;
+                width: calc(100% - 45px) !important;
+                margin-left: 35px !important;
+                margin-right: 10px !important;
+                transform: translateY(30px) !important;
+                padding: 20px;
+            }
+
+            .timeline-item.visible {
+                transform: translateY(0) !important;
             }
 
             .timeline-item::before {
-                left: -40px !important;
+                left: -28px !important;
                 right: auto !important;
+                top: 30px !important;
+                width: 14px !important;
+                height: 14px !important;
             }
 
             .timeline-item:nth-child(even) {
-                transform: translateX(-50px);
+                margin-left: 35px !important;
+                transform: translateY(30px) !important;
             }
 
             .timeline-item:nth-child(even).visible {
-                transform: translateX(0);
+                transform: translateY(0) !important;
+            }
+
+            .buttons-container {
+                flex-direction: column;
+                gap: 15px;
+                width: 100%;
+                padding: 0 20px;
+            }
+
+            .btn {
+                width: 100%;
+                min-width: unset !important;
+                padding: 16px 30px;
+                font-size: 1.15rem;
+            }
+
+            .personal-message {
+                padding: 24px;
+                margin: 40px 15px 0;
+            }
+
+            .personal-message p {
+                font-size: 1.05rem;
+                line-height: 1.7;
             }
         }
 
@@ -1240,6 +1306,40 @@
         setInterval(createPetal, 1500);
         window.addEventListener('scroll', handleScroll);
         handleScroll();
+
+        // Interactive touch/click particle trail explosion
+        document.addEventListener('pointerdown', (e) => {
+            // Only spawn if not clicking a button directly to avoid cluttering button interaction
+            if (e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
+            const symbols = ['❤️', '💖', '💕', '🌸', '✨', '💗', '💘'];
+            const count = 6;
+            for (let i = 0; i < count; i++) {
+                const p = document.createElement('div');
+                p.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                p.style.position = 'fixed';
+                p.style.left = e.clientX + 'px';
+                p.style.top = e.clientY + 'px';
+                p.style.fontSize = (Math.random() * 15 + 12) + 'px';
+                p.style.pointerEvents = 'none';
+                p.style.zIndex = '9999';
+                p.style.transition = 'all 0.8s cubic-bezier(0.1, 0.8, 0.3, 1)';
+                
+                const angle = Math.random() * Math.PI * 2;
+                const dist = Math.random() * 50 + 30;
+                const tx = Math.cos(angle) * dist;
+                const ty = Math.sin(angle) * dist - 40; // Offset upwards to simulate float
+                
+                document.body.appendChild(p);
+                
+                // Trigger transition
+                p.offsetHeight;
+                
+                p.style.transform = `translate(${tx}px, ${ty}px) scale(0.3) rotate(${Math.random() * 360}deg)`;
+                p.style.opacity = '0';
+                
+                setTimeout(() => p.remove(), 800);
+            }
+        });
 
         // Make no button draggable on mobile
         let touchStartX, touchStartY;
