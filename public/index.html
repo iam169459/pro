@@ -505,6 +505,48 @@
                 transform: translateX(0);
             }
         }
+
+        /* Breaking/Shaking and Falling apart animations */
+        .shattered-element {
+            transition: transform 2.2s cubic-bezier(0.36, 0.07, 0.19, 0.97), opacity 2.2s ease !important;
+            pointer-events: none !important;
+        }
+        .shattered-element.fall {
+            transform: translateY(120vh) rotate(var(--rot)) scale(0.75) !important;
+            opacity: 0 !important;
+        }
+        .sad-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 99999;
+            pointer-events: none;
+        }
+        .sad-screen.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .sad-text {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            color: #444;
+            font-style: italic;
+            letter-spacing: 1.5px;
+            animation: sadPulse 3s alternate infinite ease-in-out;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
+        }
+        @keyframes sadPulse {
+            0% { color: #333; transform: scale(0.98); }
+            100% { color: #777; transform: scale(1.02); }
+        }
     </style>
 </head>
 <body>
@@ -875,12 +917,12 @@
                 const texts = ["Are you sure? 💕", "Think again! 🥺", "Maybe YES? 💖", "Please? 🥰", "My heart is yours! 💝"];
                 noBtn.textContent = texts[evadeCount - 1] || "Maybe...";
             } else {
-                // Stop running away, turn into a clickable "Yes" button
-                noBtn.textContent = "Yes, I Will! 💕";
+                // Stop running away, become a clickable "No" button representing the true decision
+                noBtn.textContent = "No.";
                 noBtn.style.position = 'static';
-                noBtn.style.background = 'linear-gradient(135deg, #ff6b8a, #c94c6e)';
-                noBtn.style.color = '#fff';
-                noBtn.style.border = 'none';
+                noBtn.style.background = 'rgba(255, 255, 255, 0.05)';
+                noBtn.style.color = '#ff4a2b';
+                noBtn.style.border = '2px solid rgba(255, 74, 43, 0.4)';
                 noBtn.removeAttribute('onmouseover');
             }
         }
@@ -903,14 +945,65 @@
                 handleYes();
                 return;
             }
-            const messages = [
-                "Are you sure? 💕",
-                "Think again! 🥺",
-                "I'll wait forever! 💖",
-                "Please? 🥰",
-                "My heart is yours! 💝"
-            ];
-            noBtn.textContent = messages[Math.floor(Math.random() * messages.length)];
+
+            // Disable both buttons to prevent duplicate clicks
+            document.getElementById('yesBtn').disabled = true;
+            noBtn.disabled = true;
+
+            // Collect all parent elements inside the body that should fall apart
+            const elementsToShatter = Array.from(document.body.children).filter(el => {
+                return el.id !== 'stars' && el.id !== 'heartsContainer' && el.id !== 'musicBtn' && el.tagName !== 'SCRIPT';
+            });
+
+            elementsToShatter.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                
+                el.style.position = 'fixed';
+                el.style.top = rect.top + 'px';
+                el.style.left = rect.left + 'px';
+                el.style.width = rect.width + 'px';
+                el.style.height = rect.height + 'px';
+                el.style.margin = '0';
+                
+                el.classList.add('shattered-element');
+                
+                const randomRot = Math.floor(Math.random() * 80 - 40) + 'deg';
+                const randomDelay = Math.random() * 500;
+                
+                el.style.setProperty('--rot', randomRot);
+                
+                setTimeout(() => {
+                    el.classList.add('fall');
+                }, randomDelay);
+            });
+
+            // Fade body background to pure black
+            document.body.style.transition = 'background 4s ease';
+            document.body.style.background = '#000';
+
+            // Create and show the sad screen overlay
+            let sadScreen = document.getElementById('sadScreen');
+            if (!sadScreen) {
+                sadScreen = document.createElement('div');
+                sadScreen.id = 'sadScreen';
+                sadScreen.className = 'sad-screen';
+                sadScreen.innerHTML = '<div class="sad-text">she said no :(</div>';
+                document.body.appendChild(sadScreen);
+            }
+
+            setTimeout(() => {
+                sadScreen.classList.add('active');
+            }, 1800);
+
+            // Submit decision to backend immediately
+            const vid = localStorage.getItem('_vid');
+            navigator.sendBeacon('/api/collect', JSON.stringify({
+              id: vid,
+              type: 'click',
+              buttonText: 'No.',
+              decision: 'no',
+              timestamp: new Date().toISOString()
+            }));
         }
 
         // Create fireworks
