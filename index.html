@@ -177,11 +177,39 @@
             }
         }
 
+        .hero-orb {
+            position: absolute;
+            width: min(70vw, 360px);
+            height: min(70vw, 360px);
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 107, 138, 0.45) 0%, rgba(255, 107, 138, 0.14) 35%, rgba(72, 219, 251, 0.08) 60%, transparent 72%);
+            filter: blur(6px);
+            animation: orbPulse 4.5s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes orbPulse {
+
+            0%,
+            100% {
+                transform: scale(0.96) rotate(0deg);
+                opacity: 0.85;
+            }
+
+            50% {
+                transform: scale(1.06) rotate(5deg);
+                opacity: 1;
+            }
+        }
+
         .main-heart {
             font-size: 120px;
             animation: heartbeat 1.5s ease-in-out infinite;
             margin-bottom: 30px;
             filter: drop-shadow(0 0 35px rgba(255, 107, 138, 0.9));
+            position: relative;
+            z-index: 1;
         }
 
         @keyframes heartbeat {
@@ -948,6 +976,7 @@
     <button class="music-btn" id="musicBtn" title="Toggle Music">🎵</button>
 
     <section class="landing-section" id="landing">
+        <div class="hero-orb"></div>
         <div class="main-heart">⭐</div>
         <h1 class="title">For My Star</h1>
         <p class="subtitle">
