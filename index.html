@@ -30,10 +30,33 @@
             left: -20%;
             width: 140vw;
             height: 140vh;
-            background: radial-gradient(circle at 20% 30%, rgba(255, 107, 138, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(255, 217, 61, 0.08) 0%, transparent 50%);
+            background: radial-gradient(circle at 20% 30%, rgba(255, 107, 138, 0.18) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 217, 61, 0.14) 0%, transparent 50%);
             pointer-events: none;
             z-index: -2;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            inset: -20%;
+            background: radial-gradient(circle at 15% 20%, rgba(72, 219, 251, 0.16) 0%, transparent 24%),
+                radial-gradient(circle at 85% 15%, rgba(255, 107, 138, 0.14) 0%, transparent 28%),
+                radial-gradient(circle at 50% 85%, rgba(255, 217, 61, 0.12) 0%, transparent 26%);
+            filter: blur(40px);
+            animation: drift 12s ease-in-out infinite alternate;
+            pointer-events: none;
+            z-index: -3;
+        }
+
+        @keyframes drift {
+            from {
+                transform: translate3d(-3%, -2%, 0) scale(1);
+            }
+
+            to {
+                transform: translate3d(3%, 2%, 0) scale(1.05);
+            }
         }
 
         .hearts-container {
@@ -115,6 +138,45 @@
             position: relative;
         }
 
+        .landing-section::before,
+        .landing-section::after {
+            content: '';
+            position: absolute;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: spin 18s linear infinite;
+        }
+
+        .landing-section::before {
+            width: 320px;
+            height: 320px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.35;
+        }
+
+        .landing-section::after {
+            width: 420px;
+            height: 420px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(30deg);
+            opacity: 0.2;
+            animation-direction: reverse;
+        }
+
+        @keyframes spin {
+            from {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+
+            to {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
         .main-heart {
             font-size: 120px;
             animation: heartbeat 1.5s ease-in-out infinite;
@@ -149,14 +211,15 @@
         .title {
             font-family: 'Dancing Script', cursive;
             font-size: clamp(2.5rem, 8vw, 5rem);
-            background: linear-gradient(45deg, #ff6b8a, #ffd93d, #ff6b8a);
-            background-size: 200% auto;
+            background: linear-gradient(45deg, #ff6b8a, #ffd93d, #48dbfb, #ff6b8a);
+            background-size: 220% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             animation: shimmer 3s linear infinite;
             margin-bottom: 20px;
-            text-shadow: 0 0 40px rgba(255, 107, 138, 0.4);
+            text-shadow: 0 0 40px rgba(255, 107, 138, 0.35);
+            letter-spacing: 1px;
         }
 
         @keyframes shimmer {
@@ -266,16 +329,22 @@
             position: relative;
             width: 45%;
             padding: 24px;
-            background: rgba(255, 255, 255, 0.02);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.025));
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 107, 138, 0.15);
+            border: 1px solid rgba(255, 107, 138, 0.2);
             border-radius: 20px;
             margin-bottom: 50px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.1);
             opacity: 0;
             transform: translateY(40px);
             transition: all 0.8s cubic-bezier(0.215, 0.610, 0.355, 1);
+        }
+
+        .timeline-item:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 18px 45px rgba(255, 107, 138, 0.18), inset 0 1px 1px rgba(255, 255, 255, 0.15);
         }
 
         .timeline-item.visible {
@@ -386,12 +455,42 @@
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
             overflow: hidden;
+            isolation: isolate;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+            transform: translateX(-120%) rotate(20deg);
+            transition: transform 0.7s ease;
+            z-index: -1;
+        }
+
+        .btn:hover::before {
+            transform: translateX(120%) rotate(20deg);
         }
 
         .btn-yes {
             background: linear-gradient(135deg, #ff6b8a, #c94c6e);
             color: white;
             box-shadow: 0 10px 40px rgba(255, 107, 138, 0.5);
+            animation: pulseGlow 2.6s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+
+            0%,
+            100% {
+                box-shadow: 0 10px 40px rgba(255, 107, 138, 0.5);
+                transform: translateY(0);
+            }
+
+            50% {
+                box-shadow: 0 14px 48px rgba(255, 107, 138, 0.8);
+                transform: translateY(-2px);
+            }
         }
 
         .btn-yes:hover {
@@ -497,6 +596,36 @@
             z-index: -1;
         }
 
+        .sparkle-layer {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .sparkle {
+            position: absolute;
+            color: #ffd93d;
+            text-shadow: 0 0 12px rgba(255, 217, 61, 0.8);
+            animation: sparkleFloat 2.8s ease-in-out infinite;
+            opacity: 0.9;
+        }
+
+        @keyframes sparkleFloat {
+
+            0%,
+            100% {
+                transform: translateY(0) scale(1);
+                opacity: 0.7;
+            }
+
+            50% {
+                transform: translateY(-10px) scale(1.15);
+                opacity: 1;
+            }
+        }
+
         .star {
             position: absolute;
             width: 3px;
@@ -562,15 +691,21 @@
         }
 
         .personal-message {
-            background: rgba(255, 255, 255, 0.02);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.025));
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 107, 138, 0.15);
+            border: 1px solid rgba(255, 107, 138, 0.2);
             border-radius: 24px;
             padding: 40px;
             margin-top: 50px;
             max-width: 700px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .personal-message:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.3);
         }
 
         .personal-message p {
@@ -807,6 +942,7 @@
 
 <body>
     <div class="stars" id="stars"></div>
+    <div class="sparkle-layer" id="sparkles"></div>
     <div class="hearts-container" id="heartsContainer"></div>
 
     <button class="music-btn" id="musicBtn" title="Toggle Music">🎵</button>
@@ -1457,6 +1593,21 @@
             }
         }
 
+        function createSparkles() {
+            const sparkleLayer = document.getElementById('sparkles');
+            for (let i = 0; i < 35; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.textContent = ['✦', '✧', '⭐', '❋'][Math.floor(Math.random() * 4)];
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.top = Math.random() * 100 + '%';
+                sparkle.style.fontSize = (Math.random() * 10 + 10) + 'px';
+                sparkle.style.animationDelay = Math.random() * 2 + 's';
+                sparkle.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                sparkleLayer.appendChild(sparkle);
+            }
+        }
+
         // Create floating hearts
         function createHeart() {
             const container = document.getElementById('heartsContainer');
@@ -1812,6 +1963,7 @@
 
         // Initialize
         createStars();
+        createSparkles();
         setInterval(createHeart, 2000);
         setInterval(createPetal, 1500);
         window.addEventListener('scroll', handleScroll);
