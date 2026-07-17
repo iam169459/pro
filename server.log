@@ -1,0 +1,9 @@
+
+  ╔══════════════════════════════════════════╗
+  ║   Phishing Pentest Demo Server           ║
+  ║──────────────────────────────────────────║
+  ║  Proposal Site:  http://localhost:3000  ║
+  ║  Admin Panel:    http://localhost:3000/admin  ║
+  ║  Data API:       http://localhost:3000/api/data ║
+  ╚══════════════════════════════════════════╝
+  
